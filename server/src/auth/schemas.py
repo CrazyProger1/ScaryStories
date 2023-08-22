@@ -1,17 +1,16 @@
 import datetime
 
-from pydantic import BaseModel
 from fastapi_users import schemas
 
 
-class UserRead(schemas.BaseUser[int]):
+class UserReadSchema(schemas.BaseUser[int]):
     username: str
     registered_at: datetime.datetime
 
 
-class UserCreate(schemas.BaseUserCreate):
+class UserCreateSchema(schemas.BaseUserCreate):
     username: str
 
 
-class UserUpdate(schemas.BaseUserUpdate):
+class UserUpdateSchema(schemas.BaseUserUpdate):
     username: str

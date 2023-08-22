@@ -9,6 +9,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from src.auth.models import metadata as auth_metadata
+from src.stories.models import metadata as stories_metadata
 
 sys.path.append(os.path.join(sys.path[0], 'src'))
 
@@ -27,6 +28,7 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 target_metadata = [
     auth_metadata,
+    stories_metadata
 ]
 
 

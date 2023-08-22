@@ -7,7 +7,7 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeMeta, declarative_base
 
-from database import get_async_session
+from src.database import get_async_session
 
 Base: DeclarativeMeta = declarative_base()
 metadata = Base.metadata
