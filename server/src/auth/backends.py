@@ -2,7 +2,7 @@ from fastapi_users.authentication import AuthenticationBackend, BearerTransport,
 from config import settings
 from auth.constants import TOKEN_LIFETIME
 
-bearer_transport = BearerTransport('users/login')
+bearer_transport = BearerTransport('auth/login/')
 
 
 def get_jwt_strategy() -> JWTStrategy:

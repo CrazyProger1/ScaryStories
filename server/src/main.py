@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 
-from auth.router import router as auth_router
+from auth.routers import routers
 
 app = FastAPI()
 
-app.include_router(
-    auth_router,
-    prefix='/auth',
-    tags=['Auth']
-)
+for router in routers:
+    app.include_router(
+        router,
+        prefix='/auth',
+        tags=['Auth']
+    )
