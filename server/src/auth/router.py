@@ -1,26 +1,11 @@
-from fastapi import APIRouter
+from fastapi_users import FastAPIUsers
+from .models import User
+from .manager import get_user_manager
+from .backends import auth_backend
 
-from .schemas import UserSchema
+fastapi_users = FastAPIUsers[User, int](
+    get_user_manager,
+    [auth_backend],
+)
 
-
-router = APIRouter()
-
-
-@router.get('/')
-async def get_users():
-    return 'Users'
-
-
-@router.get('/{pk}')
-async def get_user(pk: int):
-    return f'User, {pk}'
-
-
-@router.get('/me')
-async def get_me():
-    pass
-
-
-@router.post('/')
-async def create_user(user: UserSchema):
-    pass
+router = fastapi_users.get_auth_router(auth_backend)

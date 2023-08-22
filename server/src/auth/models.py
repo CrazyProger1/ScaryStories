@@ -1,18 +1,16 @@
 from datetime import datetime
-from typing import AsyncGenerator
 
 import sqlalchemy as db
 from fastapi import Depends
-from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from fastapi_users.db import SQLAlchemyBaseUserTable
+from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeMeta, declarative_base
 
-from src.config import settings
-
-metadata = db.MetaData()
+from database import get_async_session
 
 Base: DeclarativeMeta = declarative_base()
-# metadata = Base.metadata
+metadata = Base.metadata
 
 
 class User(SQLAlchemyBaseUserTable[int], Base):
@@ -26,15 +24,5 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     is_verified: bool = db.Column(db.Boolean, default=False, nullable=False)
 
 
-user = db.Table(
-    'user',
-    metadata,
-    db.Column('id', db.Integer, primary_key=True),
-    db.Column('email', db.String, nullable=False),
-    db.Column('username', db.String, nullable=False),
-    db.Column('registered_at', db.TIMESTAMP, default=datetime.utcnow),
-    db.Column('hashed_password', db.String, nullable=False),
-    db.Column('is_active', db.Boolean, default=True, nullable=False),
-    db.Column('is_superuser', db.Boolean, default=False, nullable=False),
-    db.Column('is_verified', db.Boolean, default=False, nullable=False),
-)
+async def get_user_db(session: AsyncSession = Depends(get_async_session)):
+    yield SQLAlchemyUserDatabase(session, User)
