@@ -1,19 +1,17 @@
 from datetime import datetime
 
 import sqlalchemy as db
+from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyBaseUserTable
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import DeclarativeMeta, declarative_base
 
-from src.database import get_async_session
-
-Base: DeclarativeMeta = declarative_base()
-metadata = Base.metadata
+from src.database import Base, get_async_session
 
 
 class User(SQLAlchemyBaseUserTable[int], Base):
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, nullable=False)
     username = db.Column(db.String, nullable=False)
