@@ -1,6 +1,3 @@
-import sys
-import os
-
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -8,9 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from database import metadata
-
-sys.path.append(os.path.join(sys.path[0], 'src'))
+from src.database import metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
