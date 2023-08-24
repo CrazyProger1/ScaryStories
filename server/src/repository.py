@@ -22,7 +22,7 @@ class AbstractRepository(ABC):
 class SQLAlchemyRepository(AbstractRepository):
     model: type[Base] = None
 
-    async def create(self, **data) -> int:
+    async def create(self, **data):
         async with async_session_maker() as session:
             stmt = insert(self.model).values(**data).returning(self.model.id)
             result = await session.execute(stmt)
