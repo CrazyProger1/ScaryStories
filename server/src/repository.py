@@ -7,7 +7,7 @@ from src.database import async_session_maker, Base
 
 class AbstractRepository(ABC):
     @abstractmethod
-    async def create(self, **data): ...
+    async def create(self, returning_fields: tuple[str] | None = ('id',), **data): ...
 
     @abstractmethod
     async def read(self, limit: int = None, offset: int = None): ...
@@ -24,12 +24,18 @@ class SQLAlchemyRepository(AbstractRepository):
 
     async def create(self, returning_fields: tuple[str] = ('id',), **data):
         async with async_session_maker() as session:
-            stmt = insert(self.model).values(**data).returning(
-                *(getattr(self.model, field) for field in returning_fields)
-            )
+            stmt = insert(self.model).values(**data)
+
+            if returning_fields:
+                stmt = stmt.returning(
+                    *(getattr(self.model, field) for field in returning_fields)
+                )
             result = await session.execute(stmt)
             await session.commit()
-            return result.scalars().all()
+
+            if returning_fields:
+                return result.scalar_one()
+            # return result.scalars().all()
 
     async def read(self, limit: int = None, offset: int = None) -> list:
         async with async_session_maker() as session:
@@ -42,7 +48,7 @@ class SQLAlchemyRepository(AbstractRepository):
                 query = query.offset(offset)
 
             result = await session.execute(query)
-            return result.all()
+            return result.scalars().all()
 
     async def update(self):
         pass

@@ -22,7 +22,7 @@ class StoryCategorySchema(BaseModel):
 class StoryRatingVoteSchema(BaseModel):
     story_id: int
     user_id: int
-    vote: int
+    vote: str
 
 
 class StoryCommentSchema(BaseModel):

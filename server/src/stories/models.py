@@ -25,7 +25,7 @@ class StoryRatingVote(Base):
 
     story_id = db.Column(db.Integer, db.ForeignKey('stories.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True)
-    vote = db.Column(db.Integer, nullable=False)
+    vote = db.Column(db.String, nullable=False)
 
 
 class StoryComments(Base):
@@ -33,4 +33,4 @@ class StoryComments(Base):
 
     story_id = db.Column(db.Integer, db.ForeignKey('stories.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True)
-    comment = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.String, nullable=False)

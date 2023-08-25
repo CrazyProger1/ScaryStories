@@ -11,7 +11,7 @@ class StoriesService:
 
     async def create_story(self, story: StoryCreateSchema, creator: User) -> StoryReadSchema:
         story_id = await self.repository.create(creator_id=creator.id, **story.model_dump())
-        print(story_id)
+
         data = {
             'id': story_id,
             'creator_id': creator.id,
@@ -21,11 +21,7 @@ class StoriesService:
 
     async def read_stories(self, limit: int = None, offset: int = None) -> Iterable[StoryReadSchema]:
         result = []
-
-        data = await self.repository.read(limit=limit, offset=offset)
-        for row in data:
-            story = row[0]
-
+        for story in await self.repository.read(limit=limit, offset=offset):
             result.append(
                 StoryReadSchema.model_validate(
                     story.__dict__
@@ -45,11 +41,8 @@ class StoryCategoriesService:
 
     async def read_categories(self):
         result = []
-        data = await self.repository.read()
 
-        for row in data:
-            story = row[0]
-
+        for story in await self.repository.read():
             result.append(
                 StoryCategorySchema.model_validate(
                     story.__dict__
@@ -64,4 +57,5 @@ class StoryVotesService:
         self.repository = repository()
 
     async def create_vote(self, vote: StoryRatingVoteSchema) -> StoryRatingVoteSchema:
-        pass
+        await self.repository.create(returning_fields=None, **vote.model_dump())
+        return vote
