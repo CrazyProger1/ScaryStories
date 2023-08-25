@@ -18,3 +18,7 @@ class StoryCategoriesRepository(SQLAlchemyRepository):
             result = await session.execute(stmt)
             await session.commit()
             return result.scalar_one()
+
+
+class StoryVotesRepository(SQLAlchemyRepository):
+    model = StoryCategory

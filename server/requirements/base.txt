@@ -1,0 +1,7 @@
+uvicorn
+fastapi
+fastapi-users
+sqlalchemy
+fastapi-users-db-sqlalchemy
+pydantic-settings
+aiosqlite

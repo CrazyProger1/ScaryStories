@@ -10,7 +10,7 @@ class AbstractRepository(ABC):
     async def create(self, **data): ...
 
     @abstractmethod
-    async def read(self): ...
+    async def read(self, limit: int = None, offset: int = None): ...
 
     @abstractmethod
     async def update(self): ...
@@ -22,16 +22,25 @@ class AbstractRepository(ABC):
 class SQLAlchemyRepository(AbstractRepository):
     model: type[Base] = None
 
-    async def create(self, **data):
+    async def create(self, returning_fields: tuple[str] = ('id',), **data):
         async with async_session_maker() as session:
-            stmt = insert(self.model).values(**data).returning(self.model.id)
+            stmt = insert(self.model).values(**data).returning(
+                *(getattr(self.model, field) for field in returning_fields)
+            )
             result = await session.execute(stmt)
             await session.commit()
-            return result.scalar_one()
+            return result.scalars().all()
 
-    async def read(self) -> list:
+    async def read(self, limit: int = None, offset: int = None) -> list:
         async with async_session_maker() as session:
             query = select(self.model)
+
+            if limit:
+                query = query.limit(limit)
+
+            if offset:
+                query = query.offset(offset)
+
             result = await session.execute(query)
             return result.all()
 
