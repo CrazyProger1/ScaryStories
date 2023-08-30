@@ -25,10 +25,10 @@ class StoryRatingVote(Base):
 
     story_id = db.Column(db.Integer, db.ForeignKey('stories.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True)
-    vote = db.Column(db.String, nullable=False)
+    vote = db.Column(db.Integer, nullable=False)
 
 
-class StoryComments(Base):
+class StoryComment(Base):
     __tablename__ = 'story_comments'
 
     story_id = db.Column(db.Integer, db.ForeignKey('stories.id'), primary_key=True)

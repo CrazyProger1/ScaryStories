@@ -2,7 +2,7 @@ from sqlalchemy import insert
 from src.database import async_session_maker
 
 from src.repository import SQLAlchemyRepository
-from src.stories.models import Story, StoryCategory, StoryRatingVote
+from src.stories.models import Story, StoryCategory, StoryRatingVote, StoryComment
 
 
 class StoriesRepository(SQLAlchemyRepository):
@@ -22,3 +22,7 @@ class StoryCategoriesRepository(SQLAlchemyRepository):
 
 class StoryVotesRepository(SQLAlchemyRepository):
     model = StoryRatingVote
+
+
+class StoryCommentsRepository(SQLAlchemyRepository):
+    model = StoryComment

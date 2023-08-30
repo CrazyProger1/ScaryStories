@@ -19,13 +19,21 @@ class StoryCategorySchema(BaseModel):
     name: str
 
 
-class StoryRatingVoteSchema(BaseModel):
+class StoryRatingVoteWriteSchema(BaseModel):
+    vote: int
+
+
+class StoryRatingVoteReadSchema(BaseModel):
     story_id: int
     user_id: int
-    vote: str
+    vote: int
 
 
-class StoryCommentSchema(BaseModel):
+class StoryCommentWriteSchema(BaseModel):
+    comment: str
+
+
+class StoryCommentReadSchema(BaseModel):
     story_id: int
     user_id: int
     comment: str

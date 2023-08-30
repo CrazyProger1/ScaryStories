@@ -1,5 +1,15 @@
-from src.stories.repositories import StoriesRepository, StoryCategoriesRepository, StoryVotesRepository
-from src.stories.services import StoriesService, StoryCategoriesService, StoryVotesService
+from src.stories.repositories import (
+    StoriesRepository,
+    StoryCategoriesRepository,
+    StoryVotesRepository,
+    StoryCommentsRepository
+)
+from src.stories.services import (
+    StoriesService,
+    StoryCategoriesService,
+    StoryVotesService,
+    StoryCommentsService
+)
 
 
 def stories_service():
@@ -12,3 +22,7 @@ def story_categories_service():
 
 def story_votes_service():
     return StoryVotesService(StoryVotesRepository)
+
+
+def story_comments_service():
+    return StoryCommentsService(StoryCommentsRepository)

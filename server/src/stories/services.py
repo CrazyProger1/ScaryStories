@@ -1,8 +1,16 @@
 from typing import Iterable
 
-from src.repository import AbstractRepository
-from src.stories.schemas import StoryCreateSchema, StoryReadSchema, StoryCategorySchema, StoryRatingVoteSchema
 from src.auth.models import User
+from src.repository import AbstractRepository
+from src.stories.schemas import (
+    StoryCreateSchema,
+    StoryReadSchema,
+    StoryCategorySchema,
+    StoryRatingVoteWriteSchema,
+    StoryRatingVoteReadSchema,
+    StoryCommentWriteSchema,
+    StoryCommentReadSchema
+)
 
 
 class StoriesService:
@@ -42,10 +50,10 @@ class StoryCategoriesService:
     async def read_categories(self):
         result = []
 
-        for story in await self.repository.read():
+        for category in await self.repository.read():
             result.append(
                 StoryCategorySchema.model_validate(
-                    story.__dict__
+                    category.__dict__
                 )
             )
 
@@ -56,6 +64,47 @@ class StoryVotesService:
     def __init__(self, repository: type[AbstractRepository]):
         self.repository = repository()
 
-    async def create_vote(self, vote: StoryRatingVoteSchema) -> StoryRatingVoteSchema:
-        await self.repository.create(returning_fields=None, **vote.model_dump())
-        return vote
+    async def create_vote(
+            self,
+            vote: StoryRatingVoteWriteSchema,
+            creator: User,
+            story_id: int
+    ) -> StoryRatingVoteReadSchema:
+        data = vote.model_dump()
+        await self.repository.create(returning_fields=None, **data, user_id=creator.id, story_id=story_id)
+        return StoryRatingVoteReadSchema(
+            **data,
+            user_id=creator.id,
+            story_id=story_id
+        )
+
+
+class StoryCommentsService:
+    def __init__(self, repository: type[AbstractRepository]):
+        self.repository = repository()
+
+    async def create_comment(
+            self,
+            comment: StoryCommentWriteSchema,
+            creator: User,
+            story_id: int
+    ) -> StoryCommentReadSchema:
+        data = comment.model_dump()
+        await self.repository.create(returning_fields=None, **data, user_id=creator.id, story_id=story_id)
+        return StoryCommentReadSchema(
+            **data,
+            user_id=creator.id,
+            story_id=story_id
+        )
+
+    async def read_comments(self):
+        result = []
+
+        for comment in await self.repository.read():
+            result.append(
+                StoryCommentReadSchema.model_validate(
+                    comment.__dict__
+                )
+            )
+
+        return result

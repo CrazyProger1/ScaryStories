@@ -18,7 +18,7 @@ def include_routers(routers: Iterable[APIRouter], tags: list[str], prefix: str):
         )
 
 
-include_routers(auth_routers, tags=['Auth'], prefix='/auth')
+include_routers(auth_routers, tags=['Users'], prefix='/users')
 include_routers(stories_routers, tags=['Stories'], prefix='/stories')
 
 if __name__ == '__main__':
