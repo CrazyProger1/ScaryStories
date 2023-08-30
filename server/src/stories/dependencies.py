@@ -10,19 +10,20 @@ from src.stories.services import (
     StoryVotesService,
     StoryCommentsService
 )
+from src.stories.serializers import Serializer
 
 
 def stories_service():
-    return StoriesService(StoriesRepository)
+    return StoriesService(StoriesRepository, Serializer)
 
 
 def story_categories_service():
-    return StoryCategoriesService(StoryCategoriesRepository)
+    return StoryCategoriesService(StoryCategoriesRepository, Serializer)
 
 
 def story_votes_service():
-    return StoryVotesService(StoryVotesRepository)
+    return StoryVotesService(StoryVotesRepository, Serializer)
 
 
 def story_comments_service():
-    return StoryCommentsService(StoryCommentsRepository)
+    return StoryCommentsService(StoryCommentsRepository, Serializer)

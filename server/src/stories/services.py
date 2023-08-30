@@ -1,7 +1,10 @@
-from typing import Iterable
+from typing import Iterable, List
+
+from pydantic import BaseModel
 
 from src.auth.models import User
 from src.repository import AbstractRepository
+from src.serializer import AbstractSerializer
 from src.stories.schemas import (
     StoryCreateSchema,
     StoryReadSchema,
@@ -14,8 +17,12 @@ from src.stories.schemas import (
 
 
 class StoriesService:
-    def __init__(self, repository: type[AbstractRepository]):
+    def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
         self.repository = repository()
+        self.serializer = serializer()
+
+    async def read_stories(self, limit: int = None, offset: int = None) -> list[BaseModel]:
+        return self.serializer.serialize_many(await self.repository.read(limit=limit, offset=offset), StoryReadSchema)
 
     async def create_story(self, story: StoryCreateSchema, creator: User) -> StoryReadSchema:
         story_id = await self.repository.create(creator_id=creator.id, **story.model_dump())
@@ -27,42 +34,24 @@ class StoriesService:
         }
         return StoryReadSchema.model_validate(data)
 
-    async def read_stories(self, limit: int = None, offset: int = None) -> Iterable[StoryReadSchema]:
-        result = []
-        for story in await self.repository.read(limit=limit, offset=offset):
-            result.append(
-                StoryReadSchema.model_validate(
-                    story.__dict__
-                )
-            )
-
-        return result
-
 
 class StoryCategoriesService:
-    def __init__(self, repository: type[AbstractRepository]):
+    def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
         self.repository = repository()
+        self.serializer = serializer()
+
+    async def read_categories(self):
+        return self.serializer.serialize_many(await self.repository.read(), StoryCategorySchema)
 
     async def create_category(self, category: StoryCategorySchema) -> StoryCategorySchema:
         name = await self.repository.create(**category.model_dump())
         return StoryCategorySchema(name=name)
 
-    async def read_categories(self):
-        result = []
-
-        for category in await self.repository.read():
-            result.append(
-                StoryCategorySchema.model_validate(
-                    category.__dict__
-                )
-            )
-
-        return result
-
 
 class StoryVotesService:
-    def __init__(self, repository: type[AbstractRepository]):
+    def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
         self.repository = repository()
+        self.serializer = serializer()
 
     async def create_vote(
             self,
@@ -80,8 +69,12 @@ class StoryVotesService:
 
 
 class StoryCommentsService:
-    def __init__(self, repository: type[AbstractRepository]):
+    def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
         self.repository = repository()
+        self.serializer = serializer()
+
+    async def read_comments(self):
+        return self.serializer.serialize_many(await self.repository.read(), StoryCommentReadSchema)
 
     async def create_comment(
             self,
@@ -96,15 +89,3 @@ class StoryCommentsService:
             user_id=creator.id,
             story_id=story_id
         )
-
-    async def read_comments(self):
-        result = []
-
-        for comment in await self.repository.read():
-            result.append(
-                StoryCommentReadSchema.model_validate(
-                    comment.__dict__
-                )
-            )
-
-        return result
