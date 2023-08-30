@@ -21,7 +21,8 @@ from src.stories.schemas import (
     StoryRatingVoteReadSchema,
     StoryRatingVoteWriteSchema,
     StoryCommentWriteSchema,
-    StoryCommentReadSchema
+    StoryCommentReadSchema,
+    StoryRating
 )
 
 router = APIRouter()
@@ -63,6 +64,11 @@ async def create_category(
     return await service.create_category(category=category)
 
 
+@router.get('/{story_id}/votes', response_model=StoryRating)
+async def get_rating(story_id: int, service: StoryVotesService = Depends(story_votes_service)):
+    return await service.get_rating(story_id=story_id)
+
+
 @router.post('/{story_id}/votes', response_model=StoryRatingVoteReadSchema)
 async def create_vote(
         story_id: int,
@@ -78,7 +84,7 @@ async def read_comments(
         story_id: int,
         service: StoryCommentsService = Depends(story_comments_service),
 ):
-    return await service.read_comments()
+    return await service.read_comments(story_id=story_id)
 
 
 @router.post('/{story_id}/comments', response_model=StoryCommentReadSchema)

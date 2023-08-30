@@ -12,8 +12,10 @@ from src.stories.schemas import (
     StoryRatingVoteWriteSchema,
     StoryRatingVoteReadSchema,
     StoryCommentWriteSchema,
-    StoryCommentReadSchema
+    StoryCommentReadSchema,
+    StoryRating
 )
+from src.stories.models import StoryComment, StoryRatingVote
 
 
 class StoriesService:
@@ -67,14 +69,29 @@ class StoryVotesService:
             story_id=story_id
         )
 
+    async def get_rating(self, story_id: int) -> StoryRating:
+        rating = 0
+        count = 0
+        for vote in await self.repository.read(StoryRatingVote.story_id == story_id):
+            rating += vote.vote
+            count += 1
+
+        return StoryRating.model_validate({
+            'story_id': story_id,
+            'rating': rating / count
+        })
+
 
 class StoryCommentsService:
     def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
         self.repository = repository()
         self.serializer = serializer()
 
-    async def read_comments(self):
-        return self.serializer.serialize_many(await self.repository.read(), StoryCommentReadSchema)
+    async def read_comments(self, story_id: int):
+        return self.serializer.serialize_many(
+            await self.repository.read(StoryComment.story_id == story_id),
+            StoryCommentReadSchema
+        )
 
     async def create_comment(
             self,

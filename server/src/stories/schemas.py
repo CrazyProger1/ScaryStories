@@ -29,6 +29,11 @@ class StoryRatingVoteReadSchema(BaseModel):
     vote: int
 
 
+class StoryRating(BaseModel):
+    story_id: int
+    rating: float
+
+
 class StoryCommentWriteSchema(BaseModel):
     comment: str
 
