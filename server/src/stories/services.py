@@ -87,9 +87,13 @@ class StoryCommentsService:
         self.repository = repository()
         self.serializer = serializer()
 
-    async def read_comments(self, story_id: int):
+    async def read_comments(self, story_id: int, limit: int = None, offset: int = None):
         return self.serializer.serialize_many(
-            await self.repository.read(StoryComment.story_id == story_id),
+            await self.repository.read(
+                StoryComment.story_id == story_id,
+                limit=limit,
+                offset=offset
+            ),
             StoryCommentReadSchema
         )
 

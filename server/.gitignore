@@ -163,5 +163,3 @@ cython_debug/
 *.sqlite
 
 alembic/versions
-
-test_src

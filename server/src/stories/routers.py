@@ -83,8 +83,10 @@ async def create_vote(
 async def read_comments(
         story_id: int,
         service: StoryCommentsService = Depends(story_comments_service),
+        limit: int = None,
+        offset: int = None
 ):
-    return await service.read_comments(story_id=story_id)
+    return await service.read_comments(story_id=story_id, limit=limit, offset=offset)
 
 
 @router.post('/{story_id}/comments', response_model=StoryCommentReadSchema)
