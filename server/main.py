@@ -5,8 +5,12 @@ from fastapi import FastAPI, APIRouter
 
 from src.auth.routers import routers as auth_routers
 from src.stories.routers import routers as stories_routers
+from src.config import APP, VERSION
 
-app = FastAPI()
+app = FastAPI(
+    title=APP,
+    version=VERSION
+)
 
 
 def include_routers(routers: Iterable[APIRouter], tags: list[str], prefix: str):
