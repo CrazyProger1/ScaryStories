@@ -7,3 +7,5 @@ pydantic-settings
 alembic
 asyncpg
 psycopg2
+pytest-asyncio
+httpx
