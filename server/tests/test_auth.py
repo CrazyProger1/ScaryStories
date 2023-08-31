@@ -2,7 +2,7 @@ from conftest import client
 
 
 def test_register():
-    response = client.post("/users/register", json={
+    response = client.post('/users/register', json={
         'email': 'user@example.com',
         'password': 'string',
         'is_active': True,
