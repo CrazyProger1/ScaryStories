@@ -12,6 +12,6 @@ COPY . .
 
 RUN alembic upgrade head
 
-CMD gunicorn main:app
+CMD gunicorn main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker
 
 
