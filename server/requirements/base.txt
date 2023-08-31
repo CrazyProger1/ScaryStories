@@ -5,3 +5,5 @@ sqlalchemy
 fastapi-users-db-sqlalchemy
 pydantic-settings
 alembic
+asyncpg
+psycopg2
