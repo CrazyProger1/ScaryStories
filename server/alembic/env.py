@@ -1,6 +1,3 @@
-import sys
-import os
-
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -8,13 +5,22 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.auth.models import metadata as auth_metadata
+from src.database import metadata
+from src.config import settings
 
-sys.path.append(os.path.join(sys.path[0], 'src'))
+import src.auth.models
+import src.stories.models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+section = config.config_ini_section
+config.set_section_option(section, 'DB_HOST', settings.db_host)
+config.set_section_option(section, 'DB_PORT', str(settings.db_port))
+config.set_section_option(section, 'DB_USER', settings.db_user)
+config.set_section_option(section, 'DB_NAME', settings.db_name)
+config.set_section_option(section, 'DB_PASS', settings.db_pass)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -25,9 +31,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [
-    auth_metadata,
-]
+target_metadata = metadata
 
 
 # other values from the config, defined by the needs of env.py,

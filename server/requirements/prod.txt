@@ -1,0 +1,11 @@
+uvicorn
+fastapi
+fastapi-users
+sqlalchemy
+fastapi-users-db-sqlalchemy
+pydantic-settings
+alembic
+asyncpg
+psycopg2
+gunicorn
+flower
