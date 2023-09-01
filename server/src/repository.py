@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, delete, update, exists
 
 from src.database import async_session_maker, Base
 
@@ -13,10 +13,16 @@ class AbstractRepository(ABC):
     async def read(self, *filters, limit: int = None, offset: int = None): ...
 
     @abstractmethod
-    async def update(self): ...
+    async def read_one(self, *filters): ...
 
     @abstractmethod
-    async def delete(self): ...
+    async def update(self, *filters, **data) -> None: ...
+
+    @abstractmethod
+    async def delete(self, *filters) -> None: ...
+
+    @abstractmethod
+    async def exists(self, *filters) -> bool: ...
 
 
 class SQLAlchemyRepository(AbstractRepository):
@@ -37,7 +43,7 @@ class SQLAlchemyRepository(AbstractRepository):
                 return result.scalar_one()
             # return result.scalars().all()
 
-    async def read(self, *filters, limit: int = None, offset: int = None) -> list:
+    async def _read(self, *filters, limit: int = None, offset: int = None):
         async with async_session_maker() as session:
             query = select(self.model)
 
@@ -51,10 +57,28 @@ class SQLAlchemyRepository(AbstractRepository):
                 query = query.filter(*filters)
 
             result = await session.execute(query)
-            return result.scalars().all()
+            return result
 
-    async def update(self):
-        pass
+    async def read(self, *filters, limit: int = None, offset: int = None) -> list:
+        result = await self._read(*filters, limit=limit, offset=offset)
+        return result.scalars().all()
 
-    async def delete(self):
-        pass
+    async def read_one(self, *filters):
+        result = await self._read(*filters)
+        return result.scalars().first()
+
+    async def update(self, *filters, **data):
+        async with async_session_maker() as session:
+            stmt = update(self.model).filter(*filters).values(**data)
+            await session.execute(stmt)
+            await session.commit()
+
+    async def delete(self, *filters):
+        async with async_session_maker() as session:
+            stmt = delete(self.model).filter(*filters)
+            await session.execute(stmt)
+            await session.commit()
+
+    async def exists(self, *filters) -> bool:
+        result = await self._read(*filters)
+        return result.first() is not None

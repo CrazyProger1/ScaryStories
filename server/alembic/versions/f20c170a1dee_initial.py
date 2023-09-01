@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: dafc8749f96d
+Revision ID: f20c170a1dee
 Revises: 
-Create Date: 2023-08-31 14:57:53.531702
+Create Date: 2023-09-01 15:37:04.565440
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'dafc8749f96d'
+revision: str = 'f20c170a1dee'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -42,23 +42,24 @@ def upgrade() -> None:
     sa.Column('creator_id', sa.Integer(), nullable=True),
     sa.Column('category_name', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['category_name'], ['story_categories.name'], ),
-    sa.ForeignKeyConstraint(['creator_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['creator_id'], ['users.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('story_comments',
-    sa.Column('story_id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('story_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('comment', sa.String(), nullable=False),
-    sa.ForeignKeyConstraint(['story_id'], ['stories.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('story_id', 'user_id')
+    sa.ForeignKeyConstraint(['story_id'], ['stories.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('story_rating_votes',
     sa.Column('story_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('vote', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['story_id'], ['stories.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['story_id'], ['stories.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('story_id', 'user_id')
     )
     # ### end Alembic commands ###
