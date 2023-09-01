@@ -48,6 +48,10 @@ class VoteReadSchema(BaseModel):
     vote: int
 
 
+class VoteUpdateSchema(BaseModel):
+    vote: int = Field(ge=0, le=5)
+
+
 class Rating(BaseModel):
     story_id: int
     rating: float

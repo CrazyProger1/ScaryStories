@@ -23,8 +23,8 @@ def include_routers(routers: Iterable[APIRouter], tags: list[str], prefix: str):
         )
 
 
-include_routers(auth_routers, tags=['Users'], prefix='/users')
-include_routers(stories_routers, tags=['Stories'], prefix='/stories')
+include_routers(auth_routers, tags=['Users App'], prefix='/users')
+include_routers(stories_routers, tags=['Stories App'], prefix='/stories')
 
 app.middleware('http')(catch_exceptions_middleware)
 

@@ -1,5 +1,3 @@
-from typing import Iterable, List
-
 import sqlalchemy.exc
 from pydantic import BaseModel
 from fastapi import HTTPException
@@ -16,7 +14,7 @@ from src.stories.schemas import (
     CommentWriteSchema,
     CommentReadSchema,
     Rating,
-    StoryReadSchema, StoryUpdateSchema, CommentUpdateSchema
+    StoryReadSchema, StoryUpdateSchema, CommentUpdateSchema, VoteUpdateSchema
 )
 from src.stories.models import (
     StoryComment,
@@ -74,7 +72,7 @@ class StoriesService:
         await self.repository.delete(Story.id == story_id)
 
 
-class StoryCategoriesService:
+class CategoriesService:
     def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
         self.repository = repository()
         self.serializer = serializer()
@@ -95,10 +93,17 @@ class StoryCategoriesService:
         await self.repository.delete(StoryCategory.name == name)
 
 
-class StoryVotesService:
+class VotesService:
     def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
         self.repository = repository()
         self.serializer = serializer()
+
+    async def vote_exists_or_404(self, story_id: int, user_id: int) -> StoryRatingVote:
+        if not await self.repository.exists(
+                StoryRatingVote.story_id == story_id,
+                StoryRatingVote.user_id == user_id
+        ):
+            raise HTTPException(status_code=404, detail='Vote not found')
 
     async def create_vote(
             self,
@@ -130,8 +135,23 @@ class StoryVotesService:
             'rating': (rating / count) if count > 0 else 0
         })
 
+    async def update_vote(self, vote: VoteUpdateSchema, user: User, story_id: int):
+        await self.vote_exists_or_404(user_id=user.id, story_id=story_id)
+        await self.repository.update(
+            StoryRatingVote.story_id == story_id,
+            StoryRatingVote.user_id == user.id,
+            **vote.model_dump()
+        )
 
-class StoryCommentsService:
+    async def delete_vote(self, user: User, story_id: int):
+        await self.vote_exists_or_404(user_id=user.id, story_id=story_id)
+        await self.repository.delete(
+            StoryRatingVote.story_id == story_id,
+            StoryRatingVote.user_id == user.id
+        )
+
+
+class CommentsService:
     def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
         self.repository = repository()
         self.serializer = serializer()
