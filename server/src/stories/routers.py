@@ -128,3 +128,13 @@ async def delete_story(
 ):
     await service.delete_story(story_id=story_id, user=user)
     return Response(status_code=204)
+
+
+@router.delete('/categories/{name}', status_code=204)
+async def delete_category(
+        name: str,
+        service: StoryCategoriesService = Depends(story_categories_service),
+        user: User = Depends(current_superuser)
+):
+    await service.delete_category(name=name, user=user)
+    return Response(status_code=204)

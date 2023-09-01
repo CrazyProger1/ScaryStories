@@ -18,7 +18,12 @@ from src.stories.schemas import (
     StoryRating,
     StoryReadSchema, StoryUpdateSchema
 )
-from src.stories.models import StoryComment, StoryRatingVote, Story
+from src.stories.models import (
+    StoryComment,
+    StoryRatingVote,
+    Story,
+    StoryCategory
+)
 
 
 class StoriesService:
@@ -80,6 +85,14 @@ class StoryCategoriesService:
     async def create_category(self, category: StoryCategorySchema) -> StoryCategorySchema:
         name = await self.repository.create(**category.model_dump())
         return StoryCategorySchema(name=name)
+
+    async def _is_superuser_or_403(self, user: User):
+        if not user.is_superuser:
+            raise HTTPException(status_code=403, detail="You don't have permission to perform this action")
+
+    async def delete_category(self, name: str, user: User):
+        await self._is_superuser_or_403(user)
+        await self.repository.delete(StoryCategory.name == name)
 
 
 class StoryVotesService:
