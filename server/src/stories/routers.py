@@ -80,6 +80,15 @@ async def create_vote(
     return await service.create_vote(vote=vote, creator=user, story_id=story_id)
 
 
+@router.get('/{story_id}/votes/my', response_model=VoteReadSchema, tags=['Votes'])
+async def read_my_vote(
+        story_id: int,
+        service: VotesService = Depends(story_votes_service),
+        user: User = Depends(current_active_user)
+):
+    return await service.read_my_vote(story_id=story_id, user=user)
+
+
 @router.get('/{story_id}/comments', tags=['Comments'])
 async def read_comments(
         story_id: int,

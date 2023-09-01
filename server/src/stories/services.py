@@ -98,12 +98,18 @@ class VotesService:
         self.repository = repository()
         self.serializer = serializer()
 
-    async def vote_exists_or_404(self, story_id: int, user_id: int) -> StoryRatingVote:
-        if not await self.repository.exists(
-                StoryRatingVote.story_id == story_id,
-                StoryRatingVote.user_id == user_id
-        ):
+    async def get_vote_or_404(self, story_id: int, user_id: int) -> StoryRatingVote:
+        vote = await self.repository.read_one(
+            StoryRatingVote.story_id == story_id,
+            StoryRatingVote.user_id == user_id
+        )
+        if not vote:
             raise HTTPException(status_code=404, detail='Vote not found')
+        return vote
+
+    async def vote_not_exists_or_403(self, story_id: int, user_id: int):
+        if await self.repository.exists(StoryRatingVote.story_id == story_id, StoryRatingVote.user_id == user_id):
+            raise HTTPException(status_code=403, detail='You have already voted for this story')
 
     async def create_vote(
             self,
@@ -113,6 +119,7 @@ class VotesService:
     ) -> VoteReadSchema:
         data = vote.model_dump()
         try:
+            await self.vote_not_exists_or_403(story_id=story_id, user_id=creator.id)
             await self.repository.create(returning_fields=None, **data, user_id=creator.id, story_id=story_id)
         except sqlalchemy.exc.IntegrityError:
             raise HTTPException(status_code=403, detail=f'Story {story_id} not found')
@@ -135,8 +142,12 @@ class VotesService:
             'rating': (rating / count) if count > 0 else 0
         })
 
+    async def read_my_vote(self, story_id: int, user: User):
+        vote = await self.get_vote_or_404(user_id=user.id, story_id=story_id)
+        return self.serializer.serialize(vote, VoteReadSchema)
+
     async def update_vote(self, vote: VoteUpdateSchema, user: User, story_id: int):
-        await self.vote_exists_or_404(user_id=user.id, story_id=story_id)
+        await self.get_vote_or_404(user_id=user.id, story_id=story_id)
         await self.repository.update(
             StoryRatingVote.story_id == story_id,
             StoryRatingVote.user_id == user.id,
@@ -144,7 +155,7 @@ class VotesService:
         )
 
     async def delete_vote(self, user: User, story_id: int):
-        await self.vote_exists_or_404(user_id=user.id, story_id=story_id)
+        await self.get_vote_or_404(user_id=user.id, story_id=story_id)
         await self.repository.delete(
             StoryRatingVote.story_id == story_id,
             StoryRatingVote.user_id == user.id
