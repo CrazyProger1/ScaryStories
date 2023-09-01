@@ -3,8 +3,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 APP = 'ScaryStories'
 VERSION = '0.1'
 
-DEBUG = True
-
 
 class SensitiveSettings(BaseSettings):
     secret: str
@@ -14,6 +12,7 @@ class SensitiveSettings(BaseSettings):
     db_name: str
     db_user: str
     db_pass: str
+    debug: bool = False
     model_config = SettingsConfigDict(env_file='.env')
 
 

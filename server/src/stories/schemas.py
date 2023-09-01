@@ -1,4 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+from src.stories.constants import (
+    STORY_LENGTH,
+    STORY_NAME_LENGTH,
+    CATEGORY_NAME_LENGTH,
+    COMMENT_LENGTH
+)
 
 
 class StoryReadSchema(BaseModel):
@@ -10,17 +17,17 @@ class StoryReadSchema(BaseModel):
 
 
 class StoryCreateSchema(BaseModel):
-    name: str
-    story: str
+    name: str = Field(max_length=STORY_NAME_LENGTH)
+    story: str = Field(max_length=STORY_LENGTH)
     category_name: str
 
 
 class StoryCategorySchema(BaseModel):
-    name: str
+    name: str = Field(max_length=CATEGORY_NAME_LENGTH)
 
 
 class StoryRatingVoteWriteSchema(BaseModel):
-    vote: int
+    vote: int = Field(ge=0, le=5)
 
 
 class StoryRatingVoteReadSchema(BaseModel):
@@ -35,7 +42,7 @@ class StoryRating(BaseModel):
 
 
 class StoryCommentWriteSchema(BaseModel):
-    comment: str
+    comment: str = Field(max_length=COMMENT_LENGTH)
 
 
 class StoryCommentReadSchema(BaseModel):

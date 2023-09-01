@@ -1,6 +1,8 @@
 from typing import Iterable, List
 
+import sqlalchemy.exc
 from pydantic import BaseModel
+from fastapi import HTTPException
 
 from src.auth.models import User
 from src.repository import AbstractRepository
@@ -27,8 +29,10 @@ class StoriesService:
         return self.serializer.serialize_many(await self.repository.read(limit=limit, offset=offset), StoryReadSchema)
 
     async def create_story(self, story: StoryCreateSchema, creator: User) -> StoryReadSchema:
-        story_id = await self.repository.create(creator_id=creator.id, **story.model_dump())
-
+        try:
+            story_id = await self.repository.create(creator_id=creator.id, **story.model_dump())
+        except sqlalchemy.exc.IntegrityError:
+            raise HTTPException(status_code=403, detail=f"Category '{story.category_name}' does not exists")
         data = {
             'id': story_id,
             'creator_id': creator.id,
