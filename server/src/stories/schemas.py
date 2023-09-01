@@ -23,6 +23,11 @@ class StoryReadSchema(BaseModel):
     category_name: str
 
 
+class StoryUpdateSchema(BaseModel):
+    name: str = Field(max_length=STORY_NAME_LENGTH)
+    story: str = Field(max_length=STORY_LENGTH)
+
+
 class StoryCreateSchema(BaseModel):
     name: str = Field(max_length=STORY_NAME_LENGTH)
     story: str = Field(max_length=STORY_LENGTH)

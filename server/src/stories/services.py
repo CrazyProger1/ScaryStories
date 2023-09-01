@@ -16,7 +16,7 @@ from src.stories.schemas import (
     StoryCommentWriteSchema,
     StoryCommentReadSchema,
     StoryRating,
-    StoryReadSchema
+    StoryReadSchema, StoryUpdateSchema
 )
 from src.stories.models import StoryComment, StoryRatingVote, Story
 
@@ -47,6 +47,26 @@ class StoriesService:
             **story.model_dump()
         }
         return StoriesReadSchema.model_validate(data)
+
+    async def _get_story_or_404(self, story_id: int) -> Story:
+        story = await self.repository.read_one(Story.id == story_id)
+        if not story:
+            raise HTTPException(status_code=404, detail='Story not found')
+        return story
+
+    async def _check_owner_or_403(self, story: Story, owner: User):
+        if story.creator_id != owner.id and not owner.is_superuser:
+            raise HTTPException(status_code=403)
+
+    async def update_story(self, story_id: int, story: StoryUpdateSchema, user: User):
+        story_instance = await self._get_story_or_404(story_id=story_id)
+        await self._check_owner_or_403(story=story_instance, owner=user)
+        await self.repository.update(Story.id == story_id, **story.model_dump())
+
+    async def delete_story(self, story_id: int, user: User):
+        story = await self._get_story_or_404(story_id=story_id)
+        await self._check_owner_or_403(story=story, owner=user)
+        await self.repository.delete(Story.id == story_id)
 
 
 class StoryCategoriesService:

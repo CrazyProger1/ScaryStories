@@ -1,18 +1,12 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 
-from src.auth.models import User
 from src.auth.auth import current_active_user, current_superuser
+from src.auth.models import User
 from src.stories.dependencies import (
     stories_service,
     story_categories_service,
     story_votes_service,
     story_comments_service
-)
-from src.stories.services import (
-    StoriesService,
-    StoryCategoriesService,
-    StoryVotesService,
-    StoryCommentsService
 )
 from src.stories.schemas import (
     StoryCreateSchema,
@@ -22,7 +16,14 @@ from src.stories.schemas import (
     StoryRatingVoteWriteSchema,
     StoryCommentWriteSchema,
     StoryCommentReadSchema,
-    StoryRating
+    StoryRating,
+    StoryUpdateSchema, StoryReadSchema
+)
+from src.stories.services import (
+    StoriesService,
+    StoryCategoriesService,
+    StoryVotesService,
+    StoryCommentsService
 )
 
 router = APIRouter()
@@ -100,9 +101,30 @@ async def create_comment(
     return await service.create_comment(comment=comment, story_id=story_id, creator=user)
 
 
-@router.get('/{story_id}')
+@router.get('/{story_id}', response_model=StoryReadSchema)
 async def read_story(
         story_id: int,
         service: StoriesService = Depends(stories_service)
 ):
     return await service.read_story(story_id=story_id)
+
+
+@router.patch('/{story_id}', status_code=204)
+async def update_story(
+        story_id: int,
+        story: StoryUpdateSchema,
+        service: StoriesService = Depends(stories_service),
+        user: User = Depends(current_active_user)
+):
+    await service.update_story(story_id=story_id, story=story, user=user)
+    return Response(status_code=204)
+
+
+@router.delete('/{story_id}', status_code=204)
+async def delete_story(
+        story_id: int,
+        service: StoriesService = Depends(stories_service),
+        user: User = Depends(current_active_user)
+):
+    await service.delete_story(story_id=story_id, user=user)
+    return Response(status_code=204)

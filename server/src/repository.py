@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, delete, update
 
 from src.database import async_session_maker, Base
 
@@ -16,10 +16,10 @@ class AbstractRepository(ABC):
     async def read_one(self, *filters): ...
 
     @abstractmethod
-    async def update(self): ...
+    async def update(self, *filters, **data) -> None: ...
 
     @abstractmethod
-    async def delete(self): ...
+    async def delete(self, *filters) -> None: ...
 
 
 class SQLAlchemyRepository(AbstractRepository):
@@ -64,8 +64,14 @@ class SQLAlchemyRepository(AbstractRepository):
         result = await self._read(*filters)
         return result.scalars().first()
 
-    async def update(self):
-        pass
+    async def update(self, *filters, **data):
+        async with async_session_maker() as session:
+            stmt = update(self.model).filter(*filters).values(**data)
+            await session.execute(stmt)
+            await session.commit()
 
-    async def delete(self):
-        pass
+    async def delete(self, *filters):
+        async with async_session_maker() as session:
+            stmt = delete(self.model).filter(*filters)
+            await session.execute(stmt)
+            await session.commit()
