@@ -6,7 +6,7 @@ To see the server documentation, follow this link [server](server).
 
 ## Client
 
-To see the client documentation, follow this link [client](server).
+To see the client documentation, follow this link [client](client).
 
 ## License
 
