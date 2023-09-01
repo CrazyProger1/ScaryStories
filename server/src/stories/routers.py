@@ -41,14 +41,6 @@ async def read_stories(
     return await service.read_stories(limit=limit, offset=offset)
 
 
-@router.get('/{story_id}')
-async def read_story(
-        story_id: int,
-        service: StoriesService = Depends(stories_service)
-):
-    return await service.read_story(story_id=story_id)
-
-
 @router.post('', response_model=StoriesReadSchema)
 async def create_story(
         story: StoryCreateSchema,
@@ -106,3 +98,11 @@ async def create_comment(
 
 ):
     return await service.create_comment(comment=comment, story_id=story_id, creator=user)
+
+
+@router.get('/{story_id}')
+async def read_story(
+        story_id: int,
+        service: StoriesService = Depends(stories_service)
+):
+    return await service.read_story(story_id=story_id)

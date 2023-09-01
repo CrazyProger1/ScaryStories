@@ -30,10 +30,10 @@ class StoriesService:
         return self.serializer.serialize_many(await self.repository.read(limit=limit, offset=offset), StoriesReadSchema)
 
     async def read_story(self, story_id: int):
-        stories = await self.repository.read(Story.id == story_id)
+        story = await self.repository.read_one(Story.id == story_id)
 
-        if stories:
-            return self.serializer.serialize(stories[0], StoryReadSchema)
+        if story:
+            return self.serializer.serialize(story, StoryReadSchema)
         raise HTTPException(status_code=404, detail='Story not found')
 
     async def create_story(self, story: StoryCreateSchema, creator: User) -> StoriesReadSchema:
@@ -74,7 +74,11 @@ class StoryVotesService:
             story_id: int
     ) -> StoryRatingVoteReadSchema:
         data = vote.model_dump()
-        await self.repository.create(returning_fields=None, **data, user_id=creator.id, story_id=story_id)
+        try:
+            await self.repository.create(returning_fields=None, **data, user_id=creator.id, story_id=story_id)
+        except sqlalchemy.exc.IntegrityError:
+            raise HTTPException(status_code=403, detail=f'Story {story_id} not found')
+
         return StoryRatingVoteReadSchema(
             **data,
             user_id=creator.id,
@@ -90,7 +94,7 @@ class StoryVotesService:
 
         return StoryRating.model_validate({
             'story_id': story_id,
-            'rating': rating / count
+            'rating': (rating / count) if count > 0 else 0
         })
 
 
@@ -116,7 +120,11 @@ class StoryCommentsService:
             story_id: int
     ) -> StoryCommentReadSchema:
         data = comment.model_dump()
-        await self.repository.create(returning_fields=None, **data, user_id=creator.id, story_id=story_id)
+        try:
+            await self.repository.create(returning_fields=None, **data, user_id=creator.id, story_id=story_id)
+        except sqlalchemy.exc.IntegrityError:
+            raise HTTPException(status_code=403, detail=f'Story {story_id} not found')
+
         return StoryCommentReadSchema(
             **data,
             user_id=creator.id,
