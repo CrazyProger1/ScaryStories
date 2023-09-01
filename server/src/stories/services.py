@@ -9,15 +9,16 @@ from src.repository import AbstractRepository
 from src.serializer import AbstractSerializer
 from src.stories.schemas import (
     StoryCreateSchema,
-    StoryReadSchema,
+    StoriesReadSchema,
     StoryCategorySchema,
     StoryRatingVoteWriteSchema,
     StoryRatingVoteReadSchema,
     StoryCommentWriteSchema,
     StoryCommentReadSchema,
-    StoryRating
+    StoryRating,
+    StoryReadSchema
 )
-from src.stories.models import StoryComment, StoryRatingVote
+from src.stories.models import StoryComment, StoryRatingVote, Story
 
 
 class StoriesService:
@@ -26,19 +27,26 @@ class StoriesService:
         self.serializer = serializer()
 
     async def read_stories(self, limit: int = None, offset: int = None) -> list[BaseModel]:
-        return self.serializer.serialize_many(await self.repository.read(limit=limit, offset=offset), StoryReadSchema)
+        return self.serializer.serialize_many(await self.repository.read(limit=limit, offset=offset), StoriesReadSchema)
 
-    async def create_story(self, story: StoryCreateSchema, creator: User) -> StoryReadSchema:
+    async def read_story(self, story_id: int):
+        stories = await self.repository.read(Story.id == story_id)
+
+        if stories:
+            return self.serializer.serialize(stories[0], StoryReadSchema)
+        raise HTTPException(status_code=404, detail='Story not found')
+
+    async def create_story(self, story: StoryCreateSchema, creator: User) -> StoriesReadSchema:
         try:
             story_id = await self.repository.create(creator_id=creator.id, **story.model_dump())
         except sqlalchemy.exc.IntegrityError:
-            raise HTTPException(status_code=403, detail=f"Category '{story.category_name}' does not exists")
+            raise HTTPException(status_code=403, detail=f"Category '{story.category_name}' not found")
         data = {
             'id': story_id,
             'creator_id': creator.id,
             **story.model_dump()
         }
-        return StoryReadSchema.model_validate(data)
+        return StoriesReadSchema.model_validate(data)
 
 
 class StoryCategoriesService:

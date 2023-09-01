@@ -16,7 +16,7 @@ from src.stories.services import (
 )
 from src.stories.schemas import (
     StoryCreateSchema,
-    StoryReadSchema,
+    StoriesReadSchema,
     StoryCategorySchema,
     StoryRatingVoteReadSchema,
     StoryRatingVoteWriteSchema,
@@ -32,7 +32,7 @@ routers = (
 )
 
 
-@router.get('', response_model=list[StoryReadSchema])
+@router.get('', response_model=list[StoriesReadSchema])
 async def read_stories(
         service: StoriesService = Depends(stories_service),
         limit: int = None,
@@ -41,7 +41,15 @@ async def read_stories(
     return await service.read_stories(limit=limit, offset=offset)
 
 
-@router.post('', response_model=StoryReadSchema)
+@router.get('/{story_id}')
+async def read_story(
+        story_id: int,
+        service: StoriesService = Depends(stories_service)
+):
+    return await service.read_story(story_id=story_id)
+
+
+@router.post('', response_model=StoriesReadSchema)
 async def create_story(
         story: StoryCreateSchema,
         user: User = Depends(current_active_user),

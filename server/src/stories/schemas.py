@@ -8,6 +8,13 @@ from src.stories.constants import (
 )
 
 
+class StoriesReadSchema(BaseModel):
+    id: int
+    name: str
+    creator_id: int
+    category_name: str
+
+
 class StoryReadSchema(BaseModel):
     id: int
     name: str
