@@ -9,3 +9,4 @@ asyncpg
 psycopg2
 gunicorn
 flower
+loguru

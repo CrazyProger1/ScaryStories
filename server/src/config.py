@@ -3,6 +3,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 APP = 'ScaryStories'
 VERSION = '0.1'
 
+DEBUG = True
+
 
 class SensitiveSettings(BaseSettings):
     secret: str

@@ -6,6 +6,7 @@ from fastapi import FastAPI, APIRouter
 from src.auth.routers import routers as auth_routers
 from src.stories.routers import routers as stories_routers
 from src.config import APP, VERSION
+from src.middlewares import catch_exceptions_middleware
 
 app = FastAPI(
     title=APP,
@@ -24,6 +25,8 @@ def include_routers(routers: Iterable[APIRouter], tags: list[str], prefix: str):
 
 include_routers(auth_routers, tags=['Users'], prefix='/users')
 include_routers(stories_routers, tags=['Stories'], prefix='/stories')
+
+app.middleware('http')(catch_exceptions_middleware)
 
 if __name__ == '__main__':
     uvicorn.run(
