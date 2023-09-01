@@ -65,7 +65,18 @@ async def create_category(
     return await service.create_category(category=category)
 
 
-@router.get('/{story_id}/votes', response_model=Rating, tags=['Votes'])
+@router.put('/categories/{name}', response_model=CategorySchema, tags=['Categories'])
+async def update_category(
+        name: str,
+        category: CategorySchema,
+        service: CategoriesService = Depends(story_categories_service),
+        user: User = Depends(current_superuser)
+):
+    await service.update_category(name=name, category=category)
+    return Response(status_code=204)
+
+
+@router.get('/{story_id}/rating', response_model=Rating, tags=['Votes'])
 async def get_rating(story_id: int, service: VotesService = Depends(story_votes_service)):
     return await service.get_rating(story_id=story_id)
 
@@ -145,7 +156,7 @@ async def delete_category(
         service: CategoriesService = Depends(story_categories_service),
         user: User = Depends(current_superuser)
 ):
-    await service.delete_category(name=name, user=user)
+    await service.delete_category(name=name)
     return Response(status_code=204)
 
 

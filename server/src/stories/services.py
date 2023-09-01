@@ -32,7 +32,7 @@ class StoriesService:
     async def get_story_or_404(self, story_id: int) -> Story:
         story = await self.repository.read_one(Story.id == story_id)
         if not story:
-            raise HTTPException(status_code=404, detail='Story not found')
+            raise HTTPException(status_code=404, detail='Not found')
         return story
 
     async def is_story_owner_or_superuser_or_403(self, story: Story, owner: User):
@@ -47,13 +47,13 @@ class StoriesService:
 
         if story:
             return self.serializer.serialize(story, StoryReadSchema)
-        raise HTTPException(status_code=404, detail='Story not found')
+        raise HTTPException(status_code=404, detail='Not found')
 
     async def create_story(self, story: StoryCreateSchema, creator: User) -> StoriesReadSchema:
         try:
             story_id = await self.repository.create(creator_id=creator.id, **story.model_dump())
         except sqlalchemy.exc.IntegrityError:
-            raise HTTPException(status_code=403, detail=f"Category '{story.category_name}' not found")
+            raise HTTPException(status_code=403, detail=f"Category not found")
         data = {
             'id': story_id,
             'creator_id': creator.id,
@@ -77,20 +77,28 @@ class CategoriesService:
         self.repository = repository()
         self.serializer = serializer()
 
+    async def category_exist_or_404(self, name: str):
+        if not await self.repository.exists(StoryCategory.name == name):
+            raise HTTPException(status_code=404, detail='Not found')
+
+    async def category_not_exist_or_403(self, name: str):
+        if await self.repository.exists(StoryCategory.name == name):
+            raise HTTPException(status_code=403, detail='Category already exists')
+
     async def read_categories(self):
         return self.serializer.serialize_many(await self.repository.read(), CategorySchema)
 
     async def create_category(self, category: CategorySchema) -> CategorySchema:
+        await self.category_not_exist_or_403(name=category.name)
         name = await self.repository.create(**category.model_dump())
         return CategorySchema(name=name)
 
-    async def is_superuser_or_403(self, user: User):
-        if not user.is_superuser:
-            raise HTTPException(status_code=403, detail="You don't have permission to perform this action")
-
-    async def delete_category(self, name: str, user: User):
-        await self.is_superuser_or_403(user)
+    async def delete_category(self, name: str):
         await self.repository.delete(StoryCategory.name == name)
+
+    async def update_category(self, name: str, category: CategorySchema):
+        await self.category_exist_or_404(name=name)
+        await self.repository.update(StoryCategory.name == name, **category.model_dump())
 
 
 class VotesService:
@@ -104,7 +112,7 @@ class VotesService:
             StoryRatingVote.user_id == user_id
         )
         if not vote:
-            raise HTTPException(status_code=404, detail='Vote not found')
+            raise HTTPException(status_code=404, detail='Not found')
         return vote
 
     async def vote_not_exists_or_403(self, story_id: int, user_id: int):
@@ -122,7 +130,7 @@ class VotesService:
             await self.vote_not_exists_or_403(story_id=story_id, user_id=creator.id)
             await self.repository.create(returning_fields=None, **data, user_id=creator.id, story_id=story_id)
         except sqlalchemy.exc.IntegrityError:
-            raise HTTPException(status_code=403, detail=f'Story {story_id} not found')
+            raise HTTPException(status_code=403, detail=f'Not found')
 
         return VoteReadSchema(
             **data,
@@ -170,7 +178,7 @@ class CommentsService:
     async def get_comment_or_404(self, comment_id: int) -> StoryComment:
         comment = await self.repository.read_one(StoryComment.id == comment_id)
         if not comment:
-            raise HTTPException(status_code=404, detail='Comment not found')
+            raise HTTPException(status_code=404, detail='Not found')
         return comment
 
     async def is_comment_owner_or_superuser_or_403(self, comment: StoryComment, owner: User):
@@ -197,7 +205,7 @@ class CommentsService:
         try:
             comment_id = await self.repository.create(**data, user_id=creator.id, story_id=story_id)
         except sqlalchemy.exc.IntegrityError:
-            raise HTTPException(status_code=403, detail=f'Story {story_id} not found')
+            raise HTTPException(status_code=403, detail=f'Story not found')
 
         return CommentReadSchema(
             **data,

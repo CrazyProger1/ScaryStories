@@ -11,7 +11,7 @@ class Story(Base):
     name = db.Column(db.String, nullable=False)
     story = db.Column(db.String, nullable=False)
     creator_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='SET NULL'), nullable=True)
-    category_name = db.Column(db.String, db.ForeignKey('story_categories.name'))
+    category_name = db.Column(db.String, db.ForeignKey('story_categories.name', onupdate='CASCADE'))
 
 
 class StoryCategory(Base):
