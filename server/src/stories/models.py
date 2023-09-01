@@ -31,6 +31,7 @@ class StoryRatingVote(Base):
 class StoryComment(Base):
     __tablename__ = 'story_comments'
 
-    story_id = db.Column(db.Integer, db.ForeignKey('stories.id', ondelete='CASCADE'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    story_id = db.Column(db.Integer, db.ForeignKey('stories.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'))
     comment = db.Column(db.String, nullable=False)

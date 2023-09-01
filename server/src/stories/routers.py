@@ -11,13 +11,13 @@ from src.stories.dependencies import (
 from src.stories.schemas import (
     StoryCreateSchema,
     StoriesReadSchema,
-    StoryCategorySchema,
-    StoryRatingVoteReadSchema,
-    StoryRatingVoteWriteSchema,
-    StoryCommentWriteSchema,
-    StoryCommentReadSchema,
-    StoryRating,
-    StoryUpdateSchema, StoryReadSchema
+    CategorySchema,
+    VoteReadSchema,
+    VoteWriteSchema,
+    CommentWriteSchema,
+    CommentReadSchema,
+    Rating,
+    StoryUpdateSchema, StoryReadSchema, CommentUpdateSchema
 )
 from src.stories.services import (
     StoriesService,
@@ -51,29 +51,29 @@ async def create_story(
     return await service.create_story(story=story, creator=user)
 
 
-@router.get('/categories', response_model=list[StoryCategorySchema])
+@router.get('/categories', response_model=list[CategorySchema])
 async def read_categories(service: StoryCategoriesService = Depends(story_categories_service)):
     return await service.read_categories()
 
 
-@router.post('/categories', response_model=StoryCategorySchema)
+@router.post('/categories', response_model=CategorySchema)
 async def create_category(
-        category: StoryCategorySchema,
+        category: CategorySchema,
         service: StoryCategoriesService = Depends(story_categories_service),
         user: User = Depends(current_superuser)
 ):
     return await service.create_category(category=category)
 
 
-@router.get('/{story_id}/votes', response_model=StoryRating)
+@router.get('/{story_id}/votes', response_model=Rating)
 async def get_rating(story_id: int, service: StoryVotesService = Depends(story_votes_service)):
     return await service.get_rating(story_id=story_id)
 
 
-@router.post('/{story_id}/votes', response_model=StoryRatingVoteReadSchema)
+@router.post('/{story_id}/votes', response_model=VoteReadSchema)
 async def create_vote(
         story_id: int,
-        vote: StoryRatingVoteWriteSchema,
+        vote: VoteWriteSchema,
         service: StoryVotesService = Depends(story_votes_service),
         user: User = Depends(current_active_user)
 ):
@@ -90,10 +90,10 @@ async def read_comments(
     return await service.read_comments(story_id=story_id, limit=limit, offset=offset)
 
 
-@router.post('/{story_id}/comments', response_model=StoryCommentReadSchema)
+@router.post('/{story_id}/comments', response_model=CommentReadSchema)
 async def create_comment(
         story_id: int,
-        comment: StoryCommentWriteSchema,
+        comment: CommentWriteSchema,
         service: StoryCommentsService = Depends(story_comments_service),
         user: User = Depends(current_active_user)
 
@@ -137,4 +137,32 @@ async def delete_category(
         user: User = Depends(current_superuser)
 ):
     await service.delete_category(name=name, user=user)
+    return Response(status_code=204)
+
+
+@router.patch('/comments/{comment_id}', status_code=204)
+async def update_comment(
+        comment_id: int,
+        comment: CommentUpdateSchema,
+        service: StoryCommentsService = Depends(story_comments_service),
+        user: User = Depends(current_active_user)
+):
+    await service.update_comment(
+        comment=comment,
+        comment_id=comment_id,
+        user=user
+    )
+    return Response(status_code=204)
+
+
+@router.delete('/comments/{comment_id}', status_code=204)
+async def delete_comment(
+        comment_id: int,
+        service: StoryCommentsService = Depends(story_comments_service),
+        user: User = Depends(current_active_user)
+):
+    await service.delete_comment(
+        comment_id=comment_id,
+        user=user
+    )
     return Response(status_code=204)

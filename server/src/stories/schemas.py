@@ -34,30 +34,35 @@ class StoryCreateSchema(BaseModel):
     category_name: str
 
 
-class StoryCategorySchema(BaseModel):
+class CategorySchema(BaseModel):
     name: str = Field(max_length=CATEGORY_NAME_LENGTH)
 
 
-class StoryRatingVoteWriteSchema(BaseModel):
+class VoteWriteSchema(BaseModel):
     vote: int = Field(ge=0, le=5)
 
 
-class StoryRatingVoteReadSchema(BaseModel):
+class VoteReadSchema(BaseModel):
     story_id: int
     user_id: int
     vote: int
 
 
-class StoryRating(BaseModel):
+class Rating(BaseModel):
     story_id: int
     rating: float
 
 
-class StoryCommentWriteSchema(BaseModel):
+class CommentWriteSchema(BaseModel):
     comment: str = Field(max_length=COMMENT_LENGTH)
 
 
-class StoryCommentReadSchema(BaseModel):
+class CommentReadSchema(BaseModel):
+    id: int
     story_id: int
     user_id: int
     comment: str
+
+
+class CommentUpdateSchema(BaseModel):
+    comment: str = Field(max_length=COMMENT_LENGTH)

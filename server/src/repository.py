@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import insert, select, delete, update
+from sqlalchemy import insert, select, delete, update, exists
 
 from src.database import async_session_maker, Base
 
@@ -20,6 +20,9 @@ class AbstractRepository(ABC):
 
     @abstractmethod
     async def delete(self, *filters) -> None: ...
+
+    @abstractmethod
+    async def exists(self, *filters) -> bool: ...
 
 
 class SQLAlchemyRepository(AbstractRepository):
@@ -75,3 +78,7 @@ class SQLAlchemyRepository(AbstractRepository):
             stmt = delete(self.model).filter(*filters)
             await session.execute(stmt)
             await session.commit()
+
+    async def exists(self, *filters) -> bool:
+        result = await self._read(*filters)
+        return result.first() is not None
