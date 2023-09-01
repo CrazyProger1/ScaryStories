@@ -8,9 +8,9 @@ from src.stories.repositories import (
 )
 from src.stories.services import (
     StoriesService,
-    StoryCategoriesService,
-    StoryVotesService,
-    StoryCommentsService
+    CategoriesService,
+    VotesService,
+    CommentsService
 )
 from src.stories.serializers import Serializer
 
@@ -22,14 +22,14 @@ def stories_service():
 
 @cache
 def story_categories_service():
-    return StoryCategoriesService(StoryCategoriesRepository, Serializer)
+    return CategoriesService(StoryCategoriesRepository, Serializer)
 
 
 @cache
 def story_votes_service():
-    return StoryVotesService(StoryVotesRepository, Serializer)
+    return VotesService(StoryVotesRepository, Serializer)
 
 
 @cache
 def story_comments_service():
-    return StoryCommentsService(StoryCommentsRepository, Serializer)
+    return CommentsService(StoryCommentsRepository, Serializer)
