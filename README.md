@@ -1,12 +1,14 @@
 # Scary Stories
 
+Scary Stories is a simple REST API for storing scary stories.
+
 ## Server
 
-To see the server documentation, follow this link [server](server).
+To see the server documentation, follow this link [server](server/README.md).
 
 ## Client
 
-To see the client documentation, follow this link [client](client).
+To see the client documentation, follow this link [client](client/README.md).
 
 ## License
 

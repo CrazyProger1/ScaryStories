@@ -1,0 +1,31 @@
+version: '3.11'
+
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    container_name: "scary_stories_db"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ScaryStories
+      - POSTGRES_PORT=5432
+    restart: always
+  web:
+    env_file:
+      - .env
+    build: .
+    container_name: "scary_stories"
+    volumes:
+      - .:/usr/src/scary_stories
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      - "db"
+volumes:
+  postgres_data:
