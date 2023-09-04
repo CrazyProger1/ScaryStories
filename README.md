@@ -1,5 +1,7 @@
 # Scary Stories
 
+Scary Stories is a simple REST API for storing scary stories. 
+
 ## Server
 
 To see the server documentation, follow this link [server](server).
