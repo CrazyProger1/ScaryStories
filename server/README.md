@@ -6,6 +6,60 @@
 
 ## Development
 
+**Note:** _make sure you've installed [Python 3.11](https://python.org/) and [PostgreSQL](https://www.postgresql.org/)._
+
+Firstly, you need to clone the repository:
+
+```shell
+git clone https://github.com/CrazyProger1/ScaryStories.git
+```
+
+Change directory to server:
+
+```shell
+cd ./ScaryStories/server
+```
+
+Create the virtual environment:
+
+```shell
+python -m venv venv
+```
+
+Activate it:
+
+* Linux:
+
+```shell
+source venv/bin/activate
+```
+
+* Windows:
+
+```commandline
+call venv/scripts/activate
+```
+
+Install the requirements:
+
+```shell
+pip install -r requirements/dev.txt
+```
+
+Now, you need to create the local database. PSQL command:
+
+```postgresql
+CREATE DATABASE "dbname";
+```
+
+Create .env file by example [.env.example](.env.example) in the server directory and fill out it.
+
+And finally you can run it:
+
+```shell
+uvicorn main:app --reload
+```
+
 ## Documentation
 
 To see the documentation, start the server locally and follow this link [Swagger docs](http://127.0.0.1:8000/docs)
