@@ -10,3 +10,4 @@ psycopg2
 pytest-asyncio
 httpx
 loguru
+ruff
