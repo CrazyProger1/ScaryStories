@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
 import {Button, Form, Modal} from "react-bootstrap";
+import RegistrationForm from "../forms/RegistrationForm";
 
 const RegistrationModal = ({show, onClose, onChangeMode, onSubmit, ...props}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordConfirmation, setPasswordConfirmation] = useState("");
+    const [valid, setValid] = useState(false);
+
+    const handleSubmit = () => {
+        if (valid)
+            onSubmit(email, password)
+    }
 
     return (
         <div>
@@ -12,31 +20,20 @@ const RegistrationModal = ({show, onClose, onChangeMode, onSubmit, ...props}) =>
                     <Modal.Title>Registration</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </Form.Group>
-                    </Form>
+                    <RegistrationForm
+                        username={email}
+                        password={password}
+                        passwordConfirmation={passwordConfirmation}
+                        onChangeUsername={setEmail}
+                        onChangePassword={setPassword}
+                        onChangePasswordConfirmation={setPasswordConfirmation}
+                        onSetValidity={setValid}
+                        onSubmit={handleSubmit}
+                    />
                     <Button
                         className="w-100 mt-3"
                         variant="primary"
-                        onClick={() => onSubmit(email, password)}>
+                        onClick={handleSubmit}>
                         Sign Up
                     </Button>
                 </Modal.Body>
