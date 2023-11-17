@@ -1,12 +1,11 @@
 import React from 'react';
-
 import PageWrapper from '../components/PageWrapper';
 
 
-const Categories = () =>
+const StoryPage = () =>
     <PageWrapper>
-        <h1>Categories</h1>
+        <h1>Story</h1>
     </PageWrapper>
 
 
-export default Categories;
+export default StoryPage;
