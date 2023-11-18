@@ -22,9 +22,9 @@ const LoginModal = ({show, onClose, onChangeMode, onSubmit, ...props}) => {
                 </Modal.Header>
                 <Modal.Body>
                     <LoginForm
-                        username={email}
+                        email={email}
                         password={password}
-                        onChangeUsername={setEmail}
+                        onChangeEmail={setEmail}
                         onChangePassword={setPassword}
                         onSetValidity={setValid}
                         onSubmit={handleSubmit}

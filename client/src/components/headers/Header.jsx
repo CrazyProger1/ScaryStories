@@ -19,14 +19,18 @@ const Header = () => {
         setShowLoginModal(prev);
     }
 
-    // login modal
-    const handleLoginModalSubmit = (username, password) =>
+
+    const handleLoginModalSubmit = (username, password) => {
         setShowLoginModal(false);
 
+    }
 
-    // registration modal
-    const handleRegistrationModalSubmit = (username, password) =>
+
+    const handleRegistrationModalSubmit = (username, password) => {
         setShowRegistrationModal(false);
+
+    }
+
 
     return (
         <div>

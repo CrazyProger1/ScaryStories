@@ -1,57 +1,82 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
+import {validateEmail} from "../../utils/validators/user";
 
-const LoginForm = ({username, password, onChangeUsername, onChangePassword, onSetValidity, onSubmit}) => {
-    const formRef = useRef(null)
-
+const LoginForm = ({email, password, onChangeEmail, onChangePassword, onSetValidity, onSubmit}) => {
+    const [errors, setErrors] = useState({
+        email: ""
+    });
     useEffect(() => {
-        if (onSetValidity)
-            onSetValidity(validate())
+        validate()
     })
 
-    const validate = () => formRef.current.checkValidity();
+    useEffect(() => validate(), [
+        email
+    ])
+
+    const handleEmailChange = (e) =>
+        onChangeEmail(e.target.value);
+
+    const handlePasswordChange = (e) =>
+        onChangePassword(e.target.value);
 
 
-    const handleChange = () => {
-        if (onSetValidity)
-            onSetValidity(validate())
+    const validate = () => {
+        let newErrors = {
+            email: ""
+        }
+        if (!validateEmail(email))
+            newErrors.email = "Email is not valid";
+
+
+        setErrors(newErrors);
+        onSetValidity(!errors.email);
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         onSubmit();
     };
 
     return (
-        <Form ref={formRef} noValidate validated={true} onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
+        <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
-                    required
-                    autoFocus
-                    type='email'
-                    placeholder='Email'
-                    value={username}
-                    onChange={(e) => {
-                        onChangeUsername(e.target.value);
-                        handleChange();
-                    }}
+                    type="text"
+                    placeholder="Email"
+                    name="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    isInvalid={!!errors.email}
+                    isValid={!errors.email}
                 />
+                <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                    Looks good!
+                </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formBasicPassword">
+            <Form.Group controlId="formPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
-                    required
                     type="password"
                     placeholder="Password"
+                    name="password"
                     value={password}
-                    onChange={(e) => {
-                        onChangePassword(e.target.value);
-                        handleChange();
-                    }}
+                    onChange={handlePasswordChange}
+                    isInvalid={!!errors.password}
+                    isValid={!errors.password}
                 />
+                <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                    Looks good!
+                </Form.Control.Feedback>
             </Form.Group>
         </Form>
     );

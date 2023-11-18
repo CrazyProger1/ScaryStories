@@ -1,8 +1,10 @@
-export const validateUsername = (username) => {
-    return true;
+import {EMAIL_EXPR, PASSWORD_EXPR} from "../../constants/validation";
+
+export const validateEmail = (email) => {
+    return EMAIL_EXPR.test(email);
 }
 
 
 export const validatePassword = (password) => {
-    return true;
+    return PASSWORD_EXPR.test(password);
 }

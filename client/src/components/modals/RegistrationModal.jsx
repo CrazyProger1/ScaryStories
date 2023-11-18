@@ -21,10 +21,10 @@ const RegistrationModal = ({show, onClose, onChangeMode, onSubmit, ...props}) =>
                 </Modal.Header>
                 <Modal.Body>
                     <RegistrationForm
-                        username={email}
+                        email={email}
                         password={password}
                         passwordConfirmation={passwordConfirmation}
-                        onChangeUsername={setEmail}
+                        onChangeEmail={setEmail}
                         onChangePassword={setPassword}
                         onChangePasswordConfirmation={setPasswordConfirmation}
                         onSetValidity={setValid}

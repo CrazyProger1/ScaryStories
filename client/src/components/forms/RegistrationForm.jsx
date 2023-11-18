@@ -1,84 +1,134 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
-import {validatePassword, validateUsername} from "../../utils/validators/user";
+import {validatePassword, validateEmail} from "../../utils/validators/user";
 
 
 const RegistrationForm = (
     {
-        username,
+        email,
         password,
         passwordConfirmation,
-        onChangeUsername,
+        onChangeEmail,
         onChangePassword,
         onChangePasswordConfirmation,
         onSetValidity,
         onSubmit
     }) => {
-    const formRef = useRef(null)
 
+    const [errors, setErrors] = useState({
+        email: "",
+        password: "",
+        passwordConfirmation: ""
+    });
     useEffect(() => {
-        if (onSetValidity)
-            onSetValidity(validate())
+        validate()
     })
 
-    const validate = () => formRef.current.checkValidity() && validateUsername(username) && validatePassword(password);
+    useEffect(() => validate(), [
+        email,
+        password,
+        passwordConfirmation
+    ])
+
+    const handleEmailChange = (e) =>
+        onChangeEmail(e.target.value);
+
+    const handlePasswordChange = (e) =>
+        onChangePassword(e.target.value);
 
 
-    const handleChange = () => {
-        if (onSetValidity)
-            onSetValidity(validate())
+    const handlePasswordConfirmationChange = (e) =>
+        onChangePasswordConfirmation(e.target.value);
+
+
+    const validate = () => {
+        let newErrors = {
+            email: "",
+            password: "",
+            passwordConfirmation: ""
+        }
+        if (!validateEmail(email))
+            newErrors.email = "Email is not valid";
+
+
+        if (!validatePassword(password))
+            if (password.length < 8)
+                newErrors.password = "Password should contain at least 8 chars"
+            else
+                newErrors.password = "Password should contain numbers, letters, upper case letters and symbols"
+
+
+        if (passwordConfirmation !== password)
+            newErrors.passwordConfirmation = "Password mismatch"
+
+
+        setErrors(newErrors);
+        onSetValidity(!errors.email && !errors.password && !errors.passwordConfirmation);
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         onSubmit();
     };
 
     return (
-        <Form ref={formRef} noValidate validated={true} onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
+        <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
-                    required
-                    autoFocus
-                    type="email"
+                    type="text"
                     placeholder="Email"
-                    value={username}
-                    onChange={(e) => {
-                        onChangeUsername(e.target.value);
-                        handleChange();
-                    }}
+                    name="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    isInvalid={!!errors.email}
+                    isValid={!errors.email}
                 />
+                <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                    Looks good!
+                </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formBasicPassword">
+            <Form.Group controlId="formPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
-                    required
                     type="password"
                     placeholder="Password"
+                    name="password"
                     value={password}
-                    onChange={(e) => {
-                        onChangePassword(e.target.value);
-                        handleChange();
-                    }}
+                    onChange={handlePasswordChange}
+                    isInvalid={!!errors.password}
+                    isValid={!errors.password}
                 />
+                <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                    Looks good!
+                </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formBasicPasswordConfirmation">
+            <Form.Group controlId="formPasswordConfirmation">
                 <Form.Label>Confirmation</Form.Label>
                 <Form.Control
-                    required
                     type="password"
                     placeholder="Password"
+                    name="password-confirmation"
                     value={passwordConfirmation}
-
-                    onChange={(e) => {
-                        onChangePasswordConfirmation(e.target.value)
-                        handleChange();
-                    }}
+                    onChange={handlePasswordConfirmationChange}
+                    isInvalid={!!errors.passwordConfirmation}
+                    isValid={!errors.passwordConfirmation}
                 />
+                <Form.Control.Feedback type="invalid">
+                    {errors.passwordConfirmation}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                    Looks good!
+                </Form.Control.Feedback>
             </Form.Group>
         </Form>
     );
