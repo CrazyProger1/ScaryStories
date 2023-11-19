@@ -56,7 +56,10 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
             top: visible ? '0' : `-${headerHeight}px`
         }}>
             <Container>
-                <Navbar.Brand onClick={() => navigate("/")} className="brand">Scary Stories</Navbar.Brand>
+                <Navbar.Brand onClick={() => {
+                    navigate("/");
+                    uiStore.setPage("/");
+                }} className="brand">Scary Stories</Navbar.Brand>
                 <Nav className="me-auto" activeKey={uiStore.currentPage}
                      onSelect={eventKey => uiStore.setPage(eventKey)}>
                     {links.map(({eventKey, to, children}) =>

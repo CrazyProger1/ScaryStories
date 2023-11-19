@@ -9,6 +9,11 @@
     src: url("../../public/fonts/Night Stalker Free.ttf") format("truetype")
 }
 
+@font-face {
+    font-family: "Scream Again";
+    src: url("../../public/fonts/Scream Again.ttf") format("truetype")
+}
+
 
 .header {
     position: fixed;
@@ -23,7 +28,14 @@
     color: maroon;
 }
 
+
+.nav-link {
+    font-family: Scream Again, sans-serif;
+    font-size: 30px;
+}
+
 .brand:hover {
     color: maroon;
     cursor: pointer;
 }
+
