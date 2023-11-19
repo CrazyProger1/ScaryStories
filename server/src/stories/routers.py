@@ -11,13 +11,13 @@ from src.stories.dependencies import (
 from src.stories.schemas import (
     StoryCreateSchema,
     StoriesReadSchema,
-    CategorySchema,
+    CategoryReadSchema,
     VoteReadSchema,
     VoteWriteSchema,
     CommentWriteSchema,
     CommentReadSchema,
     Rating,
-    StoryUpdateSchema, StoryReadSchema, CommentUpdateSchema, VoteUpdateSchema
+    StoryUpdateSchema, StoryReadSchema, CommentUpdateSchema, VoteUpdateSchema, CategoryCreateUpdateSchema
 )
 from src.stories.services import (
     StoriesService,
@@ -51,28 +51,28 @@ async def create_story(
     return await service.create_story(story=story, creator=user)
 
 
-@router.get('/categories', response_model=list[CategorySchema], tags=['Categories'])
+@router.get('/categories', response_model=list[CategoryReadSchema], tags=['Categories'])
 async def read_categories(service: CategoriesService = Depends(story_categories_service)):
     return await service.read_categories()
 
 
-@router.post('/categories', response_model=CategorySchema, tags=['Categories'])
+@router.post('/categories', response_model=CategoryReadSchema, tags=['Categories'])
 async def create_category(
-        category: CategorySchema,
+        category: CategoryCreateUpdateSchema,
         service: CategoriesService = Depends(story_categories_service),
         user: User = Depends(current_superuser)
 ):
     return await service.create_category(category=category)
 
 
-@router.put('/categories/{name}', response_model=CategorySchema, tags=['Categories'])
+@router.put('/categories/{category_id}', response_model=CategoryReadSchema, tags=['Categories'])
 async def update_category(
-        name: str,
-        category: CategorySchema,
+        category_id: int,
+        category: CategoryCreateUpdateSchema,
         service: CategoriesService = Depends(story_categories_service),
         user: User = Depends(current_superuser)
 ):
-    await service.update_category(name=name, category=category)
+    await service.update_category(category_id=category_id, category=category)
     return Response(status_code=204)
 
 
@@ -150,13 +150,13 @@ async def delete_story(
     return Response(status_code=204)
 
 
-@router.delete('/categories/{name}', status_code=204, tags=['Categories'])
+@router.delete('/categories/{category_id}', status_code=204, tags=['Categories'])
 async def delete_category(
-        name: str,
+        category_id: str,
         service: CategoriesService = Depends(story_categories_service),
         user: User = Depends(current_superuser)
 ):
-    await service.delete_category(name=name)
+    await service.delete_category(category_id=category_id)
     return Response(status_code=204)
 
 

@@ -12,7 +12,7 @@ class StoriesReadSchema(BaseModel):
     id: int
     name: str
     creator_id: int
-    category_name: str
+    category_id: str
 
 
 class StoryReadSchema(BaseModel):
@@ -20,7 +20,7 @@ class StoryReadSchema(BaseModel):
     name: str
     story: str
     creator_id: int
-    category_name: str
+    category_id: str
 
 
 class StoryUpdateSchema(BaseModel):
@@ -31,10 +31,15 @@ class StoryUpdateSchema(BaseModel):
 class StoryCreateSchema(BaseModel):
     name: str = Field(max_length=STORY_NAME_LENGTH)
     story: str = Field(max_length=STORY_LENGTH)
-    category_name: str
+    category_id: str
 
 
-class CategorySchema(BaseModel):
+class CategoryReadSchema(BaseModel):
+    id: int
+    name: str = Field(max_length=CATEGORY_NAME_LENGTH)
+
+
+class CategoryCreateUpdateSchema(BaseModel):
     name: str = Field(max_length=CATEGORY_NAME_LENGTH)
 
 

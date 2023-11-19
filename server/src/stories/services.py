@@ -8,13 +8,13 @@ from src.serializer import AbstractSerializer
 from src.stories.schemas import (
     StoryCreateSchema,
     StoriesReadSchema,
-    CategorySchema,
+    CategoryReadSchema,
     VoteWriteSchema,
     VoteReadSchema,
     CommentWriteSchema,
     CommentReadSchema,
     Rating,
-    StoryReadSchema, StoryUpdateSchema, CommentUpdateSchema, VoteUpdateSchema
+    StoryReadSchema, StoryUpdateSchema, CommentUpdateSchema, VoteUpdateSchema, CategoryCreateUpdateSchema
 )
 from src.stories.models import (
     StoryComment,
@@ -78,28 +78,28 @@ class CategoriesService:
         self.repository = repository()
         self.serializer = serializer()
 
-    async def category_exist_or_404(self, name: str):
-        if not await self.repository.exists(StoryCategory.name == name):
+    async def category_exist_or_404(self, category_id: int):
+        if not await self.repository.exists(StoryCategory.id == category_id):
             raise HTTPException(status_code=404, detail=ErrorMessages.NOT_FOUND)
 
-    async def category_not_exist_or_403(self, name: str):
-        if await self.repository.exists(StoryCategory.name == name):
+    async def category_not_exist_or_403(self, category_id: int):
+        if await self.repository.exists(StoryCategory.id == category_id):
             raise HTTPException(status_code=403, detail=ErrorMessages.CATEGORY_ALREADY_EXISTS)
 
     async def read_categories(self):
-        return self.serializer.serialize_many(await self.repository.read(), CategorySchema)
+        return self.serializer.serialize_many(await self.repository.read(), CategoryReadSchema)
 
-    async def create_category(self, category: CategorySchema) -> CategorySchema:
-        await self.category_not_exist_or_403(name=category.name)
-        name = await self.repository.create(**category.model_dump())
-        return CategorySchema(name=name)
+    async def create_category(self, category: CategoryCreateUpdateSchema) -> CategoryReadSchema:
+        await self.category_not_exist_or_403(category_id=category.id)
+        category_id = await self.repository.create(**category.model_dump())
+        return CategoryReadSchema(name=category.name, id=category_id)
 
-    async def delete_category(self, name: str):
-        await self.repository.delete(StoryCategory.name == name)
+    async def delete_category(self, category_id: str):
+        await self.repository.delete(StoryCategory.id == category_id)
 
-    async def update_category(self, name: str, category: CategorySchema):
-        await self.category_exist_or_404(name=name)
-        await self.repository.update(StoryCategory.name == name, **category.model_dump())
+    async def update_category(self, category_id: int, category: CategoryCreateUpdateSchema):
+        await self.category_exist_or_404(category_id=category_id)
+        await self.repository.update(StoryCategory.id == category_id, **category.model_dump())
 
 
 class VotesService:

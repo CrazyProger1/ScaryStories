@@ -11,13 +11,14 @@ class Story(Base):
     name = db.Column(db.String, nullable=False)
     story = db.Column(db.String, nullable=False)
     creator_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='SET NULL'), nullable=True)
-    category_name = db.Column(db.String, db.ForeignKey('story_categories.name', onupdate='CASCADE'))
+    category_id = db.Column(db.Integer, db.ForeignKey('story_categories.id', onupdate='CASCADE'))
 
 
 class StoryCategory(Base):
     __tablename__ = 'story_categories'
 
-    name = db.Column(db.String, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
 
 
 class StoryRatingVote(Base):
