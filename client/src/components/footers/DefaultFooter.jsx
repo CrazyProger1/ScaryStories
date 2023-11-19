@@ -1,11 +1,5 @@
 import React from 'react';
 
-const DefaultFooter = () => {
-    return (
-        <div>
-
-        </div>
-    );
-};
+const DefaultFooter = () => <div/>
 
 export default DefaultFooter;
