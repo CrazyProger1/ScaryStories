@@ -1,8 +1,11 @@
 import React from 'react';
+import {useParams} from "react-router-dom";
 import PageWrapper from "../components/PageWrapper";
 
-const CategoryPage = ({category, ...props}) => {
-    console.log(category)
+
+const StoriesPage = () => {
+    const {category} = useParams();
+
     return (
         <PageWrapper>
             <h1>Stories</h1>
@@ -11,4 +14,4 @@ const CategoryPage = ({category, ...props}) => {
 }
 
 
-export default CategoryPage;
+export default StoriesPage;
