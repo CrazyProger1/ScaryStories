@@ -1,0 +1,23 @@
+@font-face {
+    font-family: "Another Danger";
+    src: url("../../public/fonts/Another Danger.otf") format("opentype")
+}
+
+
+.header {
+    position: fixed;
+    width: 100%;
+    transition: top 0.3s;
+}
+
+
+.brand {
+    font-family: Another Danger, sans-serif;
+    font-size: 40px;
+    color: maroon;
+}
+
+.brand:hover {
+    color: maroon;
+    cursor: pointer;
+}

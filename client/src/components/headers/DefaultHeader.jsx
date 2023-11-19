@@ -1,9 +1,27 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from "react";
 import {Container, Nav, Navbar} from "react-bootstrap";
 import {observer, inject} from "mobx-react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import "../../styles/Header.css";
 
 const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
+    const navigate = useNavigate();
+    const [prevScrollPos, setPrevScrollPos] = useState(0);
+    const [visible, setVisible] = useState(true);
+
+
+    const handleScroll = () => {
+        const currentScrollPos = window.pageYOffset;
+        const isScrolledDown = prevScrollPos < currentScrollPos;
+
+        setVisible(!isScrolledDown);
+        setPrevScrollPos(currentScrollPos);
+    };
+
+
+    window.addEventListener('scroll', handleScroll);
+
+
     const links = [
         {
             to: "/",
@@ -33,9 +51,11 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
     ]
 
     return (
-        <Navbar bg="dark" data-bs-theme="dark">
+        <Navbar className="header" bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg" style={{
+            top: visible ? '0' : '-100px'
+        }}>
             <Container>
-                <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+                <Navbar.Brand onClick={() => navigate("/")} className="brand">Scary Stories</Navbar.Brand>
                 <Nav className="me-auto" activeKey={uiStore.currentPage}
                      onSelect={eventKey => uiStore.setPage(eventKey)}>
                     {links.map(({eventKey, to, children}) =>
@@ -46,7 +66,6 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
                             {children}
                         </Nav.Link>
                     )}
-
                 </Nav>
             </Container>
         </Navbar>
