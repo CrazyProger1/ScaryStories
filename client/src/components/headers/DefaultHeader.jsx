@@ -10,6 +10,7 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
     const [visible, setVisible] = useState(true);
     const [headerHeight, setHeaderHeight] = useState(0);
     const headerRef = useRef(null);
+
     useEffect(() => {
         setHeaderHeight(headerRef.current ? headerRef.current.clientHeight : 0);
     }, [headerRef])
