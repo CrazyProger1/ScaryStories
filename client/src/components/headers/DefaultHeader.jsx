@@ -8,7 +8,7 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
     const navigate = useNavigate();
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [visible, setVisible] = useState(true);
-
+    const headerRef = useRef(null);
 
     const handleScroll = () => {
         const currentScrollPos = window.pageYOffset;
@@ -49,10 +49,11 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
             children: "About"
         }
     ]
+    const headerHeight = headerRef.current ? headerRef.current.clientHeight : 0;
 
     return (
-        <Navbar className="header" bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg" style={{
-            top: visible ? '0' : '-100px'
+        <Navbar ref={headerRef} className="header" bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg" style={{
+            top: visible ? '0' : `-${headerHeight}px`
         }}>
             <Container>
                 <Navbar.Brand onClick={() => navigate("/")} className="brand">Scary Stories</Navbar.Brand>
