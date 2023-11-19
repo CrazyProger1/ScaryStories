@@ -16,4 +16,3 @@ export default class UIStore {
         this.currentPage = page;
     }
 }
-
