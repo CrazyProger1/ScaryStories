@@ -1,0 +1,7 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("../../public/imgs/backgrounds/main_background.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+}

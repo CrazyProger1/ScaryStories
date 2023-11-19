@@ -34,13 +34,13 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
             children: "Categories"
         },
         {
-            to: "/",
-            eventKey: "/",
+            to: "/stories/topranked",
+            eventKey: "/stories/topranked",
             children: "Top Ranked"
         },
         {
-            to: "/",
-            eventKey: "/",
+            to: "/story/random",
+            eventKey: "/story/random",
             children: "Random Story"
         },
         {
@@ -64,6 +64,7 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
                      onSelect={eventKey => uiStore.setPage(eventKey)}>
                     {links.map(({eventKey, to, children}) =>
                         <Nav.Link
+                            className="nav-link"
                             as={Link}
                             eventKey={eventKey}
                             to={to}>
