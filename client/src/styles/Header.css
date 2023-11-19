@@ -4,6 +4,12 @@
 }
 
 
+@font-face {
+    font-family: "Night Stalker";
+    src: url("../../public/fonts/Night Stalker Free.ttf") format("truetype")
+}
+
+
 .header {
     position: fixed;
     width: 100%;
