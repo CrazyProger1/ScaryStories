@@ -41,7 +41,10 @@ class StoriesService:
             raise HTTPException(status_code=403, detail=ErrorMessages.NO_PERMISSION)
 
     async def read_stories(self, limit: int = None, offset: int = None) -> list[BaseModel]:
-        return self.serializer.serialize_many(await self.repository.read(limit=limit, offset=offset), StoriesReadSchema)
+        return self.serializer.serialize_many(
+            await self.repository.read(limit=limit, offset=offset),
+            StoriesReadSchema
+        )
 
     async def read_story(self, story_id: int):
         story = await self.repository.read_one(Story.id == story_id)
@@ -82,15 +85,15 @@ class CategoriesService:
         if not await self.repository.exists(StoryCategory.id == category_id):
             raise HTTPException(status_code=404, detail=ErrorMessages.NOT_FOUND)
 
-    async def category_not_exist_or_403(self, category_id: int):
-        if await self.repository.exists(StoryCategory.id == category_id):
+    async def category_not_exist_or_403(self, name: str):
+        if await self.repository.exists(StoryCategory.name == name):
             raise HTTPException(status_code=403, detail=ErrorMessages.CATEGORY_ALREADY_EXISTS)
 
     async def read_categories(self):
         return self.serializer.serialize_many(await self.repository.read(), CategoryReadSchema)
 
     async def create_category(self, category: CategoryCreateUpdateSchema) -> CategoryReadSchema:
-        await self.category_not_exist_or_403(category_id=category.id)
+        await self.category_not_exist_or_403(name=category.name)
         category_id = await self.repository.create(**category.model_dump())
         return CategoryReadSchema(name=category.name, id=category_id)
 

@@ -6,13 +6,25 @@ from src.stories.constants import (
     CATEGORY_NAME_LENGTH,
     COMMENT_LENGTH
 )
+from src.auth.schemas import (
+    UserReadSchema
+)
+
+
+class CategoryReadSchema(BaseModel):
+    id: int
+    name: str = Field(max_length=CATEGORY_NAME_LENGTH)
+
+
+class CategoryCreateUpdateSchema(BaseModel):
+    name: str = Field(max_length=CATEGORY_NAME_LENGTH)
 
 
 class StoriesReadSchema(BaseModel):
     id: int
     name: str
-    author_id: int
-    category_id: str
+    author: UserReadSchema
+    category: CategoryReadSchema
 
 
 class StoryReadSchema(BaseModel):
@@ -31,16 +43,7 @@ class StoryUpdateSchema(BaseModel):
 class StoryCreateSchema(BaseModel):
     name: str = Field(max_length=STORY_NAME_LENGTH)
     story: str = Field(max_length=STORY_LENGTH)
-    category_id: str
-
-
-class CategoryReadSchema(BaseModel):
-    id: int
-    name: str = Field(max_length=CATEGORY_NAME_LENGTH)
-
-
-class CategoryCreateUpdateSchema(BaseModel):
-    name: str = Field(max_length=CATEGORY_NAME_LENGTH)
+    category_id: int
 
 
 class VoteWriteSchema(BaseModel):
