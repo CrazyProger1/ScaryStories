@@ -36,8 +36,8 @@ class StoriesService:
             raise HTTPException(status_code=404, detail=ErrorMessages.NOT_FOUND)
         return story
 
-    async def is_story_owner_or_superuser_or_403(self, story: Story, owner: User):
-        if story.creator_id != owner.id and not owner.is_superuser:
+    async def is_story_owner_or_superuser_or_403(self, story: Story, author: User):
+        if story.author_id != author.id and not author.is_superuser:
             raise HTTPException(status_code=403, detail=ErrorMessages.NO_PERMISSION)
 
     async def read_stories(self, limit: int = None, offset: int = None) -> list[BaseModel]:
@@ -50,26 +50,26 @@ class StoriesService:
             return self.serializer.serialize(story, StoryReadSchema)
         raise HTTPException(status_code=404, detail=ErrorMessages.NOT_FOUND)
 
-    async def create_story(self, story: StoryCreateSchema, creator: User) -> StoriesReadSchema:
+    async def create_story(self, story: StoryCreateSchema, author: User) -> StoriesReadSchema:
         try:
-            story_id = await self.repository.create(creator_id=creator.id, **story.model_dump())
+            story_id = await self.repository.create(author_id=author.id, **story.model_dump())
         except sqlalchemy.exc.IntegrityError:
             raise HTTPException(status_code=403, detail=ErrorMessages.CATEGORY_NOT_FOUND)
         data = {
             'id': story_id,
-            'creator_id': creator.id,
+            'author_id': author.id,
             **story.model_dump()
         }
         return StoriesReadSchema.model_validate(data)
 
     async def update_story(self, story_id: int, story: StoryUpdateSchema, user: User):
         story_obj = await self.get_story_or_404(story_id=story_id)
-        await self.is_story_owner_or_superuser_or_403(story=story_obj, owner=user)
+        await self.is_story_owner_or_superuser_or_403(story=story_obj, author=user)
         await self.repository.update(Story.id == story_id, **story.model_dump())
 
     async def delete_story(self, story_id: int, user: User):
         story = await self.get_story_or_404(story_id=story_id)
-        await self.is_story_owner_or_superuser_or_403(story=story, owner=user)
+        await self.is_story_owner_or_superuser_or_403(story=story, author=user)
         await self.repository.delete(Story.id == story_id)
 
 

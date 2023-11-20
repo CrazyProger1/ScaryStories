@@ -48,7 +48,7 @@ async def create_story(
         user: User = Depends(current_active_user),
         service: StoriesService = Depends(stories_service)
 ):
-    return await service.create_story(story=story, creator=user)
+    return await service.create_story(story=story, author=user)
 
 
 @router.get('/categories', response_model=list[CategoryReadSchema], tags=['Categories'])
