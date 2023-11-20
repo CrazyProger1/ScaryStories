@@ -43,7 +43,7 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
             children: "Categories"
         },
         {
-            to: "/stories/topranked",
+            to: "/category/topranked",
             eventKey: "/stories/topranked",
             children: "Top Ranked"
         },

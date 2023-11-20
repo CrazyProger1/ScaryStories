@@ -4,6 +4,7 @@ import "./styles/App.css";
 import MainPage from "./components/pages/MainPage";
 import CategoriesPage from "./components/pages/CategoriesPage";
 import AboutPage from "./components/pages/AboutPage";
+import CategoryPage from "./components/pages/CategoryPage";
 
 
 const App = () =>
@@ -11,6 +12,7 @@ const App = () =>
         <Routes>
             <Route path='/' element={<MainPage/>}/>
             <Route path='/categories' element={<CategoriesPage/>}/>
+            <Route path='/category/:id' element={<CategoryPage/>}/>
             <Route path='/about' element={<AboutPage/>}/>
         </Routes>
     </div>

@@ -1,0 +1,26 @@
+.story-table {
+
+}
+
+
+.story-card {
+
+}
+
+
+.story-card:hover {
+
+}
+
+.story-card:hover img {
+    filter: blur(1px) brightness(90%);
+}
+
+.story-card-img {
+    height: 16rem;
+    filter: brightness(80%);
+}
+
+.story-card-title {
+    text-align: center;
+}

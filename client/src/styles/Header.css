@@ -18,6 +18,7 @@
     position: fixed;
     width: 100%;
     transition: top 0.3s;
+    z-index: 10;
 }
 
 

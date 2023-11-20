@@ -1,0 +1,26 @@
+.category-table {
+
+}
+
+
+.category-card {
+    height: 16rem;
+}
+
+
+.category-card:hover {
+
+}
+
+.category-card:hover img {
+    filter: blur(1px) brightness(90%);
+}
+
+.category-card-img {
+    height: 100%;
+    filter: brightness(80%);
+}
+
+.category-card-title {
+    text-align: center;
+}

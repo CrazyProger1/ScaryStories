@@ -1,0 +1,153 @@
+import React from 'react';
+import {useNavigate, useParams} from "react-router-dom";
+import PageWrapper from "./PageWrapper";
+import StoriesTable from "../tables/StoriesTable";
+
+const stories = [
+    {
+        id: 1,
+        name: "Scary Story #1",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 3.5
+    },
+    {
+        id: 2,
+        name: "Scary Story #2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 4.5
+    },
+    {
+        id: 1,
+        name: "Scary Story #1",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 3.5
+    },
+    {
+        id: 2,
+        name: "Scary Story #2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 4.5
+    },
+    {
+        id: 1,
+        name: "Scary Story #1",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 3.5
+    },
+    {
+        id: 2,
+        name: "Scary Story #2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 4.5
+    },
+    {
+        id: 1,
+        name: "Scary Story #1",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 3.5
+    },
+    {
+        id: 2,
+        name: "Scary Story #2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 4.5
+    },
+    {
+        id: 1,
+        name: "Scary Story #1",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 3.5
+    },
+    {
+        id: 2,
+        name: "Scary Story #2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 4.5
+    },
+    {
+        id: 1,
+        name: "Scary Story #1",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 3.5
+    },
+    {
+        id: 2,
+        name: "Scary Story #2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 4.5
+    },
+    {
+        id: 1,
+        name: "Scary Story #1",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 3.5
+    },
+    {
+        id: 2,
+        name: "Scary Story #2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 4.5
+    },
+    {
+        id: 1,
+        name: "Scary Story #1",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 3.5
+    },
+    {
+        id: 2,
+        name: "Scary Story #2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
+        author: {},
+        category: {},
+        rating: 4.5
+    }
+];
+
+const CategoryPage = () => {
+    const {id: categoryId} = useParams();
+    const navigate = useNavigate();
+
+
+    const handleStoryChoose = (story) =>
+        navigate("/story/" + story.id);
+
+
+    return (
+        <PageWrapper>
+            <StoriesTable stories={stories} onChoose={handleStoryChoose}/>
+        </PageWrapper>
+    );
+};
+
+export default CategoryPage;

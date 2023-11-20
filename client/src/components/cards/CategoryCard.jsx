@@ -8,7 +8,7 @@ const CategoryCard = ({category, onChoose, ...props}) => {
                 <div className="card category-card">
                     <img src={image} className="card-img-top category-card-img" alt={name}/>
                     <div className="card-body card-img-overlay">
-                        <h5 className="card-title">{name}</h5>
+                        <h5 className="card-title category-card-title">{name}</h5>
                     </div>
                 </div>
             </div>
