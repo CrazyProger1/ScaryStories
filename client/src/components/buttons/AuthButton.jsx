@@ -17,7 +17,14 @@ const AuthButton = inject("authStore")(observer(({authStore, ...props}) => {
 
     const handleModalSubmit = (data) => {
         setModalVisible(false);
-        console.log(data)
+        switch (modalType) {
+            case "login":
+                authStore.login(data.username, data.password);
+                break;
+            case  "registration":
+                authStore.register(data.username, data.password);
+                break;
+        }
     }
 
     const handleChangeMode = () =>
