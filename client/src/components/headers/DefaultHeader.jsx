@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Container, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Nav, Navbar} from "react-bootstrap";
 import {observer, inject} from "mobx-react";
 import {Link} from "react-router-dom";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import "../../styles/Header.css";
+import AuthButton from "../buttons/AuthButton";
 
 
 const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
@@ -81,7 +82,7 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
                             </Nav.Link>
                         )}
                     </Nav>
-
+                    <AuthButton/>
                 </Container>
             </Navbar>
             <div style={{

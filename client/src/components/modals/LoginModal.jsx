@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
 import {Button, Modal} from "react-bootstrap";
-import RegistrationForm from "../forms/RegistrationForm";
+import LoginForm from "../forms/LoginForm";
 
-
-const RegistrationModal = ({show, onClose, onSubmit, onChangeMode}) => {
+const LoginModal = ({show, onClose, onSubmit, onChangeMode}) => {
     const [formData, setFormData] = useState({
         login: "",
-        password: "",
-        passwordConfirmation: ""
+        password: ""
     })
     const [valid, setValid] = useState(false);
 
@@ -15,13 +13,14 @@ const RegistrationModal = ({show, onClose, onSubmit, onChangeMode}) => {
         if (valid)
             onSubmit(formData);
     }
+
     return (
         <Modal show={show} onHide={onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Registration</Modal.Title>
+                <Modal.Title>Login</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <RegistrationForm
+                <LoginForm
                     formData={formData}
                     onFormDataChange={setFormData}
                     onSetValidity={setValid}
@@ -31,16 +30,16 @@ const RegistrationModal = ({show, onClose, onSubmit, onChangeMode}) => {
                     className="w-100 mt-3"
                     variant="primary"
                     onClick={handleSubmit}>
-                    Sign Up
+                    Sign In
                 </Button>
             </Modal.Body>
 
             <Modal.Footer>
-                Already have an account?
-                <Button className="ml-0 mt-1" variant="link" onClick={onChangeMode}>Sign In</Button>
+                Don't have account yet?
+                <Button className="ml-0 mt-1" variant="link" onClick={onChangeMode}>Sign Up</Button>
             </Modal.Footer>
         </Modal>
     );
 };
 
-export default RegistrationModal;
+export default LoginModal;

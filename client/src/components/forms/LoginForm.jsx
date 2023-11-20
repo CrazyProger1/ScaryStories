@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Form} from "react-bootstrap";
 import {validateEmail, validatePassword} from "../../utils/validators/user";
+import {Form} from "react-bootstrap";
 
-
-const RegistrationForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
-    const {login, password, passwordConfirmation} = formData;
+const LoginForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
+    const {login, password} = formData;
     const [errors, setErrors] = useState({
         login: "",
-        password: "",
-        passwordConfirmation: ""
+        password: ""
     });
-
 
     useEffect(
         () => {
@@ -32,18 +29,10 @@ const RegistrationForm = ({formData, onFormDataChange, onSetValidity, onSubmit, 
         })
 
 
-    const handlePasswordConfirmationChange = (e) =>
-        onFormDataChange({
-            ...formData,
-            passwordConfirmation: e.target.value
-        })
-
-
     const validate = () => {
         let newErrors = {
             login: "",
-            password: "",
-            passwordConfirmation: ""
+            password: ""
         }
         if (!validateEmail(login))
             newErrors.login = "Email is not valid";
@@ -56,14 +45,10 @@ const RegistrationForm = ({formData, onFormDataChange, onSetValidity, onSubmit, 
                 newErrors.password = "Password should contain numbers, letters, upper case letters and symbols"
 
 
-        if (passwordConfirmation !== password)
-            newErrors.passwordConfirmation = "Password mismatch"
-
-
         setErrors(newErrors);
 
         if (onSetValidity)
-            onSetValidity(!newErrors.login && !newErrors.password && !newErrors.passwordConfirmation);
+            onSetValidity(!newErrors.login && !newErrors.password);
     }
 
     const handleSubmit = (e) => {
@@ -112,27 +97,8 @@ const RegistrationForm = ({formData, onFormDataChange, onSetValidity, onSubmit, 
                     Looks good!
                 </Form.Control.Feedback>
             </Form.Group>
-
-            <Form.Group controlId="formPasswordConfirmation">
-                <Form.Label>Confirmation</Form.Label>
-                <Form.Control
-                    type="password"
-                    placeholder="Password"
-                    name="password-confirmation"
-                    value={passwordConfirmation}
-                    onChange={handlePasswordConfirmationChange}
-                    isInvalid={!!errors.passwordConfirmation}
-                    isValid={!errors.passwordConfirmation}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.passwordConfirmation}
-                </Form.Control.Feedback>
-                <Form.Control.Feedback type="valid">
-                    Looks good!
-                </Form.Control.Feedback>
-            </Form.Group>
         </Form>
     );
 };
 
-export default RegistrationForm;
+export default LoginForm;
