@@ -1,6 +1,6 @@
 import {makeObservable, action, observable} from 'mobx';
 
-export default class UIStore {
+class UIStore {
     currentPage = '/'
 
     constructor() {
@@ -16,3 +16,6 @@ export default class UIStore {
         this.currentPage = page;
     }
 }
+
+
+export default new UIStore();

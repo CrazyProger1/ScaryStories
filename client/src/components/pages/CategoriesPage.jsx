@@ -1,9 +1,8 @@
 import React from 'react';
 import PageWrapper from "./PageWrapper";
 import CategoriesTable from "../tables/CategoriesTable";
+import useNavigateCustom from "../../hooks/useNavigateCustom";
 import "../../styles/Categories.css"
-import {useNavigate} from "react-router-dom";
-
 
 const categories = [
     {
@@ -25,7 +24,7 @@ const categories = [
 
 
 const CategoriesPage = () => {
-    const navigate = useNavigate();
+    const navigate = useNavigateCustom();
 
     const handleCategoryChoose = (category) =>
         navigate("/category/" + category.id)

@@ -1,7 +1,8 @@
 import React from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import PageWrapper from "./PageWrapper";
 import StoriesTable from "../tables/StoriesTable";
+import useNavigateCustom from "../../hooks/useNavigateCustom";
 
 const stories = [
     {
@@ -26,7 +27,7 @@ const stories = [
 
 const CategoryPage = () => {
     const {id: categoryId} = useParams();
-    const navigate = useNavigate();
+    const navigate = useNavigateCustom();
 
 
     const handleStoryChoose = (story) =>
