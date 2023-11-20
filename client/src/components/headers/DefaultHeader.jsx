@@ -61,8 +61,6 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
 
     return (
         <div>
-
-
             <Navbar ref={headerRef} className="header" bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg"
                     style={{
                         top: visible ? '0' : `-${headerHeight}px`

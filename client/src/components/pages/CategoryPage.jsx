@@ -10,7 +10,8 @@ const stories = [
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
         author: {},
         category: {},
-        rating: 3.5
+        rating: 3.5,
+        read_time_minutes: 10
     },
     {
         id: 2,
@@ -18,120 +19,9 @@ const stories = [
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
         author: {},
         category: {},
-        rating: 4.5
+        rating: 4.5,
+        read_time_minutes: 3.5
     },
-    {
-        id: 1,
-        name: "Scary Story #1",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 3.5
-    },
-    {
-        id: 2,
-        name: "Scary Story #2",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 4.5
-    },
-    {
-        id: 1,
-        name: "Scary Story #1",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 3.5
-    },
-    {
-        id: 2,
-        name: "Scary Story #2",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 4.5
-    },
-    {
-        id: 1,
-        name: "Scary Story #1",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 3.5
-    },
-    {
-        id: 2,
-        name: "Scary Story #2",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 4.5
-    },
-    {
-        id: 1,
-        name: "Scary Story #1",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 3.5
-    },
-    {
-        id: 2,
-        name: "Scary Story #2",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 4.5
-    },
-    {
-        id: 1,
-        name: "Scary Story #1",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 3.5
-    },
-    {
-        id: 2,
-        name: "Scary Story #2",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 4.5
-    },
-    {
-        id: 1,
-        name: "Scary Story #1",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 3.5
-    },
-    {
-        id: 2,
-        name: "Scary Story #2",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 4.5
-    },
-    {
-        id: 1,
-        name: "Scary Story #1",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 3.5
-    },
-    {
-        id: 2,
-        name: "Scary Story #2",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
-        author: {},
-        category: {},
-        rating: 4.5
-    }
 ];
 
 const CategoryPage = () => {
