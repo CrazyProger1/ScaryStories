@@ -12,12 +12,12 @@ const categories = [
     },
     {
         id: 2,
-        name: 'Категория 2',
+        name: 'Category 2',
         image: 'https://obninsk.name/UserFiles/Image/202304/2023-04-30-00-12-54.jpg'
     },
     {
         id: 3,
-        name: 'Категория 3',
+        name: 'Category 3',
         image: 'https://cs8.pikabu.ru/post_img/big/2016/02/13/12/1455396840122133493.jpg'
     },
 ];
@@ -31,7 +31,9 @@ const CategoriesPage = () => {
 
     return (
         <PageWrapper>
-            <CategoriesTable categories={categories} onChoose={handleCategoryChoose}/>
+            <div className="mt-5">
+                <CategoriesTable categories={categories} onChoose={handleCategoryChoose}/>
+            </div>
         </PageWrapper>
     );
 };

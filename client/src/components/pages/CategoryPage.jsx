@@ -38,7 +38,9 @@ const CategoryPage = () => {
 
     return (
         <PageWrapper>
-            <StoriesTable stories={stories} onChoose={handleStoryChoose}/>
+            <div className="mt-5">
+                <StoriesTable stories={stories} onChoose={handleStoryChoose}/>
+            </div>
         </PageWrapper>
     );
 };

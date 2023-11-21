@@ -6,7 +6,7 @@ const CategoryCard = ({category, onChoose, ...props}) => {
     return (
             <div className="col-md-4 mb-4" onClick={() => onChoose(category)}>
                 <div className="card category-card">
-                    <img src={image} className="card-img-top category-card-img" alt={name}/>
+                    <img src={image} className="card-img-top" alt={name}/>
                     <div className="card-body card-img-overlay">
                         <h5 className="card-title category-card-title">{name}</h5>
                     </div>

@@ -4,26 +4,31 @@
 
 
 .category-card {
+    border: 0;
     height: 16rem;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0);
 }
 
 
 .category-card:hover {
-
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .category-card:hover img {
-    filter: blur(1px) brightness(90%);
+    filter: brightness(90%) blur(1px);
 }
 
-.category-card-img {
+.category-card img {
     height: 100%;
     filter: brightness(80%);
+    border-radius: 5px;
+    opacity: 0.8;
 }
 
 .category-card-title {
     text-align: center;
     font-size: 25px;
     font-weight: bold;
-    color: white;
+    color: rgba(255, 255, 255, 0.8);
 }

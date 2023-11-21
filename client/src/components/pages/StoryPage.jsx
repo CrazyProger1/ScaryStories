@@ -7,7 +7,18 @@ const StoryPage = ({...props}) => {
 
     return (
         <PageWrapper>
-            <p>Story bla bla bla bla bla bla bla bla bla bla bla bla bla</p>
+            <h1 className="mt-5 text-center">Some scary story</h1>
+            <p className="mt-5">Very very scary story bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla
+                bla bla bla bla bla bla bla bla bla bla bla bla bla
+                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla
+                bla bla
+                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla
+                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla
+                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla
+                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla
+                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla
+                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla
+                bla bla bla bla bla bla bla</p>
         </PageWrapper>
     );
 };
