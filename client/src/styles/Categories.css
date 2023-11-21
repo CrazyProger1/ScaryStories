@@ -23,4 +23,7 @@
 
 .category-card-title {
     text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
 }
