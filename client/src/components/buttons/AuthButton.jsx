@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Nav} from "react-bootstrap";
+import {Button, Nav, Stack} from "react-bootstrap";
 import {inject, observer} from "mobx-react";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import LoginModal from "../modals/LoginModal";
@@ -31,9 +31,14 @@ const AuthButton = inject("authStore")(observer(({authStore, ...props}) => {
         setModalType(modalType === "login" ? "registration" : "login")
 
 
-    const handleLoginButtonClick = () => {
+    const handleSignInButtonClick = () => {
         setModalVisible(true);
         setModalType("login")
+    }
+
+    const handleSignUpButtonClick = () => {
+        setModalVisible(true);
+        setModalType("registration")
     }
 
     const handleProfileButtonClick = () =>
@@ -43,7 +48,11 @@ const AuthButton = inject("authStore")(observer(({authStore, ...props}) => {
         <Nav className="justify-content-end">
             {authStore.isAuthorized ?
                 <Button variant="link" onClick={handleProfileButtonClick}>Profile</Button> :
-                <Button variant="link" onClick={handleLoginButtonClick}>Login</Button>
+                <Stack direction="horizontal" gap={2}>
+                    <Button variant="dark" onClick={handleSignInButtonClick}>Sign In</Button>
+                    <Button variant="danger" onClick={handleSignUpButtonClick}>Sign Up</Button>
+                </Stack>
+
             }
             <RegistrationModal
                 show={modalVisible && modalType === "registration"}

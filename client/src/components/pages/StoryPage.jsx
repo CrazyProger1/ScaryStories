@@ -7,7 +7,7 @@ const StoryPage = ({...props}) => {
 
     return (
         <PageWrapper>
-            Hello
+            <p>Story bla bla bla bla bla bla bla bla bla bla bla bla bla</p>
         </PageWrapper>
     );
 };
