@@ -4,12 +4,13 @@ import {inject, observer} from "mobx-react";
 import {Image, Stack} from "react-bootstrap";
 
 const ProfilePage = inject("authStore")(observer(({authStore, ...props}) => {
-    const {id, nickname, email, registered_at, photo_url} = {
+    const {id, nickname, email, registered_at: registeredAt, photo_url, is_superuser: isSuperuser} = {
         id: 1,
         nickname: "crazyproger1",
         email: "crazyproger1@gmail.com",
         registered_at: "20.11.2023",
-        photo_url: "https://cdn.gogeticon.net/files/1925428/fa0cbc2764f70113bf2fad3905933545.png"
+        photo_url: "https://cdn.gogeticon.net/files/1925428/fa0cbc2764f70113bf2fad3905933545.png",
+        is_superuser: true,
     }
     return (
         <PageWrapper>
@@ -21,7 +22,7 @@ const ProfilePage = inject("authStore")(observer(({authStore, ...props}) => {
                         width="250px"
                     />
                     <h1>
-                        {nickname}
+                        {nickname}{isSuperuser ? "(admin)" : ""}
                     </h1>
                 </Stack>
 

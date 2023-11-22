@@ -15,7 +15,7 @@ from src.stories.constants import (
 class CategoryReadSchema(BaseModel):
     id: int
     name: str = Field(max_length=CATEGORY_NAME_LENGTH)
-    picture_url: str
+    picture_url: str = Field(None)
 
 
 class CategoryCreateUpdateSchema(BaseModel):
@@ -32,7 +32,7 @@ class StoriesReadSchema(BaseModel):
     views: int
     comments_number: int
     created_date: datetime.datetime
-    picture_url: str
+    picture_url: str = Field(None)
 
 
 class StoryReadSchema(BaseModel):
@@ -46,7 +46,7 @@ class StoryReadSchema(BaseModel):
     comments_number: int
     created_date: datetime.datetime
     views: int
-    picture_url: str
+    picture_url: str = Field(None)
 
 
 class StoryUpdateSchema(BaseModel):
