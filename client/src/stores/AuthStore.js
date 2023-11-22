@@ -20,8 +20,8 @@ class AuthStore {
         this.isAuthorized = true;
 
         await loginUser({
-            username: login,
-            password: password
+            password: password,
+            username: login
         }).then((resp) => {
             console.log(resp)
         })
