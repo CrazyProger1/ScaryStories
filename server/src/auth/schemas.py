@@ -4,13 +4,13 @@ from fastapi_users import schemas
 
 
 class UserReadSchema(schemas.BaseUser[int]):
-    username: str
+    nickname: str
     registered_at: datetime.datetime
 
 
 class UserCreateSchema(schemas.BaseUserCreate):
-    username: str
+    nickname: str
 
 
 class UserUpdateSchema(schemas.BaseUserUpdate):
-    username: str
+    nickname: str

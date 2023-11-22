@@ -1,13 +1,14 @@
+import datetime
+
 from pydantic import BaseModel, Field
 
-from src.stories.constants import (
-    STORY_LENGTH,
-    STORY_NAME_LENGTH,
-    CATEGORY_NAME_LENGTH,
-    COMMENT_LENGTH
-)
 from src.auth.schemas import (
     UserReadSchema
+)
+from src.stories.constants import (
+    CATEGORY_NAME_LENGTH,
+    STORY_NAME_LENGTH,
+    STORY_LENGTH
 )
 
 
@@ -25,14 +26,20 @@ class StoriesReadSchema(BaseModel):
     name: str
     author: UserReadSchema
     category: CategoryReadSchema
+    rating: float
+    read_time: float
+    created_date: datetime.datetime
 
 
 class StoryReadSchema(BaseModel):
     id: int
     name: str
     story: str
-    author_id: int
-    category_id: str
+    author: UserReadSchema
+    category: CategoryReadSchema
+    rating: float
+    read_time: float
+    created_date: datetime.datetime
 
 
 class StoryUpdateSchema(BaseModel):
@@ -44,37 +51,3 @@ class StoryCreateSchema(BaseModel):
     name: str = Field(max_length=STORY_NAME_LENGTH)
     story: str = Field(max_length=STORY_LENGTH)
     category_id: int
-
-
-class VoteWriteSchema(BaseModel):
-    vote: int = Field(ge=0, le=5)
-
-
-class VoteReadSchema(BaseModel):
-    story_id: int
-    user_id: int
-    vote: int
-
-
-class VoteUpdateSchema(BaseModel):
-    vote: int = Field(ge=0, le=5)
-
-
-class Rating(BaseModel):
-    story_id: int
-    rating: float
-
-
-class CommentWriteSchema(BaseModel):
-    comment: str = Field(max_length=COMMENT_LENGTH)
-
-
-class CommentReadSchema(BaseModel):
-    id: int
-    story_id: int
-    user_id: int
-    comment: str
-
-
-class CommentUpdateSchema(BaseModel):
-    comment: str = Field(max_length=COMMENT_LENGTH)
