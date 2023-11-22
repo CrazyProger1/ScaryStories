@@ -4,7 +4,7 @@
     width: 100%;
     transition: top 0.3s;
     z-index: 10;
-    background-color: rgba(9, 9, 9, 0.1); /* Adjust the last value (0.7) to change opacity */
+    background-color: rgba(9, 9, 9, 0.3); /* Adjust the last value (0.7) to change opacity */
 }
 
 

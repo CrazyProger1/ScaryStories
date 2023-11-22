@@ -1,10 +1,13 @@
 import React from 'react';
 import {BsCalendar2DateFill} from "react-icons/bs";
 import {IoTimeSharp} from "react-icons/io5";
+import {FaCommentDots, FaStar} from "react-icons/fa";
+import {MdRemoveRedEye} from "react-icons/md";
+import {Stack} from "react-bootstrap";
 
 
 const StoryCard = ({story, onChoose, ...props}) => {
-    const {name, image, author, category, rating, read_time_minutes: readTimeMin, date} = story;
+    const {name, image, author, category, rating, read_time: readTimeMin, date} = story;
 
     return (
         <div className="col-md-4 mb-4" onClick={() => onChoose(story)}>
@@ -15,17 +18,33 @@ const StoryCard = ({story, onChoose, ...props}) => {
                 <div className="card-body">
                     <h5 className="card-title story-card-title">{name}</h5>
                     <p className="card-text">Author:&nbsp; {author.username}</p>
+
                     <p className="card-text">
-                        <div>
-                            Time to read:&nbsp;
-                            {readTimeMin}m
-                        </div>
-                    </p>
-                    <p className="card-text">
-                        <div>
-                            <BsCalendar2DateFill width="24" height="24"/>
-                            November 16, 2023
-                        </div>
+                        <Stack direction="horizontal" gap={2}>
+
+                            <div>
+                                <BsCalendar2DateFill width="24" height="24"/>
+                                {date}
+                            </div>
+
+
+                            <div>
+                                <FaStar width="24" height="24"/>
+                                {rating}
+                            </div>
+
+
+                            <div>
+                                <MdRemoveRedEye width="24" height="24"/>
+                                71
+                            </div>
+
+                            <div>
+                                <IoTimeSharp width="24" height="24"/>
+                                {readTimeMin}m
+                            </div>
+
+                        </Stack>
                     </p>
                 </div>
             </div>

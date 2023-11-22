@@ -14,7 +14,7 @@ const stories = [
         },
         category: {},
         rating: 3.5,
-        read_time_minutes: 10,
+        read_time: 10,
         date: "20.11.2023"
     },
     {
@@ -26,7 +26,7 @@ const stories = [
         },
         category: {},
         rating: 4.5,
-        read_time_minutes: 3.5,
+        read_time: 3.5,
         date: "23.11.2023"
     },
 ];
