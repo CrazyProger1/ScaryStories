@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from src.stories.schemas import StoriesReadSchema
+from .schemas import CategoryReadSchema
+from .services import CategoryService, story_categories_service
 
 router = APIRouter()
 
@@ -9,9 +10,8 @@ routers = (
 )
 
 
-@router.get('', response_model=list[StoriesReadSchema], tags=['Stories'])
-async def read_stories(
-        limit: int = None,
-        offset: int = None
+@router.get('/categories', response_model=list[CategoryReadSchema], tags=['Categories'])
+async def read_categories(
+        service: CategoryService = Depends(story_categories_service)
 ):
-    pass
+    return service.read_categories()
