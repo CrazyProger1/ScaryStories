@@ -1,5 +1,5 @@
 import {makeObservable, action, observable} from 'mobx';
-import {loginUser, registerUser} from "../services/api/users";
+import {loginUser, logoutUser, registerUser} from "../services/api/users";
 
 class AuthStore {
     isAuthorized = false;
@@ -43,7 +43,8 @@ class AuthStore {
 
 
     logout = async () => {
-
+        this.isAuthorized = false;
+        // await logoutUser()
     }
 
 

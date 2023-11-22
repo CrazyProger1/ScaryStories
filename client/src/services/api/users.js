@@ -21,3 +21,14 @@ export const loginUser = async (user) =>
         }
     )
 
+
+export const logoutUser = async (token) =>
+    await makeRequest({
+            method: "POST",
+            url: "users/logout",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                Authorization: "Bearer " + token
+            }
+        }
+    )
