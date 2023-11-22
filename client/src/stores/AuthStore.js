@@ -1,4 +1,5 @@
 import {makeObservable, action, observable} from 'mobx';
+import {loginUser, registerUser} from "../services/api/users";
 
 class AuthStore {
     isAuthorized = false;
@@ -15,12 +16,29 @@ class AuthStore {
     }
 
 
-    login = async (username, password) => {
+    login = async (login, password) => {
         this.isAuthorized = true;
+
+        await loginUser({
+            username: login,
+            password: password
+        }).then((resp) => {
+            console.log(resp)
+        })
+
+
     }
 
-    register = async (username, password) => {
+    register = async (login, password) => {
         this.isAuthorized = true;
+        await registerUser({
+            email: login,
+            password: password,
+            username: login
+        }).then((resp) => {
+                console.log(resp)
+            }
+        )
     }
 
 

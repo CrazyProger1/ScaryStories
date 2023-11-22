@@ -19,10 +19,10 @@ const AuthButton = inject("authStore")(observer(({authStore, ...props}) => {
         setModalVisible(false);
         switch (modalType) {
             case "login":
-                authStore.login(data.username, data.password);
+                authStore.login(data.login, data.password);
                 break;
             case  "registration":
-                authStore.register(data.username, data.password);
+                authStore.register(data.login, data.password);
                 break;
         }
     }

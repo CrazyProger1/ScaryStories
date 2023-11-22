@@ -9,7 +9,9 @@ const stories = [
         id: 1,
         name: "Scary Story #1",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkodjAtKyrUFKt7QE7UjG3VwbiiV72fhWCcA&usqp=CAU",
-        author: {},
+        author: {
+            username: "crazyproger1"
+        },
         category: {},
         rating: 3.5,
         read_time_minutes: 10,
@@ -19,7 +21,9 @@ const stories = [
         id: 2,
         name: "Scary Story #2",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMUwmEjQHjRrKq2-jifQKvLujNOFUm2d8qhQ&usqp=CAU",
-        author: {},
+        author: {
+            username: "Abc"
+        },
         category: {},
         rating: 4.5,
         read_time_minutes: 3.5,
