@@ -22,7 +22,7 @@ const AuthButton = inject("authStore")(observer(({authStore, ...props}) => {
                 authStore.login(data.login, data.password);
                 break;
             case  "registration":
-                authStore.register(data.login, data.password);
+                authStore.register(data.login, data.nickname, data.password);
                 break;
         }
     }
@@ -44,10 +44,18 @@ const AuthButton = inject("authStore")(observer(({authStore, ...props}) => {
     const handleProfileButtonClick = () =>
         navigate("/profile")
 
+    const handleLogoutButtonClick = () =>
+        authStore.logout();
+
+
     return (
         <Nav className="justify-content-end">
             {authStore.isAuthorized ?
-                <Button variant="link" onClick={handleProfileButtonClick}>Profile</Button> :
+                <Stack direction="horizontal" gap={2}>
+                    <Button variant="dark" onClick={handleProfileButtonClick}>Profile</Button>
+                    <Button variant="danger" onClick={handleLogoutButtonClick}>Logout</Button>
+                </Stack> :
+
                 <Stack direction="horizontal" gap={2}>
                     <Button variant="dark" onClick={handleSignInButtonClick}>Sign In</Button>
                     <Button variant="danger" onClick={handleSignUpButtonClick}>Sign Up</Button>

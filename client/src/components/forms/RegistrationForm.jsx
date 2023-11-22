@@ -4,11 +4,12 @@ import {validateEmail, validatePassword} from "../../utils/validators/user";
 
 
 const RegistrationForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
-    const {login, password, passwordConfirmation} = formData;
+    const {login, nickname, password, passwordConfirmation} = formData;
     const [errors, setErrors] = useState({
         login: "",
         password: "",
-        passwordConfirmation: ""
+        passwordConfirmation: "",
+        nickname: ""
     });
 
 
@@ -24,6 +25,14 @@ const RegistrationForm = ({formData, onFormDataChange, onSetValidity, onSubmit, 
             ...formData,
             login: e.target.value
         })
+
+
+    const handleNicknameChange = (e) => {
+        onFormDataChange({
+            ...formData,
+            nickname: e.target.value
+        })
+    }
 
     const handlePasswordChange = (e) =>
         onFormDataChange({
@@ -43,7 +52,8 @@ const RegistrationForm = ({formData, onFormDataChange, onSetValidity, onSubmit, 
         let newErrors = {
             login: "",
             password: "",
-            passwordConfirmation: ""
+            passwordConfirmation: "",
+            nickname: ""
         }
         if (!validateEmail(login))
             newErrors.login = "Email is not valid";
@@ -88,6 +98,25 @@ const RegistrationForm = ({formData, onFormDataChange, onSetValidity, onSubmit, 
                 />
                 <Form.Control.Feedback type="invalid">
                     {errors.login}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                    Looks good!
+                </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formNickname">
+                <Form.Label>Nickname</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Nickname"
+                    name="nickname"
+                    value={nickname}
+                    onChange={handleNicknameChange}
+                    isInvalid={!!errors.nickname}
+                    isValid={!errors.nickname}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.nickname}
                 </Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">
                     Looks good!

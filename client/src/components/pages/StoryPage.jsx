@@ -11,7 +11,7 @@ import {BsCalendar2DateFill} from "react-icons/bs";
 const StoryPage = ({...props}) => {
     const {id: storyId} = useParams();
 
-    const {id, story, name, author, category, created_date, rating, read_time} = {
+    const {id, story, name, author, category, views, created_date, rating, read_time} = {
         id: 1,
         story: "Very very scary story bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
             "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
@@ -117,7 +117,8 @@ const StoryPage = ({...props}) => {
         },
         created_date: "22.11.2023",
         rating: 4.5,
-        read_time: 3.5
+        read_time: 3.5,
+        views: 0
     }
 
     return (
@@ -140,13 +141,13 @@ const StoryPage = ({...props}) => {
 
                     <div>
                         <MdRemoveRedEye width="24" height="24"/>
-                        71
+                        {views}
                     </div>
 
 
                     <div>
                         <FaCommentDots width="24" height="24"/>
-                        1
+                        0
                     </div>
                     <div>
                         <IoTimeSharp width="24" height="24"/>

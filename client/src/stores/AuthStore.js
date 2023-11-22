@@ -29,12 +29,12 @@ class AuthStore {
 
     }
 
-    register = async (login, password) => {
+    register = async (login, nickname, password) => {
         this.isAuthorized = true;
         await registerUser({
             email: login,
             password: password,
-            username: login
+            nickname: nickname
         }).then((resp) => {
                 console.log(resp)
             }

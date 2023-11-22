@@ -6,8 +6,10 @@ import RegistrationForm from "../forms/RegistrationForm";
 const RegistrationModal = ({show, onClose, onSubmit, onChangeMode}) => {
     const [formData, setFormData] = useState({
         login: "",
+        nickname: "",
         password: "",
         passwordConfirmation: ""
+
     })
     const [valid, setValid] = useState(false);
 
