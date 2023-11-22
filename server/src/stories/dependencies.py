@@ -17,7 +17,7 @@ from src.stories.serializers import Serializer
 
 @cache
 def stories_service():
-    return StoriesService(StoriesRepository, Serializer)
+    return StoriesService(StoriesRepository, Serializer, StoryCategoriesRepository)
 
 
 @cache

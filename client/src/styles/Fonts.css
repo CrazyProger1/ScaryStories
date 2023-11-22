@@ -1,0 +1,20 @@
+@font-face {
+    font-family: "Another Danger";
+    src: url("../../public/fonts/Another Danger.otf") format("opentype")
+}
+
+@font-face {
+    font-family: "Night Stalker";
+    src: url("../../public/fonts/Night Stalker Free.ttf") format("truetype")
+}
+
+@font-face {
+    font-family: "Scream Again";
+    src: url("../../public/fonts/Scream Again.ttf") format("truetype")
+}
+
+@font-face {
+    font-family: "Mavka";
+    src: url("../../public/fonts/mavka.otf") format("opentype")
+}
+

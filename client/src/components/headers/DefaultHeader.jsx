@@ -1,11 +1,14 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Container, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Nav, Navbar} from "react-bootstrap";
 import {observer, inject} from "mobx-react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import useNavigateCustom from "../../hooks/useNavigateCustom";
 import "../../styles/Header.css";
+import AuthButton from "../buttons/AuthButton";
+
 
 const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
-    const navigate = useNavigate();
+    const navigate = useNavigateCustom();
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [visible, setVisible] = useState(true);
     const [headerHeight, setHeaderHeight] = useState(0);
@@ -34,63 +37,51 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
     const links = [
         {
             to: "/",
-            eventKey: "/",
             children: "Home"
         },
         {
             to: "/categories",
-            eventKey: "/categories",
             children: "Categories"
         },
         {
-            to: "/stories/topranked",
-            eventKey: "/stories/topranked",
+            to: "/category/topranked",
             children: "Top Ranked"
         },
         {
             to: "/story/random",
-            eventKey: "/story/random",
             children: "Random Story"
         },
         {
             to: "/about",
-            eventKey: "/about",
             children: "About"
         }
     ]
 
     return (
         <div>
-
-
-            <Navbar ref={headerRef} className="header" bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg"
+            <Navbar ref={headerRef} className="header" collapseOnSelect expand="lg"
                     style={{
                         top: visible ? '0' : `-${headerHeight}px`
                     }}>
                 <Container>
-                    <Navbar.Brand onClick={() => {
-                        navigate("/");
-                        uiStore.setPage("/");
-                    }} className="brand">Scary Stories</Navbar.Brand>
-                    <Nav className="me-auto" activeKey={uiStore.currentPage}
-                         onSelect={eventKey => uiStore.setPage(eventKey)}>
-                        {links.map(({eventKey, to, children}) =>
+                    <Navbar.Brand onClick={() => navigate("/")} className="brand">Scary Stories</Navbar.Brand>
+                    <Nav className="me-auto">
+                        {links.map(({to, children}) =>
                             <Nav.Link
-                                className="nav-link"
-                                as={Link}
-                                eventKey={eventKey}
-                                to={to}>
+                                onClick={() => navigate(to)}
+                                style={uiStore.currentPage === to ? {color: "rgba(255, 255, 255, 1)"} : {}}
+                                className="nav-link">
                                 {children}
                             </Nav.Link>
                         )}
                     </Nav>
+                    <AuthButton/>
                 </Container>
             </Navbar>
             <div style={{
                 height: headerHeight
             }}/>
         </div>
-
     );
 }));
 

@@ -4,7 +4,7 @@ import DefaultFooter from "../footers/DefaultFooter";
 import "../../styles/Page.css"
 
 const PageWrapper = ({children, ...props}) =>
-    <div>
+    <div className={"page"}>
         <DefaultHeader/>
         <div className="container">
             {children}

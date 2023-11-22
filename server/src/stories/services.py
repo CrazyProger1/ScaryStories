@@ -26,9 +26,14 @@ from src.stories.enums import ErrorMessages
 
 
 class StoriesService:
-    def __init__(self, repository: type[AbstractRepository], serializer: type[AbstractSerializer]):
+    def __init__(self,
+                 repository: type[AbstractRepository],
+                 serializer: type[AbstractSerializer],
+                 categories_repository: type[AbstractRepository],
+                 ):
         self.repository = repository()
         self.serializer = serializer()
+        self.categories_repository = categories_repository()
 
     async def get_story_or_404(self, story_id: int) -> Story:
         story = await self.repository.read_one(Story.id == story_id)
@@ -40,9 +45,28 @@ class StoriesService:
         if story.author_id != author.id and not author.is_superuser:
             raise HTTPException(status_code=403, detail=ErrorMessages.NO_PERMISSION)
 
+    async def get_author(self, author_id: int) -> User:
+        pass
+
+    async def read_category(self, category_id: int) -> StoryCategory:
+        category = await self.categories_repository.read_one(StoryCategory.id == category_id)
+
     async def read_stories(self, limit: int = None, offset: int = None) -> list[BaseModel]:
+        result = []
+        stories = await self.repository.read(limit=limit, offset=offset)
+
+        for story in stories:
+            result.append(
+                StoriesReadSchema.model_validate({
+                    'id': story.id,
+                    'name': story.name,
+                    'author': self.get_author(story.author_id),
+                    'category': self.read_category(story.category_id)
+                })
+            )
+
         return self.serializer.serialize_many(
-            await self.repository.read(limit=limit, offset=offset),
+            stories,
             StoriesReadSchema
         )
 
@@ -103,6 +127,9 @@ class CategoriesService:
     async def update_category(self, category_id: int, category: CategoryCreateUpdateSchema):
         await self.category_exist_or_404(category_id=category_id)
         await self.repository.update(StoryCategory.id == category_id, **category.model_dump())
+
+    async def read_category(self, category_id: int):
+        await self.category_exist_or_404(category_id=category_id)
 
 
 class VotesService:

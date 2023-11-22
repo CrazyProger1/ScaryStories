@@ -1,23 +1,10 @@
-@font-face {
-    font-family: "Another Danger";
-    src: url("../../public/fonts/Another Danger.otf") format("opentype")
-}
-
-@font-face {
-    font-family: "Night Stalker";
-    src: url("../../public/fonts/Night Stalker Free.ttf") format("truetype")
-}
-
-@font-face {
-    font-family: "Scream Again";
-    src: url("../../public/fonts/Scream Again.ttf") format("truetype")
-}
-
 
 .header {
     position: fixed;
     width: 100%;
     transition: top 0.3s;
+    z-index: 10;
+    background-color: rgba(9, 9, 9, 0.3); /* Adjust the last value (0.7) to change opacity */
 }
 
 
@@ -31,7 +18,14 @@
 .nav-link {
     font-family: Scream Again, sans-serif;
     font-size: 10px;
+    color:  rgba(255, 255, 255, 0.7);
 }
+
+
+.nav-link:hover {
+    color:  rgba(255, 255, 255, 0.9);
+}
+
 
 .brand:hover {
     color: maroon;
