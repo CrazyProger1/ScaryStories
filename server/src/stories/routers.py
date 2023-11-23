@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from .schemas import CategoryReadSchema
-from .services import CategoryService, story_categories_service
+from src.pagination import DefaultPaginatedResponseSchema, DefaultPaginator
+from .services import CategoryService
+from .dependencies import story_categories_service
 
 router = APIRouter()
 
@@ -10,8 +11,10 @@ routers = (
 )
 
 
-@router.get('/categories', response_model=list[CategoryReadSchema], tags=['Categories'])
+@router.get('/categories', response_model=DefaultPaginatedResponseSchema, tags=['Categories'])
 async def read_categories(
-        service: CategoryService = Depends(story_categories_service)
+        service: CategoryService = Depends(story_categories_service),
+        paginator: DefaultPaginator = Depends(DefaultPaginator)
 ):
-    return service.read_categories()
+    results = await service.read_categories()
+    return paginator.form_response(results=results)

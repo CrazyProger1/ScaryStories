@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import insert, select, delete, update, exists
+from sqlalchemy import insert, select, delete, update, func
 
 from src.database import async_session_maker, Base
 
@@ -23,6 +23,9 @@ class AbstractRepository(ABC):
 
     @abstractmethod
     async def exists(self, *filters) -> bool: ...
+
+    @abstractmethod
+    async def count(self, *filters) -> int: ...
 
 
 class SQLAlchemyRepository(AbstractRepository):
@@ -82,3 +85,13 @@ class SQLAlchemyRepository(AbstractRepository):
     async def exists(self, *filters) -> bool:
         result = await self._read(*filters)
         return result.first() is not None
+
+    async def count(self, *filters) -> int:
+        async with async_session_maker() as session:
+            query = select(func.count()).select_from(self.model)
+
+            if filters:
+                query = query.filter(*filters)
+
+            result = await session.execute(query)
+            return result.scalar()
