@@ -20,6 +20,7 @@ class CategoryReadSchema(BaseModel):
 
 class CategoryCreateUpdateSchema(BaseModel):
     name: str = Field(max_length=CATEGORY_NAME_LENGTH)
+    picture_url: str = Field(None)
 
 
 class StoriesReadSchema(BaseModel):
