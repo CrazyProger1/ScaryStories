@@ -9,7 +9,8 @@ from .schemas import (
     CategoryReadSchema,
     CategoryCreateUpdateSchema,
     StoryReadSchema,
-    StoryCreateSchema
+    StoryCreateSchema,
+    StoryUpdateSchema
 )
 
 router = APIRouter()
@@ -90,3 +91,28 @@ async def create_story(
         user: User = Depends(current_active_user)
 ):
     return await service.create_story(story=story, user=user)
+
+
+@router.put('/{story_id}', status_code=204, tags=['Stories'])
+async def update_story(
+        story_id: int,
+        story: StoryUpdateSchema,
+        service: StoriesService = Depends(stories_service),
+        user: User = Depends(current_active_user)
+):
+    await service.update_story(
+        story_id=story_id,
+        story=story,
+        user=user
+    )
+    return Response(status_code=204)
+
+
+@router.delete('/{story_id}', status_code=204, tags=['Stories'])
+async def delete_story(
+        story_id: int,
+        service: StoriesService = Depends(stories_service),
+        user: User = Depends(current_active_user)
+):
+    await service.delete_story(story_id=story_id, user=user)
+    return Response(status_code=204)

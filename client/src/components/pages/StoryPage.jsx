@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import PageWrapper from "./PageWrapper";
 import {Stack} from "react-bootstrap";
@@ -7,119 +7,27 @@ import {MdRemoveRedEye} from "react-icons/md";
 import {IoTimeSharp} from "react-icons/io5";
 import {FaCommentDots} from "react-icons/fa";
 import {BsCalendar2DateFill} from "react-icons/bs";
+import {inject, observer} from "mobx-react";
 
-const StoryPage = ({...props}) => {
+
+const StoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => {
     const {id: storyId} = useParams();
+    const [story, setStory] = useState({});
 
-    const {id, story, name, author, category, views, created_date, rating, read_time} = {
-        id: 1,
-        story: "Very very scary story bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n" +
-            "                bla bla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla\n" +
-            "                bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla\n" +
-            "                bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla\n" +
-            "                bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla\n" +
-            "                bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla bla bla bla bla bla bla blabla bla\n" +
-            "                bla bla bla bla bla bla bla",
-        name: "Some scary story",
-        author: {
-            id: 1,
-            email: "crazyproger1@gmail.com",
-            username: "crazyproger1"
+    useEffect(
+        () => {
+            if (!isNaN(parseInt(storyId)))
+                storiesStore.loadStory(parseInt(storyId)).then((result) => {
+                    if (result)
+                        setStory(result);
+
+
+                });
         },
-        category: {
-            id: 1,
-            name: "Abandoned Buildings"
-        },
-        created_date: "22.11.2023",
-        rating: 4.5,
-        read_time: 3.5,
-        views: 0
-    }
+        []
+    )
+
+    const {id, story: content, name, rating, views, read_time: readTime, author} = story;
 
     return (
         <PageWrapper>
@@ -151,7 +59,7 @@ const StoryPage = ({...props}) => {
                     </div>
                     <div>
                         <IoTimeSharp width="24" height="24"/>
-                        {read_time}m
+                        {readTime}m
                     </div>
 
                 </Stack>
@@ -160,12 +68,12 @@ const StoryPage = ({...props}) => {
                 by&nbsp;
                 <a className="text-white hover:underline"
                    href="https://creepypasta.org/u/10759/arkworthy">
-                    {author.username}
+                    {author?.nickname}
                 </a>
             </div>
-            <p className="mt-5">{story}</p>
+            <p className="mt-5">{content}</p>
         </PageWrapper>
     );
-};
+}));
 
 export default StoryPage;

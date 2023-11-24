@@ -2,7 +2,7 @@ import datetime
 
 from src.repository import AbstractRepository
 from src.serializer import AbstractSerializer
-from src.stories.schemas import StoryCreateSchema, StoryReadSchema, StoriesReadSchema
+from src.stories.schemas import StoryCreateSchema, StoryReadSchema, StoriesReadSchema, StoryUpdateSchema
 from src.auth.schemas import UserReadSchema
 from src.auth.models import User
 from src.auth.services import UsersService
@@ -70,3 +70,9 @@ class StoriesService:
             author=self.users_serializer.serialize(user, UserReadSchema),
             category=await self.categories_service.read_category(story.category_id)
         )
+
+    async def update_story(self, story_id: int, story: StoryUpdateSchema, user: User):
+        await self.stories_repository.update(Story.id == story_id, **story.model_dump())
+
+    async def delete_story(self, story_id: int, user: User):
+        await self.stories_repository.delete(Story.id == story_id)
