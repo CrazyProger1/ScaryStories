@@ -1,4 +1,4 @@
-from conftest import client
+from tests.conftest import client
 
 
 def test_register():
@@ -8,7 +8,7 @@ def test_register():
         'is_active': True,
         'is_superuser': False,
         'is_verified': False,
-        'username': 'string'
+        'nickname': 'string'
     })
 
     assert response.status_code == 201

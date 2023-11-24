@@ -1,6 +1,7 @@
 from src.repository import AbstractRepository
 from src.serializer import AbstractSerializer
 from src.stories.schemas import CategoryReadSchema, CategoryCreateUpdateSchema
+from src.stories.models import StoryCategory
 
 
 class CategoryService:
@@ -14,6 +15,18 @@ class CategoryService:
             CategoryReadSchema
         )
 
+    async def read_category(self, category_id: int):
+        return self.category_serializer.serialize(
+            await self.category_repository.read_one(StoryCategory.id == category_id),
+            CategoryReadSchema
+        )
+
     async def create_category(self, category: CategoryCreateUpdateSchema):
         category_id = await self.category_repository.create(**category.model_dump())
         return CategoryReadSchema(name=category.name, id=category_id)
+
+    async def update_category(self, category_id: int, category: CategoryCreateUpdateSchema) -> None:
+        await self.category_repository.update(StoryCategory.id == category_id, **category.model_dump())
+
+    async def delete_category(self, category_id: int) -> None:
+        await self.category_repository.delete(StoryCategory.id == category_id)
