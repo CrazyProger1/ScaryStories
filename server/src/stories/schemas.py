@@ -32,7 +32,7 @@ class StoriesReadSchema(BaseModel):
     read_time: float
     views: int
     comments_number: int
-    created_date: datetime.datetime
+    create_date: datetime.datetime
     picture_url: str = Field(None)
 
 
@@ -45,7 +45,7 @@ class StoryReadSchema(BaseModel):
     rating: float
     read_time: float
     comments_number: int
-    created_date: datetime.datetime
+    create_date: datetime.datetime
     views: int
     picture_url: str = Field(None)
 
@@ -53,9 +53,11 @@ class StoryReadSchema(BaseModel):
 class StoryUpdateSchema(BaseModel):
     name: str = Field(max_length=STORY_NAME_LENGTH)
     story: str = Field(max_length=STORY_LENGTH)
+    picture_url: str = Field(None)
 
 
 class StoryCreateSchema(BaseModel):
     name: str = Field(max_length=STORY_NAME_LENGTH)
     story: str = Field(max_length=STORY_LENGTH)
+    picture_url: str = Field(None)
     category_id: int

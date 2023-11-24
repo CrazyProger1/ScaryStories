@@ -27,6 +27,7 @@ class Story(Base):
     category_id = db.Column(db.Integer, db.ForeignKey('story_categories.id', onupdate='CASCADE'))
     create_date = db.Column(db.Date, default=datetime.datetime.utcnow)
     views = db.Column(db.Integer, default=0)
+    picture_url = db.Column(db.String, nullable=True)
 
     category = relationship('StoryCategory', back_populates='stories')
     author = relationship('User')

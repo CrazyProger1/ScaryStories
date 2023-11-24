@@ -5,9 +5,9 @@ from src.stories.models import StoryCategory
 
 
 class CategoriesService:
-    def __init__(self, category_repository: type[AbstractRepository], category_serializer: type[AbstractSerializer]):
-        self.category_repository = category_repository()
-        self.category_serializer = category_serializer()
+    def __init__(self, category_repository: AbstractRepository, category_serializer: AbstractSerializer):
+        self.category_repository = category_repository
+        self.category_serializer = category_serializer
 
     async def read_categories(self, limit: int = None, offset: int = None):
         return self.category_serializer.serialize_many(
