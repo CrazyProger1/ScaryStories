@@ -4,12 +4,14 @@ import {BrowserRouter} from 'react-router-dom';
 import App from './App';
 import uiStore from "./stores/UIStore";
 import authStore from "./stores/AuthStore"
+import categoriesStore from "./stores/CategoriesStore"
 import {Provider} from 'mobx-react';
 
 
 const stores = {
     uiStore: uiStore,
-    authStore: authStore
+    authStore: authStore,
+    categoriesStore: categoriesStore,
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

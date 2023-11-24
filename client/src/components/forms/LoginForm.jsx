@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {validateEmail, validatePassword} from "../../utils/validators/user";
+import {validateEmail, validatePassword} from "../../utils/validators/users";
 import {Form} from "react-bootstrap";
 
 const LoginForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
