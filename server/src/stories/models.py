@@ -7,7 +7,7 @@ from src.database import Base
 from src.auth.models import User
 
 
-class StoryCategory(Base):
+class Category(Base):
     __tablename__ = 'story_categories'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -29,5 +29,5 @@ class Story(Base):
     views = db.Column(db.Integer, default=0)
     picture_url = db.Column(db.String, nullable=True)
 
-    category = relationship('StoryCategory', back_populates='stories')
+    category = relationship('Category', back_populates='stories')
     author = relationship('User')

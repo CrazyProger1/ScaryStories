@@ -1,12 +1,13 @@
 import datetime
 
+from fastapi import HTTPException
+
 from src.repository import AbstractRepository
 from src.serializer import AbstractSerializer
 from src.stories.schemas import StoryCreateSchema, StoryReadSchema, StoriesReadSchema, StoryUpdateSchema
 from src.auth.schemas import UserReadSchema
 from src.auth.models import User
 from src.auth.services import UsersService
-from src.stories.constants import READ_TIME_IN_CHARS_PER_MIN
 from src.stories.utils.count import get_read_time_min
 from src.stories.models import Story
 from .categories import CategoriesService

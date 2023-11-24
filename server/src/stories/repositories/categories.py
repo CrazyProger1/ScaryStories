@@ -1,6 +1,6 @@
 from src.repository import SQLAlchemyRepository
-from src.stories.models import StoryCategory
+from src.stories.models import Category
 
 
 class CategoriesRepository(SQLAlchemyRepository):
-    model = StoryCategory
+    model = Category
