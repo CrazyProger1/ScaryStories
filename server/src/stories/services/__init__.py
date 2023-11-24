@@ -1,5 +1,7 @@
-from .categories import CategoryService
+from .categories import CategoriesService
+from .stories import StoriesService
 
 __all__ = [
-    'CategoryService'
+    'CategoriesService',
+    'StoriesService'
 ]

@@ -1,5 +1,5 @@
 from src.serializer import Serializer
 
 
-class CategoriesSerializer(Serializer):
+class StoriesSerializer(Serializer):
     pass

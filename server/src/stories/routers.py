@@ -3,9 +3,14 @@ from fastapi import APIRouter, Depends, Response
 from src.pagination import DefaultPaginatedResponseSchema, DefaultPaginator
 from src.auth.models import User
 from src.auth.auth import current_superuser, current_active_user
-from .services import CategoryService
-from .dependencies import story_categories_service
-from .schemas import CategoryReadSchema, CategoryCreateUpdateSchema
+from .services import CategoriesService, StoriesService
+from .dependencies import story_categories_service, stories_service
+from .schemas import (
+    CategoryReadSchema,
+    CategoryCreateUpdateSchema,
+    StoryReadSchema,
+    StoryCreateSchema
+)
 
 router = APIRouter()
 
@@ -16,7 +21,7 @@ routers = (
 
 @router.get('/categories', response_model=DefaultPaginatedResponseSchema, tags=['Categories'])
 async def read_categories(
-        service: CategoryService = Depends(story_categories_service),
+        service: CategoriesService = Depends(story_categories_service),
         paginator: DefaultPaginator = Depends(DefaultPaginator)
 ):
     results = await service.read_categories(limit=paginator.limit, offset=paginator.offset)
@@ -26,7 +31,7 @@ async def read_categories(
 @router.get('/categories/{category_id}', response_model=CategoryReadSchema, tags=['Categories'])
 async def read_category(
         category_id: int,
-        service: CategoryService = Depends(story_categories_service)
+        service: CategoriesService = Depends(story_categories_service)
 ):
     return await service.read_category(category_id=category_id)
 
@@ -34,7 +39,7 @@ async def read_category(
 @router.post('/categories', response_model=CategoryReadSchema, tags=['Categories'])
 async def create_category(
         category: CategoryCreateUpdateSchema,
-        service: CategoryService = Depends(story_categories_service),
+        service: CategoriesService = Depends(story_categories_service),
         user: User = Depends(current_superuser)
 ):
     return await service.create_category(category=category)
@@ -44,7 +49,7 @@ async def create_category(
 async def update_category(
         category_id: int,
         category: CategoryCreateUpdateSchema,
-        service: CategoryService = Depends(story_categories_service),
+        service: CategoriesService = Depends(story_categories_service),
         user: User = Depends(current_superuser)
 ):
     await service.update_category(category_id=category_id, category=category)
@@ -54,8 +59,26 @@ async def update_category(
 @router.delete('/categories/{category_id}', status_code=204, tags=['Categories'])
 async def delete_category(
         category_id: int,
-        service: CategoryService = Depends(story_categories_service),
+        service: CategoriesService = Depends(story_categories_service),
         user: User = Depends(current_superuser)
 ):
     await service.delete_category(category_id=category_id)
     return Response(status_code=204)
+
+
+@router.get('', response_model=DefaultPaginatedResponseSchema, tags=['Stories'])
+async def read_stories(
+        service: StoriesService = Depends(stories_service),
+        paginator: DefaultPaginator = Depends(DefaultPaginator)
+):
+    results = await service.read_stories(limit=paginator.limit, offset=paginator.offset)
+    return paginator.form_response(results=results, total=0)
+
+
+@router.post('', response_model=StoryReadSchema, tags=['Stories'])
+async def create_story(
+        story: StoryCreateSchema,
+        service: StoriesService = Depends(stories_service),
+        user: User = Depends(current_active_user)
+):
+    return await service.create_story(story=story)

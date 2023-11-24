@@ -1,5 +1,7 @@
-from .categories import CategoryRepository
+from .categories import CategoriesRepository
+from .stories import StoriesRepository
 
 __all__ = [
-    'CategoryRepository',
+    'CategoriesRepository',
+    'StoriesRepository'
 ]

@@ -1,10 +1,15 @@
 from functools import cache
 
-from src.stories.repositories import CategoryRepository
-from src.stories.serializers import CategorySerializer
-from src.stories.services.categories import CategoryService
+from src.stories.repositories import CategoriesRepository, StoriesRepository
+from src.stories.serializers import CategoriesSerializer, StoriesSerializer
+from src.stories.services import CategoriesService, StoriesService
 
 
 @cache
 def story_categories_service():
-    return CategoryService(CategoryRepository(), CategorySerializer())
+    return CategoriesService(CategoriesRepository, CategoriesSerializer)
+
+
+@cache
+def stories_service():
+    return StoriesService(StoriesRepository, StoriesSerializer)
