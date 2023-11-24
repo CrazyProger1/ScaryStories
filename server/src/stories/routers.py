@@ -75,6 +75,14 @@ async def read_stories(
     return paginator.form_response(results=results, total=0)
 
 
+@router.get('/{story_id}', response_model=StoryReadSchema, tags=['Stories'])
+async def read_story(
+        story_id: int,
+        service: StoriesService = Depends(stories_service)
+):
+    return await service.read_story(story_id=story_id)
+
+
 @router.post('', response_model=StoryReadSchema, tags=['Stories'])
 async def create_story(
         story: StoryCreateSchema,

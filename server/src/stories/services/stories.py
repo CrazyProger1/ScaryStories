@@ -8,6 +8,7 @@ from src.auth.models import User
 from src.auth.services import UsersService
 from src.stories.constants import READ_TIME_IN_CHARS_PER_MIN
 from src.stories.utils.count import get_read_time_min
+from src.stories.models import Story
 from .categories import CategoriesService
 
 
@@ -39,6 +40,17 @@ class StoriesService:
             ))
 
         return results
+
+    async def read_story(self, story_id: int):
+        story = await self.stories_repository.read_one(Story.id == story_id)
+        return StoryReadSchema(
+            **story.__dict__,
+            rating=0,
+            read_time=get_read_time_min(story.story),
+            comments_number=0,
+            author=await self.users_service.read_user(story.author_id),
+            category=await self.categories_service.read_category(story.category_id)
+        )
 
     async def create_story(self, story: StoryCreateSchema, user: User):
         data = story.model_dump()
