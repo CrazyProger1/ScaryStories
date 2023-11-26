@@ -78,10 +78,13 @@ async def read_stories(
 
 @router.get('/{story_id}', response_model=StoryReadSchema, tags=['Stories'])
 async def read_story(
-        story_id: int,
+        story_id: int | str,
         service: StoriesService = Depends(stories_service)
 ):
-    return await service.read_story(story_id=story_id)
+    if isinstance(story_id, int):
+        return await service.read_story(story_id=story_id)
+    else:
+        return await service.read_random_story()
 
 
 @router.post('', response_model=StoryReadSchema, tags=['Stories'])

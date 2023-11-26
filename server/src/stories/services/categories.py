@@ -5,7 +5,6 @@ from src.repository import AbstractRepository
 from src.serializer import AbstractSerializer
 from src.stories.schemas import CategoryReadSchema, CategoryCreateUpdateSchema
 from src.stories.models import Category
-from src.auth.models import User
 from .enums import ErrorMessages
 
 
