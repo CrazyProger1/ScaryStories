@@ -32,3 +32,15 @@ export const logoutUser = async (token) =>
             }
         }
     )
+
+
+export const readUser = async (id, token) =>
+    await makeRequest({
+            method: "GET",
+            url: "users/" + id,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                Authorization: "Bearer " + token
+            }
+        }
+    )

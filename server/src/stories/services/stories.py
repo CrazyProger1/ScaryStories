@@ -29,7 +29,10 @@ class StoriesService:
         self.categories_service = categories_service
         self.users_service = users_service
 
-    async def get_story_or_404(self, story_id: int) -> Story:
+    async def _increase_views(self, story: Story):
+        await self.stories_repository.update(Story.id == story.id, views=story.views + 1)
+
+    async def _get_story_or_404(self, story_id: int) -> Story:
         story = await self.stories_repository.read_one(Story.id == story_id)
         if not story:
             raise HTTPException(status_code=404, detail=ErrorMessages.NOT_FOUND)
@@ -50,7 +53,8 @@ class StoriesService:
         return results
 
     async def read_story(self, story_id: int):
-        story = await self.get_story_or_404(story_id=story_id)
+        story = await self._get_story_or_404(story_id=story_id)
+        await self._increase_views(story)
         return StoryReadSchema(
             **story.__dict__,
             rating=0,
@@ -62,6 +66,7 @@ class StoriesService:
 
     async def read_random_story(self):
         story = await self.stories_repository.get_random_story()
+        await self._increase_views(story)
         return StoryReadSchema(
             **story.__dict__,
             rating=0,

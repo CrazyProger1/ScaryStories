@@ -11,18 +11,15 @@ import {inject, observer} from "mobx-react";
 
 
 const StoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => {
-    const {id: storyId} = useParams();
+    const {id: storyIdOrRandom} = useParams();
     const [story, setStory] = useState({});
 
     useEffect(
         () => {
-            if (!isNaN(parseInt(storyId)))
-                storiesStore.loadStory(parseInt(storyId)).then((result) => {
-                    if (result)
-                        setStory(result);
-
-
-                });
+            storiesStore.loadStory(storyIdOrRandom).then((result) => {
+                if (result)
+                    setStory(result);
+            });
         },
         []
     )

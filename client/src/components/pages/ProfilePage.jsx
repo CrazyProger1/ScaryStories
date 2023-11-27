@@ -2,16 +2,24 @@ import React from 'react';
 import PageWrapper from "./PageWrapper";
 import {inject, observer} from "mobx-react";
 import {Image, Stack} from "react-bootstrap";
+import useNavigateCustom from "../../hooks/useNavigateCustom";
+
 
 const ProfilePage = inject("authStore")(observer(({authStore, ...props}) => {
-    const {id, nickname, email, registered_at: registeredAt, photo_url, is_superuser: isSuperuser} = {
-        id: 1,
-        nickname: "crazyproger1",
-        email: "crazyproger1@gmail.com",
-        registered_at: "20.11.2023",
-        photo_url: "https://cdn.gogeticon.net/files/1925428/fa0cbc2764f70113bf2fad3905933545.png",
-        is_superuser: true,
-    }
+    const {
+        id,
+        nickname,
+        email,
+        registered_at: registeredAt,
+        photo_url,
+        is_superuser: isSuperuser
+    } = authStore.currentUser;
+
+    const navigate = useNavigateCustom();
+    if (!authStore.isAuthorized)
+        navigate("/");
+
+
     return (
         <PageWrapper>
             <div className="text-center mt-5">

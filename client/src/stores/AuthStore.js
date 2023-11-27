@@ -1,8 +1,10 @@
 import {makeObservable, action, observable} from 'mobx';
-import {loginUser, logoutUser, registerUser} from "../services/api/users";
+import {loginUser, logoutUser, readUser, registerUser} from "../services/api/users";
 
 class AuthStore {
     isAuthorized = false;
+    currentUser = {};
+    token = null;
 
     constructor() {
         makeObservable(this,
@@ -10,20 +12,39 @@ class AuthStore {
                 isAuthorized: observable,
                 login: action,
                 register: action,
-                logout: action
+                logout: action,
+                updateUserData: action
             }
         )
     }
 
+    updateUserData = async () => {
+        if (!this.isAuthorized)
+            return
+
+        await readUser("me", this.token).then(
+            (resp) => {
+                if (resp.status === 200)
+                    this.currentUser = resp.data;
+            }
+        );
+
+    }
 
     login = async (login, password) => {
-        this.isAuthorized = true;
+
 
         await loginUser({
             password: password,
             username: login
         }).then((resp) => {
-            console.log(resp)
+            if (resp.status === 200) {
+                this.isAuthorized = true;
+                this.token = resp.data.access_token;
+                this.updateUserData();
+            }
+
+
         })
 
 
@@ -44,6 +65,8 @@ class AuthStore {
 
     logout = async () => {
         this.isAuthorized = false;
+        this.token = null;
+        this.currentUser = {};
         // await logoutUser()
     }
 
