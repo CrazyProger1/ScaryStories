@@ -6,6 +6,7 @@ from src.serializer import AbstractSerializer
 from src.stories.schemas import CategoryReadSchema, CategoryCreateUpdateSchema
 from src.stories.models import Category
 from .enums import ErrorMessages
+from ...pagination.paginators import Paginator
 
 
 class CategoriesService:
@@ -24,9 +25,9 @@ class CategoriesService:
         if category:
             raise HTTPException(status_code=403, detail=ErrorMessages.CATEGORY_WITH_NAME_ALREADY_EXISTS)
 
-    async def read_categories(self, limit: int = None, offset: int = None):
+    async def read_categories(self, pagination_params: Paginator):
         return self.category_serializer.serialize_many(
-            await self.category_repository.read(limit=limit, offset=offset),
+            await self.category_repository.read(limit=pagination_params.limit, offset=pagination_params.offset),
             CategoryReadSchema
         )
 

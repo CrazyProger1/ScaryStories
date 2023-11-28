@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 
-from src.pagination import DefaultPaginatedResponseSchema, DefaultPaginator
+from src.pagination import DefaultPaginator, PaginatedResponseSchema, Paginator
+from src.filtering import Filter
 from src.auth.models import User
 from src.auth.auth import current_superuser, current_active_user
 from .services import CategoriesService, StoriesService
@@ -12,6 +13,8 @@ from .schemas import (
     StoryCreateSchema,
     StoryUpdateSchema
 )
+from .filters import StoryFilter
+
 
 router = APIRouter()
 
@@ -20,13 +23,13 @@ routers = (
 )
 
 
-@router.get('/categories', response_model=DefaultPaginatedResponseSchema, tags=['Categories'])
+@router.get('/categories', response_model=PaginatedResponseSchema, tags=['Categories'])
 async def read_categories(
         service: CategoriesService = Depends(categories_service),
-        paginator: DefaultPaginator = Depends(DefaultPaginator)
+        pagination_params: Paginator = Depends(DefaultPaginator)
 ):
-    results = await service.read_categories(limit=paginator.limit, offset=paginator.offset)
-    return paginator.form_response(results=results, total=len(results))
+    results = await service.read_categories(pagination_params=pagination_params)
+    return pagination_params.form_response(results=results, total=len(results))
 
 
 @router.get('/categories/{category_id}', response_model=CategoryReadSchema, tags=['Categories'])
@@ -67,13 +70,14 @@ async def delete_category(
     return Response(status_code=204)
 
 
-@router.get('', response_model=DefaultPaginatedResponseSchema, tags=['Stories'])
+@router.get('', response_model=PaginatedResponseSchema, tags=['Stories'])
 async def read_stories(
         service: StoriesService = Depends(stories_service),
-        paginator: DefaultPaginator = Depends(DefaultPaginator)
+        pagination_params: DefaultPaginator = Depends(DefaultPaginator),
+        filter_params: Filter = Depends(StoryFilter)
 ):
-    results = await service.read_stories(limit=paginator.limit, offset=paginator.offset)
-    return paginator.form_response(results=results, total=0)
+    results = await service.read_stories(pagination_params=pagination_params, filter_params=filter_params)
+    return pagination_params.form_response(results=results, total=0)
 
 
 @router.get('/{story_id}', response_model=StoryReadSchema, tags=['Stories'])
