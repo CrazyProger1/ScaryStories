@@ -15,7 +15,8 @@ class StoriesStore {
 
 
     async loadStories(categoryId) {
-        await readStories().then((response) => {
+        this.stories = [];
+        await readStories(categoryId).then((response) => {
             if (response.status === 200)
                 this.stories = response?.data.results;
         })

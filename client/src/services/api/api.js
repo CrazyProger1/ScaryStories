@@ -9,7 +9,10 @@ const configuredAxios = axios.create({
 
 const formResponse = (response) => {
     if (!response)
-        return null;
+        return {
+            status: 500,
+            data: {}
+        };
 
 
     return {
@@ -17,6 +20,7 @@ const formResponse = (response) => {
         data: response.data
     }
 }
+
 
 export const makeRequest = async ({...props}) =>
     await configuredAxios.request({...props})

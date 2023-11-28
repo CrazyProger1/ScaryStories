@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
-import {validateEmail, validatePassword} from "../../utils/validators/users";
 
-const CategoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
-    const {name, pictureUrl} = formData;
+const StoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
+    const {name, story} = formData;
     const [errors, setErrors] = useState({
         name: "",
-        pictureUrl: ""
+        story: ""
     });
 
     useEffect(
@@ -22,15 +21,15 @@ const CategoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit
             name: e.target.value
         })
 
-    const handleUrlChange = (e) =>
+    const handleStoryChange = (e) =>
         onFormDataChange({
             ...formData,
-            pictureUrl: e.target.value
+            story: e.target.value
         })
 
 
     const validate = () => {
-        onSetValidity(!errors.pictureUrl && !errors.name)
+        onSetValidity(!errors.story && !errors.name)
     }
 
     const handleSubmit = (e) => {
@@ -61,26 +60,20 @@ const CategoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit
                 </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formPictureUrl">
-                <Form.Label>Picture</Form.Label>
+            <Form.Group controlId="formStory">
+                <Form.Label>Story</Form.Label>
                 <Form.Control
-                    type="url"
-                    placeholder="URL"
-                    name="url"
-                    value={pictureUrl}
-                    onChange={handleUrlChange}
-                    isInvalid={!!errors.pictureUrl}
-                    isValid={!errors.pictureUrl}
+                    as="textarea"
+                    rows="15"
+                    type="text"
+                    placeholder="Text"
+                    name="story"
+                    value={story}
+                    onChange={handleStoryChange}
                 />
-                <Form.Control.Feedback type="invalid">
-                    {errors.pictureUrl}
-                </Form.Control.Feedback>
-                <Form.Control.Feedback type="valid">
-                    Looks good!
-                </Form.Control.Feedback>
             </Form.Group>
         </Form>
     );
 };
 
-export default CategoryAddingForm;
+export default StoryAddingForm;

@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {Button, Modal} from "react-bootstrap";
-import CategoryAddingForm from "../forms/CategoryAddingForm";
+import LoginForm from "../forms/LoginForm";
+import StoryAddingForm from "../forms/StoryAddingForm";
+import {set} from "mobx";
 
-const CategoryAddingModal = ({show, onClose, onSubmit, ...props}) => {
+const StoryAddingModal = ({show, onClose, onSubmit, ...props}) => {
     const [formData, setFormData] = useState({
         name: "",
-        pictureUrl: ""
+        story: ""
     })
     const [valid, setValid] = useState(false);
 
@@ -13,13 +15,14 @@ const CategoryAddingModal = ({show, onClose, onSubmit, ...props}) => {
         if (valid)
             onSubmit(formData);
     }
+
     return (
-        <Modal show={show} onHide={onClose}>
+        <Modal size="lg" show={show} onHide={onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Add Category</Modal.Title>
+                <Modal.Title>Add Story</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <CategoryAddingForm
+                <StoryAddingForm
                     formData={formData}
                     onFormDataChange={setFormData}
                     onSetValidity={setValid}
@@ -39,4 +42,4 @@ const CategoryAddingModal = ({show, onClose, onSubmit, ...props}) => {
     );
 };
 
-export default CategoryAddingModal;
+export default StoryAddingModal;

@@ -24,6 +24,6 @@ class UsersService:
 
     async def read_user(self, user_id: int):
         return self.users_serializer.serialize(
-            self.get_user_or_404(user_id=user_id),
+            await self.get_user_or_404(user_id=user_id),
             UserReadSchema
         )
