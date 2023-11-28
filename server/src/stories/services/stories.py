@@ -66,6 +66,9 @@ class StoriesService:
 
     async def read_random_story(self):
         story = await self.stories_repository.get_random_story()
+        if not story:
+            raise HTTPException(404, detail=ErrorMessages.NOT_FOUND)
+
         await self._increase_views(story)
         return StoryReadSchema(
             **story.__dict__,

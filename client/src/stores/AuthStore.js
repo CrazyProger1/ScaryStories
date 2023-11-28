@@ -16,6 +16,26 @@ class AuthStore {
                 updateUserData: action
             }
         )
+        this.loadData();
+    }
+
+    saveData = () => {
+        localStorage.setItem("auth", JSON.stringify({
+            isAuthorized: true,
+            currentUser: this.currentUser,
+            token: this.token
+        }));
+    }
+
+    loadData = () => {
+        const jsonData = localStorage.getItem("auth");
+        if (jsonData) {
+            const data = JSON.parse(jsonData)
+            this.token = data.token;
+            this.isAuthorized = data.isAuthorized;
+            this.currentUser = data.currentUser;
+        }
+
     }
 
     updateUserData = async () => {
@@ -28,12 +48,11 @@ class AuthStore {
                     this.currentUser = resp.data;
             }
         );
+        this.saveData();
 
     }
 
     login = async (login, password) => {
-
-
         await loginUser({
             password: password,
             username: login
@@ -51,14 +70,12 @@ class AuthStore {
     }
 
     register = async (login, nickname, password) => {
-        this.isAuthorized = true;
         await registerUser({
             email: login,
             password: password,
             nickname: nickname
-        }).then((resp) => {
-                console.log(resp)
-            }
+        }).then((resp) =>
+            this.login(login, password)
         )
     }
 
@@ -67,7 +84,7 @@ class AuthStore {
         this.isAuthorized = false;
         this.token = null;
         this.currentUser = {};
-        // await logoutUser()
+        this.saveData();
     }
 
 

@@ -4,9 +4,10 @@ import PageWrapper from "./PageWrapper";
 import StoriesTable from "../tables/StoriesTable";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import {inject, observer} from "mobx-react";
+import AddButton from "../buttons/AddButton";
 
 
-const CategoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => {
+const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore, authStore, ...props}) => {
     const {id: categoryId} = useParams();
     const navigate = useNavigateCustom();
 
@@ -22,8 +23,15 @@ const CategoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) 
         navigate("/story/" + story.id);
 
 
+    const handleAddStoryButtonClick = () => {
+
+    }
     return (
         <PageWrapper>
+            {authStore.isAuthorized && !isNaN(parseInt(categoryId)) ? <div className="mt-5">
+                <AddButton onClick={handleAddStoryButtonClick}/>
+            </div> : <div/>}
+
             <div className="mt-5">
                 <StoriesTable stories={storiesStore.stories} onChoose={handleStoryChoose}/>
             </div>

@@ -7,3 +7,14 @@ export const readCategories = async () =>
             url: "stories/categories"
         }
     )
+
+export const createCategory = async (category, token) =>
+    await makeRequest({
+            method: "POST",
+            url: "stories/categories",
+            data: category,
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }
+    )

@@ -27,12 +27,12 @@ const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categor
 
     const handleCategoryAdd = (data) => {
         setModalShow(false);
-        console.log(data)
+        categoriesStore.createCategory(data.name, data.pictureUrl);
     }
 
     return (
         <PageWrapper>
-            {authStore.isAuthorized ? <div className="mt-5">
+            {authStore.currentUser.is_superuser ? <div className="mt-5">
                 <AddButton onClick={handleAddCategoryButtonClick}/>
             </div> : <div/>}
 

@@ -37,7 +37,7 @@ async def read_category(
     return await service.read_category(category_id=category_id)
 
 
-@router.post('/categories', response_model=CategoryReadSchema, tags=['Categories'])
+@router.post('/categories', response_model=CategoryReadSchema, status_code=201, tags=['Categories'])
 async def create_category(
         category: CategoryCreateUpdateSchema,
         service: CategoriesService = Depends(categories_service),
@@ -46,7 +46,7 @@ async def create_category(
     return await service.create_category(category=category)
 
 
-@router.put('/categories/{category_id}', status_code=204, tags=['Categories'])
+@router.patch('/categories/{category_id}', status_code=204, tags=['Categories'])
 async def update_category(
         category_id: int,
         category: CategoryCreateUpdateSchema,
@@ -96,7 +96,7 @@ async def create_story(
     return await service.create_story(story=story, user=user)
 
 
-@router.put('/{story_id}', status_code=204, tags=['Stories'])
+@router.patch('/{story_id}', status_code=204, tags=['Stories'])
 async def update_story(
         story_id: int,
         story: StoryUpdateSchema,

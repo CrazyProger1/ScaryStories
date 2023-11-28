@@ -20,6 +20,7 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     is_active: bool = db.Column(db.Boolean, default=True, nullable=False)
     is_superuser: bool = db.Column(db.Boolean, default=False, nullable=False)
     is_verified: bool = db.Column(db.Boolean, default=False, nullable=False)
+    photo_url = db.Column(db.String, nullable=True)
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
