@@ -15,7 +15,6 @@ from .schemas import (
 )
 from .filters import StoryFilter
 
-
 router = APIRouter()
 
 routers = (

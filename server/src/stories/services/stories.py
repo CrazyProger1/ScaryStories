@@ -34,10 +34,16 @@ class StoriesService:
     async def _increase_views(self, story: Story):
         await self.stories_repository.update(Story.id == story.id, views=story.views + 1)
 
-    async def _get_story_or_404(self, story_id: int) -> Story:
+    async def count_user_stories(self, user: User) -> int:
+        return await self.stories_repository.count(Story.author_id == user.id)
+
+    async def count_author_views(self, author: User) -> int:
+        return await self.stories_repository.count_author_views(author.id)
+
+    async def get_story_or_404(self, story_id: int) -> Story:
         story = await self.stories_repository.read_one(Story.id == story_id)
         if not story:
-            raise HTTPException(status_code=404, detail=ErrorMessages.NOT_FOUND)
+            raise HTTPException(status_code=404, detail=ErrorMessages.STORY_NOT_FOUND)
         return story
 
     async def read_stories(self, pagination_params: Paginator, filter_params: Filter):
@@ -59,7 +65,7 @@ class StoriesService:
         return results
 
     async def read_story(self, story_id: int):
-        story = await self._get_story_or_404(story_id=story_id)
+        story = await self.get_story_or_404(story_id=story_id)
         await self._increase_views(story)
         return StoryReadSchema(
             **story.__dict__,
@@ -73,7 +79,7 @@ class StoriesService:
     async def read_random_story(self):
         story = await self.stories_repository.get_random_story()
         if not story:
-            raise HTTPException(404, detail=ErrorMessages.NOT_FOUND)
+            raise HTTPException(404, detail=ErrorMessages.STORY_NOT_FOUND)
 
         await self._increase_views(story)
         return StoryReadSchema(
