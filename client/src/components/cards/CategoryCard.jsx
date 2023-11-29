@@ -4,14 +4,16 @@ import EditButton from "../buttons/EditButton";
 import {Stack} from "react-bootstrap";
 import {inject, observer} from "mobx-react";
 
-const CategoryCard = inject("authStore", "categoriesStore")(observer(({
-                                                                          authStore,
-                                                                          categoriesStore,
-                                                                          category,
-                                                                          onChoose,
-                                                                          ...props
-                                                                      }) => {
-        const {id, name, picture_url: pictureUrl} = category;
+const CategoryCard = inject("authStore")(observer(
+    ({
+         authStore,
+         category,
+         onChoose,
+         onDelete,
+         onEdit,
+         ...props
+     }) => {
+        const {name, picture_url: pictureUrl} = category;
         const [picSrc, setPicSrc] = useState(pictureUrl);
 
 
@@ -20,11 +22,12 @@ const CategoryCard = inject("authStore", "categoriesStore")(observer(({
 
         const handleEditButtonClick = (event) => {
             event.stopPropagation();
+            onEdit(category);
         }
 
         const handleDeleteButtonClick = (event) => {
             event.stopPropagation();
-            categoriesStore.deleteCategory(id);
+            onDelete(category);
         }
 
         return (

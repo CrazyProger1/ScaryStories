@@ -1,13 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Modal} from "react-bootstrap";
 import CategoryForm from "../forms/CategoryForm";
 
-const CategoryCreateUpdateModal = ({show, onClose, onSubmit, title, buttonText, ...props}) => {
-    const [formData, setFormData] = useState({
-        name: "",
-        pictureUrl: ""
-    })
+const CategoryCreateUpdateModal = ({
+                                       show,
+                                       onClose,
+                                       onSubmit,
+                                       title,
+                                       buttonText,
+                                       defaultData,
+                                       ...props
+                                   }) => {
+
+    const [formData, setFormData] = useState({})
+
+    useEffect(
+        _ => {
+            setFormData({...defaultData});
+        },
+        [defaultData]
+    )
     const [valid, setValid] = useState(false);
+
 
     const handleSubmit = () => {
         if (valid)

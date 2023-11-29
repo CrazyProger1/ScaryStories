@@ -6,7 +6,7 @@ from src.serializer import AbstractSerializer
 from src.stories.schemas import CategoryReadSchema, CategoryCreateUpdateSchema
 from src.stories.models import Category
 from .enums import ErrorMessages
-from ...pagination.paginators import Paginator
+from src.pagination.paginators import Paginator
 
 
 class CategoriesService:
@@ -44,7 +44,11 @@ class CategoriesService:
 
     async def update_category(self, category_id: int, category: CategoryCreateUpdateSchema) -> None:
         await self.get_category_or_404(category_id=category_id)
-        await self.name_is_unique_or_403(category.name)
+
+        category_from_db = await self.category_repository.read_one(Category.name == category.name)
+        if category_from_db and category_from_db.id != category_id:
+            raise HTTPException(status_code=403, detail=ErrorMessages.CATEGORY_WITH_NAME_ALREADY_EXISTS)
+
         await self.category_repository.update(Category.id == category_id, **category.model_dump())
 
     async def delete_category(self, category_id: int) -> None:

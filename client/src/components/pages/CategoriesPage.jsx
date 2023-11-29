@@ -17,17 +17,39 @@ const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categor
         []
     )
     const navigate = useNavigateCustom();
-    const [modalShow, setModalShow] = useState(false);
+    const [createModalShow, setCreateModalShow] = useState(false);
+    const [editModalShow, setEditModalShow] = useState(false);
+    const [defaultEditModalData, setDefaultEditModalData] = useState({name: "", pictureUrl: ""});
 
     const handleCategoryChoose = (category) =>
         navigate("/category/" + category.id)
 
+
+    const handleCategoryDeleteButtonClick = (category) => {
+        categoriesStore.deleteCategory(category.id)
+    }
+
+    const handleCategoryEditButtonClick = (category) => {
+        setEditModalShow(true);
+        setDefaultEditModalData({
+            name: category.name,
+            pictureUrl: category.picture_url,
+            id: category.id
+        });
+    }
+
+
     const handleAddCategoryButtonClick = () =>
-        setModalShow(true);
+        setCreateModalShow(true);
 
     const handleCategoryAdd = (data) => {
-        setModalShow(false);
+        setCreateModalShow(false);
         categoriesStore.createCategory(data.name, data.pictureUrl);
+    }
+
+    const handleCategoryEdit = (data) => {
+        setEditModalShow(false);
+        categoriesStore.updateCategory(data.id, data.name, data.pictureUrl);
     }
 
     return (
@@ -37,15 +59,30 @@ const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categor
             </div> : <div/>}
 
             <div className="mt-5">
-                <CategoriesTable categories={categoriesStore.categories} onChoose={handleCategoryChoose}/>
+                <CategoriesTable
+
+                    categories={categoriesStore.categories}
+                    onChoose={handleCategoryChoose}
+                    onDelete={handleCategoryDeleteButtonClick}
+                    onEdit={handleCategoryEditButtonClick}
+                />
             </div>
 
             <CategoryCreateUpdateModal
-                show={modalShow}
+                show={createModalShow}
                 onSubmit={handleCategoryAdd}
-                onClose={() => setModalShow(false)}
+                onClose={() => setCreateModalShow(false)}
                 title="Category Creation"
                 buttonText="Add"
+            />
+
+            <CategoryCreateUpdateModal
+                defaultData={defaultEditModalData}
+                show={editModalShow}
+                onSubmit={handleCategoryEdit}
+                onClose={() => setEditModalShow(false)}
+                title="Category Edition"
+                buttonText="Save"
             />
         </PageWrapper>
     );
