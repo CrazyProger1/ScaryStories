@@ -30,6 +30,12 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
 
     const handleStoryAdd = (data) => {
         setModalShow(false);
+        storiesStore.createStory(
+            data.name,
+            data.pictureUrl,
+            data.story,
+            categoryId
+        )
     }
 
     return (

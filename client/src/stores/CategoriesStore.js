@@ -10,7 +10,7 @@ class CategoriesStore {
             {
                 categories: observable,
                 loadCategories: action,
-                createCategory: action
+                createCategory: action,
             }
         )
     }
@@ -26,10 +26,9 @@ class CategoriesStore {
     async createCategory(name, pictureUrl) {
         await createCategory({name: name, picture_url: pictureUrl}, authStore.token).then(
             response => {
-                if (response.status === 201) {
-                    console.log(response)
+                if (response.status === 201)
                     this.categories.push(response.data)
-                }
+
             }
         )
     }

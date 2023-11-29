@@ -18,3 +18,15 @@ export const readStory = async (storyId) =>
             url: "stories/" + storyId
         }
     )
+
+
+export const createStory = async (story, token) =>
+    await makeRequest({
+            method: "POST",
+            url: "stories",
+            data: story,
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }
+    )

@@ -1,5 +1,6 @@
 import {makeObservable, action, observable} from 'mobx';
-import {readStories, readStory} from "../services/api/stories";
+import {createStory, readStories, readStory} from "../services/api/stories";
+import authStore from "./AuthStore";
 
 class StoriesStore {
     stories = [];
@@ -8,7 +9,9 @@ class StoriesStore {
         makeObservable(this,
             {
                 stories: observable,
-                loadStories: action
+                loadStories: action,
+                loadStory: action,
+                createStory: action
             }
         )
     }
@@ -28,6 +31,24 @@ class StoriesStore {
             if (response.status === 200)
                 return response.data;
         })
+    }
+
+    async createStory(name, pictureUrl, story, categoryId) {
+        await createStory(
+            {
+                name: name,
+                picture_url: pictureUrl,
+                story: story,
+                category_id: categoryId
+            }, authStore.token).then(
+            response => {
+                if (response.status === 201) {
+                    console.log(response.data)
+                    this.stories.push(response.data)
+                }
+
+            }
+        )
     }
 
 

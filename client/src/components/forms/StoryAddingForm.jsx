@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
 
 const StoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
-    const {name, story} = formData;
+    const {name, story, pictureUrl} = formData;
     const [errors, setErrors] = useState({
         name: "",
-        story: ""
+        story: "",
+        pictureUrl: ""
     });
 
     useEffect(
@@ -27,9 +28,15 @@ const StoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, .
             story: e.target.value
         })
 
+    const handleUrlChange = (e) =>
+        onFormDataChange({
+            ...formData,
+            pictureUrl: e.target.value
+        })
+
 
     const validate = () => {
-        onSetValidity(!errors.story && !errors.name)
+        onSetValidity(!errors.story && !errors.name && !errors.pictureUrl)
     }
 
     const handleSubmit = (e) => {
@@ -54,6 +61,25 @@ const StoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, .
                 />
                 <Form.Control.Feedback type="invalid">
                     {errors.name}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                    Looks good!
+                </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formPictureUrl">
+                <Form.Label>Picture</Form.Label>
+                <Form.Control
+                    type="url"
+                    placeholder="URL"
+                    name="url"
+                    value={pictureUrl}
+                    onChange={handleUrlChange}
+                    isInvalid={!!errors.pictureUrl}
+                    isValid={!errors.pictureUrl}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.pictureUrl}
                 </Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">
                     Looks good!

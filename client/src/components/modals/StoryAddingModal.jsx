@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {Button, Modal} from "react-bootstrap";
-import LoginForm from "../forms/LoginForm";
 import StoryAddingForm from "../forms/StoryAddingForm";
-import {set} from "mobx";
+
 
 const StoryAddingModal = ({show, onClose, onSubmit, ...props}) => {
     const [formData, setFormData] = useState({
         name: "",
-        story: ""
+        story: "",
+        pictureUrl: ""
     })
     const [valid, setValid] = useState(false);
 
