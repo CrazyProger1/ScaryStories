@@ -43,15 +43,11 @@ class StoriesStore {
             }, authStore.token).then(
             response => {
                 if (response.status === 201) {
-                    console.log(response.data)
                     this.stories.push(response.data)
                 }
-
             }
         )
     }
-
-
 }
 
 

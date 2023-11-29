@@ -6,7 +6,7 @@ import "../../styles/Categories.css"
 import {inject, observer} from "mobx-react";
 import {Button} from "react-bootstrap";
 import AddButton from "../buttons/AddButton";
-import CategoryAddingModal from "../modals/CategoryAddingModal";
+import CategoryCreateUpdateModal from "../modals/CategoryCreateUpdateModal";
 
 
 const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categoriesStore, authStore, ...props}) => {
@@ -40,10 +40,12 @@ const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categor
                 <CategoriesTable categories={categoriesStore.categories} onChoose={handleCategoryChoose}/>
             </div>
 
-            <CategoryAddingModal
+            <CategoryCreateUpdateModal
                 show={modalShow}
                 onSubmit={handleCategoryAdd}
                 onClose={() => setModalShow(false)}
+                title="Category Creation"
+                buttonText="Add"
             />
         </PageWrapper>
     );

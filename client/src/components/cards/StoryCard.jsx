@@ -4,6 +4,8 @@ import {IoTimeSharp} from "react-icons/io5";
 import {FaCommentDots, FaStar} from "react-icons/fa";
 import {MdRemoveRedEye} from "react-icons/md";
 import {Stack} from "react-bootstrap";
+import DeleteButton from "../buttons/DeleteButton";
+import EditButton from "../buttons/EditButton";
 
 
 const StoryCard = ({story, onChoose, ...props}) => {
@@ -18,46 +20,40 @@ const StoryCard = ({story, onChoose, ...props}) => {
     return (
         <div className="col-md-4 mb-4" onClick={() => onChoose(story)}>
             <div className="card story-card">
-                <img
-                    src={picSrc}
-                    className="card-img-top"
-                    alt={name}
-                    onErrorCapture={handleImageError}
-                />
-                <div className="card-body">
+                <img src={picSrc} className="card-img-top" alt={name} onErrorCapture={handleImageError}/>
+                <div className="card-body d-flex flex-column">
                     <h5 className="card-title story-card-title">{name}</h5>
                     <p className="card-text">Author:&nbsp; {author.nickname}</p>
-
                     <p className="card-text">
                         <Stack direction="horizontal" gap={2}>
-
                             <div>
                                 <BsCalendar2DateFill width="24" height="24"/>
                                 {date}
                             </div>
-
-
                             <div>
                                 <FaStar width="24" height="24"/>
                                 {rating}
                             </div>
-
-
                             <div>
                                 <MdRemoveRedEye width="24" height="24"/>
                                 {views}
                             </div>
-
                             <div>
                                 <IoTimeSharp width="24" height="24"/>
-                                {readTimeMin}m
+                                {readTimeMin.toFixed(2)}m
                             </div>
-
+                            <div className="ms-auto mt-auto">
+                                <Stack direction="horizontal">
+                                    <EditButton/>
+                                    <DeleteButton/>
+                                </Stack>
+                            </div>
                         </Stack>
                     </p>
                 </div>
             </div>
         </div>
+
     );
 };
 

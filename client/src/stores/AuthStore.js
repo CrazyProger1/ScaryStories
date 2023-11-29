@@ -10,6 +10,8 @@ class AuthStore {
         makeObservable(this,
             {
                 isAuthorized: observable,
+                currentUser: observable,
+                token: observable,
                 login: action,
                 register: action,
                 logout: action,

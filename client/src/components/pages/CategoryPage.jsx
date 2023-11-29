@@ -5,7 +5,7 @@ import StoriesTable from "../tables/StoriesTable";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import {inject, observer} from "mobx-react";
 import AddButton from "../buttons/AddButton";
-import StoryAddingModal from "../modals/StoryAddingModal";
+import StoryCreateUpdateModal from "../modals/StoryCreateUpdateModal";
 
 
 const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore, authStore, ...props}) => {
@@ -47,10 +47,12 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
             <div className="mt-5">
                 <StoriesTable stories={storiesStore.stories} onChoose={handleStoryChoose}/>
             </div>
-            <StoryAddingModal
+            <StoryCreateUpdateModal
                 show={modalShow}
                 onSubmit={handleStoryAdd}
                 onClose={() => setModalShow(false)}
+                title="Story Creation"
+                buttonText="Add"
             />
         </PageWrapper>
     );

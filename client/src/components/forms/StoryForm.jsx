@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
-import {validateEmail, validatePassword} from "../../utils/validators/users";
 
-const CategoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
-    const {name, pictureUrl} = formData;
+const StoryForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
+    const {name, story, pictureUrl} = formData;
     const [errors, setErrors] = useState({
         name: "",
+        story: "",
         pictureUrl: ""
     });
 
@@ -22,6 +22,12 @@ const CategoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit
             name: e.target.value
         })
 
+    const handleStoryChange = (e) =>
+        onFormDataChange({
+            ...formData,
+            story: e.target.value
+        })
+
     const handleUrlChange = (e) =>
         onFormDataChange({
             ...formData,
@@ -30,7 +36,7 @@ const CategoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit
 
 
     const validate = () => {
-        onSetValidity(!errors.pictureUrl && !errors.name)
+        onSetValidity(!errors.story && !errors.name && !errors.pictureUrl)
     }
 
     const handleSubmit = (e) => {
@@ -79,8 +85,21 @@ const CategoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit
                     Looks good!
                 </Form.Control.Feedback>
             </Form.Group>
+
+            <Form.Group controlId="formStory">
+                <Form.Label>Story</Form.Label>
+                <Form.Control
+                    as="textarea"
+                    rows="15"
+                    type="text"
+                    placeholder="Text"
+                    name="story"
+                    value={story}
+                    onChange={handleStoryChange}
+                />
+            </Form.Group>
         </Form>
     );
 };
 
-export default CategoryAddingForm;
+export default StoryForm;

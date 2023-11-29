@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
 
-const StoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
-    const {name, story, pictureUrl} = formData;
+const CategoryForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
+    const {name, pictureUrl} = formData;
     const [errors, setErrors] = useState({
         name: "",
-        story: "",
         pictureUrl: ""
     });
 
@@ -22,12 +21,6 @@ const StoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, .
             name: e.target.value
         })
 
-    const handleStoryChange = (e) =>
-        onFormDataChange({
-            ...formData,
-            story: e.target.value
-        })
-
     const handleUrlChange = (e) =>
         onFormDataChange({
             ...formData,
@@ -36,7 +29,7 @@ const StoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, .
 
 
     const validate = () => {
-        onSetValidity(!errors.story && !errors.name && !errors.pictureUrl)
+        onSetValidity(!errors.pictureUrl && !errors.name)
     }
 
     const handleSubmit = (e) => {
@@ -85,21 +78,8 @@ const StoryAddingForm = ({formData, onFormDataChange, onSetValidity, onSubmit, .
                     Looks good!
                 </Form.Control.Feedback>
             </Form.Group>
-
-            <Form.Group controlId="formStory">
-                <Form.Label>Story</Form.Label>
-                <Form.Control
-                    as="textarea"
-                    rows="15"
-                    type="text"
-                    placeholder="Text"
-                    name="story"
-                    value={story}
-                    onChange={handleStoryChange}
-                />
-            </Form.Group>
         </Form>
     );
 };
 
-export default StoryAddingForm;
+export default CategoryForm;
