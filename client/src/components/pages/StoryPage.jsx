@@ -24,7 +24,25 @@ const StoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => 
         []
     )
 
-    const {id, story: content, name, rating, views, read_time: readTime, author} = story;
+    const {id, story: content, name, rating, views, read_time: readTime, author, create_date: createDateTime} = story;
+    const date = createDateTime?.split("T")[0];
+
+    const months = {
+        1: 'January',
+        2: 'February',
+        3: 'March',
+        4: 'April',
+        5: 'May',
+        6: 'June',
+        7: 'July',
+        8: 'August',
+        9: 'September',
+        10: 'October',
+        11: 'November',
+        12: 'December',
+    };
+    const [year, month, day] = date ? date.split("-") : []
+
 
     return (
         <PageWrapper>
@@ -34,7 +52,7 @@ const StoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => 
 
                     <div>
                         <BsCalendar2DateFill width="24" height="24"/>
-                        November 16, 2023
+                        {months[parseInt(month)]} {day}, {year}
                     </div>
 
 
@@ -64,7 +82,7 @@ const StoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => 
             <div className="text-md ml-2 text-center mt-3">
                 by&nbsp;
                 <a className="text-white hover:underline"
-                   href="https://creepypasta.org/u/10759/arkworthy">
+                   href={"/profile/" + author?.id}>
                     {author?.nickname}
                 </a>
             </div>

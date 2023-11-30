@@ -4,7 +4,6 @@ import CategoriesTable from "../tables/CategoriesTable";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import "../../styles/Categories.css"
 import {inject, observer} from "mobx-react";
-import {Button} from "react-bootstrap";
 import AddButton from "../buttons/AddButton";
 import CategoryCreateUpdateModal from "../modals/CategoryCreateUpdateModal";
 
@@ -25,9 +24,9 @@ const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categor
         navigate("/category/" + category.id)
 
 
-    const handleCategoryDeleteButtonClick = (category) => {
+    const handleCategoryDeleteButtonClick = (category) =>
         categoriesStore.deleteCategory(category.id)
-    }
+
 
     const handleCategoryEditButtonClick = (category) => {
         setEditModalShow(true);
@@ -52,6 +51,7 @@ const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categor
         categoriesStore.updateCategory(data.id, data.name, data.pictureUrl);
     }
 
+
     return (
         <PageWrapper>
             {authStore.currentUser.is_superuser ? <div className="mt-5">
@@ -60,7 +60,6 @@ const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categor
 
             <div className="mt-5">
                 <CategoriesTable
-
                     categories={categoriesStore.categories}
                     onChoose={handleCategoryChoose}
                     onDelete={handleCategoryDeleteButtonClick}

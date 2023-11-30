@@ -5,6 +5,7 @@ import {Image, Stack} from "react-bootstrap";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import {MdRemoveRedEye} from "react-icons/md";
 import {BiSolidFileTxt} from "react-icons/bi";
+import {useParams} from "react-router-dom";
 
 const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore, statisticsStore, ...props}) => {
     const {
@@ -16,6 +17,8 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
         is_superuser: isSuperuser
     } = authStore.currentUser;
 
+    const {id: userId} = useParams();
+    console.log(userId)
     const [picSrc, setPicSrc] = useState(photoUrl);
     const [userStatistics, setUserStatistics] = useState({viewsNumber: 0, storiesNumber: 0});
     const navigate = useNavigateCustom();

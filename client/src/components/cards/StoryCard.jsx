@@ -6,19 +6,30 @@ import {MdRemoveRedEye} from "react-icons/md";
 import {Stack} from "react-bootstrap";
 import DeleteButton from "../buttons/DeleteButton";
 import EditButton from "../buttons/EditButton";
+import {inject, observer} from "mobx-react";
 
 
-const StoryCard = ({story, onChoose, onEdit, onDelete, ...props}) => {
-    const {name, picture_url: pictureUrl, author, views, category, rating, read_time: readTimeMin, date} = story;
+const StoryCard = inject("authStore")(observer(({authStore, story, onChoose, onEdit, onDelete, ...props}) => {
+    const {
+        id,
+        name,
+        picture_url: pictureUrl,
+        author,
+        views,
+        category,
+        rating,
+        read_time: readTimeMin,
+        create_date: createDateTime
+    } = story;
 
-    const [picSrc, setPicSrc] = useState(pictureUrl);
+    const [picSrc, setPicSrc] = useState(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
 
     useEffect(
         _ => {
-            if (picSrc === null)
-                setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
+            if (pictureUrl)
+                setPicSrc(pictureUrl);
         },
-        [picSrc]
+        [pictureUrl]
     )
 
     const handleImageError = () =>
@@ -34,6 +45,9 @@ const StoryCard = ({story, onChoose, onEdit, onDelete, ...props}) => {
         onDelete(story);
     }
 
+    const date = createDateTime?.split("T")[0];
+    const [year, month, day] = date ? date.split("-") : []
+
 
     return (
         <div className="card story-card" style={{cursor: "pointer"}} onClick={() => onChoose(story)}>
@@ -45,7 +59,7 @@ const StoryCard = ({story, onChoose, onEdit, onDelete, ...props}) => {
                     <Stack direction="horizontal" gap={2}>
                         <div>
                             <BsCalendar2DateFill width="24" height="24"/>
-                            {date}
+                            {day}.{month}.{year}
                         </div>
                         <div>
                             <FaStar width="24" height="24"/>
@@ -61,8 +75,13 @@ const StoryCard = ({story, onChoose, onEdit, onDelete, ...props}) => {
                         </div>
                         <div className="ms-auto mt-auto">
                             <Stack direction="horizontal">
-                                <EditButton onClick={handleEditButtonClick}/>
-                                <DeleteButton onClick={handleDeleteButtonClick}/>
+                                {
+                                    authStore.isAuthorized && (authStore.currentUser?.is_superuser || authStore.currentUser.id === author.id) ?
+                                        <Stack className="ms-auto mt-auto" direction="horizontal">
+                                            <EditButton onClick={handleEditButtonClick}/>
+                                            <DeleteButton onClick={handleDeleteButtonClick}/>
+                                        </Stack> : <div/>
+                                }
                             </Stack>
                         </div>
                     </Stack>
@@ -70,6 +89,6 @@ const StoryCard = ({story, onChoose, onEdit, onDelete, ...props}) => {
             </div>
         </div>
     );
-};
+}));
 
 export default StoryCard;

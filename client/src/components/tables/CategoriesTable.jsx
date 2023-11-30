@@ -1,8 +1,9 @@
 import React from 'react';
 import CategoryCard from "../cards/CategoryCard";
+import {observer} from "mobx-react";
 
 
-const CategoriesTable = ({categories, onChoose, onEdit, onDelete, ...props}) =>
+const CategoriesTable = observer(({categories, onChoose, onEdit, onDelete, ...props}) =>
     <div className="category-table">
         <div className="row">
             {categories.map((category) => (
@@ -17,7 +18,7 @@ const CategoriesTable = ({categories, onChoose, onEdit, onDelete, ...props}) =>
                 </div>
             ))}
         </div>
-    </div>
+    </div>)
 
 
 export default CategoriesTable;
