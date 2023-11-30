@@ -1,6 +1,7 @@
 import {makeObservable, action, observable} from 'mobx';
 import {createStory, deleteStory, readStories, readStory, updateStory} from "../services/api/stories";
 import authStore from "./AuthStore";
+import {validateResponse} from "../utils/validators/responses";
 
 class StoriesStore {
     stories = [];
@@ -21,63 +22,53 @@ class StoriesStore {
 
     async readStories(categoryId) {
         this.stories = [];
-        await readStories(categoryId).then((response) => {
-            if (response.status === 200)
-                this.stories = response?.data.results;
-        })
+        const response = await readStories(categoryId)
+        validateResponse(response, [200])
+        this.stories = response?.data.results;
     }
 
 
     async readStory(id) {
-        return await readStory(id).then((response) => {
-            if (response.status === 200)
-                return response.data;
-        })
+        const response = await readStory(id)
+        validateResponse(response, [200])
+        return response.data;
     }
 
     async createStory(name, pictureUrl, story, categoryId) {
-        await createStory(
+        const response = await createStory(
             {
                 name: name,
                 picture_url: pictureUrl,
                 story: story,
                 category_id: categoryId
-            }, authStore.token).then(
-            response => {
-                if (response.status === 201) {
-                    console.log(response.data)
-                    this.stories.push(response.data)
-                }
-            }
-        )
+            }, authStore.token)
+
+        validateResponse(response, [201])
+        this.stories.push(response.data)
     }
 
     async updateStory(id, name, pictureUrl, text) {
-        await updateStory({
+        const response = await updateStory({
             id: id,
             name: name,
             picture_url: pictureUrl,
             story: text
-        }, authStore.token).then(response => {
-            if (response.status === 204) {
-                this.stories.map(story => {
-                    if (story.id === id) {
-                        story.name = name;
-                        story.picture_url = pictureUrl;
-                        story.story = text;
-                    }
-                });
+        }, authStore.token)
+        validateResponse(response, [204])
+        this.stories.map(story => {
+            if (story.id === id) {
+                story.name = name;
+                story.picture_url = pictureUrl;
+                story.story = text;
             }
         })
     }
 
 
     async deleteStory(id) {
-        await deleteStory(id, authStore.token).then(response => {
-            if (response.status === 204) {
-                this.stories = this.stories.filter(story => story.id !== id)
-            }
-        })
+        const response = await deleteStory(id, authStore.token)
+        validateResponse(response, [204])
+        this.stories = this.stories.filter(story => story.id !== id)
     }
 }
 

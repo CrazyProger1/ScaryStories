@@ -1,5 +1,6 @@
 import {action, makeObservable} from "mobx";
 import {readUserStatistics} from "../services/api/statistics";
+import {validateResponse} from "../utils/validators/responses";
 
 
 class StatisticsStore {
@@ -13,20 +14,15 @@ class StatisticsStore {
 
 
     async readUserStatistics(id) {
-        const result = {
-            viewsNumber: 0,
-            storiesNumber: 0
-        }
-        return await readUserStatistics(id).then(response => {
-            if (response.status === 200) {
-                const data = response.data;
-                result.viewsNumber = data?.views_number;
-                result.storiesNumber = data?.stories_number;
-                return result;
-            } else
-                return result;
+        const response = await readUserStatistics(id)
+        validateResponse(response, [200])
+        const data = response.data;
+        return {
+            viewsNumber: data?.views_number,
+            storiesNumber: data?.stories_number
+        };
 
-        })
+
     }
 }
 

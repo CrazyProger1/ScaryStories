@@ -4,7 +4,7 @@ import {observer, inject} from "mobx-react";
 import {Link} from "react-router-dom";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import "../../styles/Header.css";
-import AuthButton from "../buttons/AuthButton";
+import AuthBlock from "../buttons/AuthBlock";
 
 
 const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
@@ -76,7 +76,7 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
                             </Nav.Link>
                         )}
                     </Nav>
-                    <AuthButton/>
+                    <AuthBlock/>
                 </Container>
             </Navbar>
             <div style={{

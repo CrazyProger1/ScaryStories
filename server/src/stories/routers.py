@@ -90,7 +90,7 @@ async def read_story(
         return await service.read_random_story()
 
 
-@router.post('', response_model=StoryReadSchema, tags=['Stories'])
+@router.post('', status_code=201, response_model=StoryReadSchema, tags=['Stories'])
 async def create_story(
         story: StoryCreateSchema,
         service: StoriesService = Depends(stories_service),

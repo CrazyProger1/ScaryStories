@@ -47,8 +47,6 @@ const AboutPage = () => {
 
                     </Stack>
                 </div>
-
-
             </div>
         </PageWrapper>
     );

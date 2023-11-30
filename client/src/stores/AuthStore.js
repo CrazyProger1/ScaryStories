@@ -1,5 +1,6 @@
 import {makeObservable, action, observable} from 'mobx';
 import {loginUser, logoutUser, readUser, registerUser} from "../services/api/users";
+import {validateResponse} from "../utils/validators/responses";
 
 class AuthStore {
     isAuthorized = false;
@@ -12,10 +13,12 @@ class AuthStore {
                 isAuthorized: observable,
                 currentUser: observable,
                 token: observable,
-                login: action,
-                register: action,
-                logout: action,
-                updateUserData: action
+                loginUser: action,
+                registerUser: action,
+                logoutUser: action,
+                refreshCurrentUser: action,
+                readUser: action,
+                checkCurrentToken: action
             }
         )
         this.loadData();
@@ -38,58 +41,54 @@ class AuthStore {
             this.currentUser = data.currentUser;
         }
 
+        this.checkCurrentToken()
     }
 
-    async updateUserData() {
+    async checkCurrentToken() {
+        await this.refreshCurrentUser().catch(_ => {
+            this.logoutUser()
+        });
+    }
+
+    async refreshCurrentUser() {
         if (!this.isAuthorized)
             return
 
-        await readUser("me", this.token).then(
-            (resp) => {
-                if (resp.status === 200)
-                    this.currentUser = resp.data;
-            }
-        );
+        this.currentUser = await this.readUser("me", this.token)
         this.saveData();
-
     }
 
     async readUser(id) {
-        return await readUser(id, this.token).then((response) => {
-            if (response.status === 200)
-                return response.data;
-        })
+        const response = await readUser(id, this.token)
+        validateResponse(response, [200]);
+        return response.data;
     }
 
-    async login(login, password) {
-        await loginUser({
+    async loginUser(login, password) {
+        const credentials = {
             password: password,
             username: login
-        }).then((resp) => {
-            if (resp.status === 200) {
-                this.isAuthorized = true;
-                this.token = resp.data.access_token;
-                this.updateUserData();
-            }
-
-
-        })
-
-
+        }
+        const response = await loginUser(credentials)
+        validateResponse(response, [200]);
+        this.isAuthorized = true;
+        this.token = response.data.access_token;
+        this.refreshCurrentUser();
     }
 
-    async register(login, nickname, password) {
-        await registerUser({
+    async registerUser(login, nickname, password) {
+        const data = {
             email: login,
             password: password,
             nickname: nickname
-        }).then((resp) =>
-            this.login(login, password)
-        )
+        };
+        const response = await registerUser(data)
+        validateResponse(response, [204]);
+        this.loginUser(login, password)
     }
 
 
-    async logout() {
+    async logoutUser() {
         this.isAuthorized = false;
         this.token = null;
         this.currentUser = {};

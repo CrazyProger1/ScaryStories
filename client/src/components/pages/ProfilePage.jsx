@@ -16,13 +16,14 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
     if (!authStore.isAuthorized)
         navigate("/");
 
-
-    useEffect(_ => {
-            statisticsStore.readUserStatistics(user.id).then(statistics => {
+    useEffect(
+        _ => {
+            setUser(authStore.currentUser)
+            statisticsStore.readUserStatistics(authStore.currentUser.id).then(statistics => {
                 setUserStatistics(statistics);
             })
         },
-        [user]
+        [authStore.currentUser]
     )
 
 

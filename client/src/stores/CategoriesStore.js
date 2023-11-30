@@ -1,6 +1,7 @@
 import {makeObservable, action, observable, runInAction} from 'mobx';
 import {createCategory, deleteCategory, readCategories, updateCategory} from "../services/api/categories";
 import authStore from "./AuthStore";
+import {validateResponse} from "../utils/validators/responses";
 
 class CategoriesStore {
     categories = [];
@@ -20,17 +21,15 @@ class CategoriesStore {
 
     async readCategories() {
         const response = await readCategories()
-        if (response.status === 200)
-            this.categories = response?.data.results;
+        validateResponse(response, [200])
+        this.categories = response?.data.results;
 
     }
 
     async createCategory(name, pictureUrl) {
         const response = await createCategory({name: name, picture_url: pictureUrl}, authStore.token)
-        if (response.status === 201)
-            this.categories.push(response.data)
-
-
+        validateResponse(response, [201])
+        this.categories.push(response.data)
     }
 
 
@@ -41,20 +40,16 @@ class CategoriesStore {
             categoryToUpdate,
             authStore.token
         );
+        validateResponse(response, [204])
+        const index = this.categories.findIndex(category => category.id === id);
+        this.categories[index] = categoryToUpdate;
 
-        if (response.status === 204) {
-            const index = this.categories.findIndex(category => category.id === id);
-            this.categories[index] = categoryToUpdate;
-            console.log(categoryToUpdate)
-        }
     }
 
     async deleteCategory(id) {
         const response = await deleteCategory(id, authStore.token)
-        if (response.status === 204)
-            this.categories = this.categories.filter(category => category.id !== id);
-
-
+        validateResponse(response, [204])
+        this.categories = this.categories.filter(category => category.id !== id);
     }
 
 
