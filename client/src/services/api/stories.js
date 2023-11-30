@@ -12,10 +12,10 @@ export const readStories = async (categoryId) =>
     )
 
 
-export const readStory = async (storyId) =>
+export const readStory = async (id) =>
     await makeRequest({
             method: "GET",
-            url: "stories/" + storyId
+            url: "stories/" + id
         }
     )
 
@@ -25,6 +25,29 @@ export const createStory = async (story, token) =>
             method: "POST",
             url: "stories",
             data: story,
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }
+    )
+
+
+export const updateStory = async (story, token) =>
+    await makeRequest({
+            method: "PATCH",
+            url: "stories/" + story.id,
+            data: story,
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }
+    )
+
+
+export const deleteStory = async (id, token) =>
+    await makeRequest({
+            method: "DELETE",
+            url: "stories/" + id,
             headers: {
                 Authorization: "Bearer " + token
             }

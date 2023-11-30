@@ -1,14 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Modal} from "react-bootstrap";
 import StoryForm from "../forms/StoryForm";
 
 
-const StoryCreateUpdateModal = ({show, onClose, onSubmit, title, buttonText, ...props}) => {
-    const [formData, setFormData] = useState({
-        name: "",
-        story: "",
-        pictureUrl: ""
-    })
+const StoryCreateUpdateModal = ({show, onClose, onSubmit, title, buttonText, defaultData, ...props}) => {
+    const [formData, setFormData] = useState({})
+
+    useEffect(
+        _ => {
+            setFormData({...defaultData});
+        },
+        [defaultData]
+    )
     const [valid, setValid] = useState(false);
 
     const handleSubmit = () => {

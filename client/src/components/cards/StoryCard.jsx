@@ -8,13 +8,23 @@ import DeleteButton from "../buttons/DeleteButton";
 import EditButton from "../buttons/EditButton";
 
 
-const StoryCard = ({story, onChoose, ...props}) => {
+const StoryCard = ({story, onChoose, onEdit, onDelete, ...props}) => {
     const {name, picture_url: pictureUrl, author, views, category, rating, read_time: readTimeMin, date} = story;
 
     const [picSrc, setPicSrc] = useState(pictureUrl);
 
     const handleImageError = () =>
         setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
+
+    const handleEditButtonClick = (event) => {
+        event.stopPropagation();
+        onEdit(story);
+    }
+
+    const handleDeleteButtonClick = (event) => {
+        event.stopPropagation();
+        onDelete(story);
+    }
 
 
     return (
@@ -44,8 +54,8 @@ const StoryCard = ({story, onChoose, ...props}) => {
                             </div>
                             <div className="ms-auto mt-auto">
                                 <Stack direction="horizontal">
-                                    <EditButton/>
-                                    <DeleteButton/>
+                                    <EditButton onClick={handleEditButtonClick}/>
+                                    <DeleteButton onClick={handleDeleteButtonClick}/>
                                 </Stack>
                             </div>
                         </Stack>

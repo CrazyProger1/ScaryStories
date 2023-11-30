@@ -46,6 +46,15 @@ class StoriesService:
             raise HTTPException(status_code=404, detail=ErrorMessages.STORY_NOT_FOUND)
         return story
 
+    async def is_story_owner_or_superuser_or_403(self, user: User, story: Story):
+        if user.is_superuser:
+            return
+
+        if user.id == story.author_id:
+            return
+
+        raise HTTPException(status_code=403, detail=ErrorMessages.NO_PERMISSION)
+
     async def read_stories(self, pagination_params: Paginator, filter_params: Filter):
         results = []
         for story in await self.stories_repository.read(
@@ -111,7 +120,11 @@ class StoriesService:
         )
 
     async def update_story(self, story_id: int, story: StoryUpdateSchema, user: User):
+        story_from_db = await self.get_story_or_404(story_id=story_id)
+        await self.is_story_owner_or_superuser_or_403(user=user, story=story_from_db)
         await self.stories_repository.update(Story.id == story_id, **story.model_dump())
 
     async def delete_story(self, story_id: int, user: User):
+        story = await self.get_story_or_404(story_id=story_id)
+        await self.is_story_owner_or_superuser_or_403(user=user, story=story)
         await self.stories_repository.delete(Story.id == story_id)

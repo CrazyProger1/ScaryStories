@@ -1,5 +1,5 @@
 import {makeObservable, action, observable} from 'mobx';
-import {createStory, readStories, readStory} from "../services/api/stories";
+import {createStory, deleteStory, readStories, readStory, updateStory} from "../services/api/stories";
 import authStore from "./AuthStore";
 
 class StoriesStore {
@@ -11,7 +11,9 @@ class StoriesStore {
                 stories: observable,
                 loadStories: action,
                 loadStory: action,
-                createStory: action
+                createStory: action,
+                updateStory: action,
+                deleteStory: action
             }
         )
     }
@@ -26,8 +28,8 @@ class StoriesStore {
     }
 
 
-    async loadStory(storyId) {
-        return await readStory(storyId).then((response) => {
+    async loadStory(id) {
+        return await readStory(id).then((response) => {
             if (response.status === 200)
                 return response.data;
         })
@@ -47,6 +49,29 @@ class StoriesStore {
                 }
             }
         )
+    }
+
+    async updateStory(id, name, pictureUrl, text) {
+        await updateStory({id: id, name: name, picture_url: pictureUrl, story: text}, authStore.token).then(response => {
+            if (response.status === 204) {
+                this.stories.map(story => {
+                    if (story.id === id) {
+                        story.name = name;
+                        story.picture_url = pictureUrl;
+                        story.story = text;
+                    }
+                });
+            }
+        })
+    }
+
+
+    async deleteStory(id) {
+        await deleteStory(id, authStore.token).then(response => {
+            if (response.status === 204) {
+                this.stories = this.stories.filter(story => story.id !== id)
+            }
+        })
     }
 }
 
