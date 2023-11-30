@@ -6,6 +6,7 @@ import uiStore from "./stores/UIStore";
 import authStore from "./stores/AuthStore"
 import categoriesStore from "./stores/CategoriesStore"
 import storiesStore from "./stores/StoriesStore"
+import statisticsStore from "./stores/StatisticsStore"
 import {Provider} from 'mobx-react';
 
 
@@ -13,7 +14,8 @@ const stores = {
     uiStore: uiStore,
     authStore: authStore,
     categoriesStore: categoriesStore,
-    storiesStore: storiesStore
+    storiesStore: storiesStore,
+    statisticsStore: statisticsStore
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

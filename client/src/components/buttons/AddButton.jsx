@@ -1,12 +1,13 @@
 import React from 'react';
-import {Button} from "react-bootstrap";
+import "../../styles/Buttons.css"
 
 const AddButton = ({onClick, ...props}) => {
     return (
-        <div>
-            <Button onClick={onClick}>
-                +
-            </Button>
+        <div onClick={onClick} className="button-add d-flex justify-content-center align-items-center">
+                <img
+                    src={process.env.PUBLIC_URL + "/imgs/icons/add.png"}
+                    alt=""
+                />
         </div>
     );
 };

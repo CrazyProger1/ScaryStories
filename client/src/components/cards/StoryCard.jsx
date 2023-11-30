@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BsCalendar2DateFill} from "react-icons/bs";
 import {IoTimeSharp} from "react-icons/io5";
 import {FaCommentDots, FaStar} from "react-icons/fa";
@@ -12,6 +12,14 @@ const StoryCard = ({story, onChoose, onEdit, onDelete, ...props}) => {
     const {name, picture_url: pictureUrl, author, views, category, rating, read_time: readTimeMin, date} = story;
 
     const [picSrc, setPicSrc] = useState(pictureUrl);
+
+    useEffect(
+        _ => {
+            if (picSrc === null)
+                setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
+        },
+        [picSrc]
+    )
 
     const handleImageError = () =>
         setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');

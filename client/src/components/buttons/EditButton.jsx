@@ -4,7 +4,7 @@ import {BiSolidPencil} from "react-icons/bi";
 const EditButton = ({onClick, ...props}) => {
     return (
         <div>
-            <BiSolidPencil color="#212529" onClick={onClick} style={{cursor: "pointer"}}/>
+            <BiSolidPencil className="button-icon-edit"  onClick={onClick}/>
         </div>
     );
 };

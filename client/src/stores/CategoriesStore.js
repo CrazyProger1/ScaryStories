@@ -9,7 +9,7 @@ class CategoriesStore {
         makeObservable(this,
             {
                 categories: observable,
-                loadCategories: action,
+                readCategories: action,
                 createCategory: action,
                 updateCategory: action,
                 deleteCategory: action
@@ -18,7 +18,7 @@ class CategoriesStore {
     }
 
 
-    async loadCategories() {
+    async readCategories() {
         await readCategories().then((response) => {
             if (response.status === 200)
                 this.categories = response?.data.results;

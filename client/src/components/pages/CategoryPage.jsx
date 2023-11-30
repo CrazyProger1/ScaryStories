@@ -17,7 +17,7 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
 
     useEffect(
         () => {
-            storiesStore.loadStories(categoryId);
+            storiesStore.readStories(categoryId);
         },
         []
     )
@@ -26,18 +26,20 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
     const handleStoryChoose = (story) =>
         navigate("/story/" + story.id);
 
-    const handleStoryDeleteButtonClick = (story) => {
+    const handleStoryDeleteButtonClick = (story) =>
         storiesStore.deleteStory(story.id)
-    }
+
 
     const handleStoryEditButtonClick = (story) => {
         setEditModalShow(true);
-        setDefaultEditModalData({
-            name: story.name,
-            pictureUrl: story.picture_url,
-            id: story.id,
-            story: story.story
-        });
+        storiesStore.readStory(story.id).then(story => {
+            setDefaultEditModalData({
+                name: story.name,
+                pictureUrl: story.picture_url,
+                id: story.id,
+                story: story.story
+            });
+        })
     }
 
 
@@ -56,7 +58,12 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
 
     const handleStoryEdit = (data) => {
         setEditModalShow(false);
-        storiesStore.updateStory(data.id, data.name, data.pictureUrl, data.story);
+        storiesStore.updateStory(
+            data.id,
+            data.name,
+            data.pictureUrl,
+            data.story
+        );
     }
 
     return (

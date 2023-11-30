@@ -12,7 +12,7 @@ import CategoryCreateUpdateModal from "../modals/CategoryCreateUpdateModal";
 const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categoriesStore, authStore, ...props}) => {
     useEffect(
         () => {
-            categoriesStore.loadCategories();
+            categoriesStore.readCategories();
         },
         []
     )

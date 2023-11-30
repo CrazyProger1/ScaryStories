@@ -16,7 +16,7 @@ const StoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => 
 
     useEffect(
         () => {
-            storiesStore.loadStory(storyIdOrRandom).then((result) => {
+            storiesStore.readStory(storyIdOrRandom).then((result) => {
                 if (result)
                     setStory(result);
             });

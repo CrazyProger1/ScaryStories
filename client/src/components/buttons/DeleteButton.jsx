@@ -1,10 +1,11 @@
 import React from 'react';
 import {BiSolidPencil, BiSolidTrash} from "react-icons/bi";
+import "../../styles/Buttons.css"
 
 const DeleteButton = ({onClick, ...props}) => {
     return (
         <div>
-            <BiSolidTrash color="#800000" onClick={onClick} style={{cursor: "pointer"}}/>
+            <BiSolidTrash className="button-icon-delete" onClick={onClick}/>
         </div>
     );
 };

@@ -9,8 +9,8 @@ class StoriesStore {
         makeObservable(this,
             {
                 stories: observable,
-                loadStories: action,
-                loadStory: action,
+                readStories: action,
+                readStory: action,
                 createStory: action,
                 updateStory: action,
                 deleteStory: action
@@ -19,7 +19,7 @@ class StoriesStore {
     }
 
 
-    async loadStories(categoryId) {
+    async readStories(categoryId) {
         this.stories = [];
         await readStories(categoryId).then((response) => {
             if (response.status === 200)
@@ -28,7 +28,7 @@ class StoriesStore {
     }
 
 
-    async loadStory(id) {
+    async readStory(id) {
         return await readStory(id).then((response) => {
             if (response.status === 200)
                 return response.data;
@@ -45,6 +45,7 @@ class StoriesStore {
             }, authStore.token).then(
             response => {
                 if (response.status === 201) {
+                    console.log(response.data)
                     this.stories.push(response.data)
                 }
             }
@@ -52,7 +53,12 @@ class StoriesStore {
     }
 
     async updateStory(id, name, pictureUrl, text) {
-        await updateStory({id: id, name: name, picture_url: pictureUrl, story: text}, authStore.token).then(response => {
+        await updateStory({
+            id: id,
+            name: name,
+            picture_url: pictureUrl,
+            story: text
+        }, authStore.token).then(response => {
             if (response.status === 204) {
                 this.stories.map(story => {
                     if (story.id === id) {

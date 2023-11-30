@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DeleteButton from "../buttons/DeleteButton";
 import EditButton from "../buttons/EditButton";
 import {Stack} from "react-bootstrap";
@@ -15,6 +15,14 @@ const CategoryCard = inject("authStore")(observer(
      }) => {
         const {name, picture_url: pictureUrl} = category;
         const [picSrc, setPicSrc] = useState(pictureUrl);
+
+        useEffect(
+            _ => {
+                if (picSrc === null)
+                    setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
+            },
+            [picSrc]
+        )
 
 
         const handleImageError = () =>
