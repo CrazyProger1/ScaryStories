@@ -68,6 +68,7 @@ const DefaultHeader = inject("uiStore")(observer(({uiStore, ...props}) => {
                     <Nav className="me-auto">
                         {links.map(({to, children}) =>
                             <Nav.Link
+                                key={to}
                                 onClick={() => navigate(to)}
                                 style={uiStore.currentPage === to ? {color: "rgba(255, 255, 255, 1)"} : {}}
                                 className="nav-link">

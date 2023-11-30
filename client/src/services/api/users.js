@@ -39,7 +39,6 @@ export const readUser = async (id, token) =>
             method: "GET",
             url: "users/" + id,
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
                 Authorization: "Bearer " + token
             }
         }

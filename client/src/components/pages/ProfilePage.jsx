@@ -5,9 +5,27 @@ import {Image, Stack} from "react-bootstrap";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import {MdRemoveRedEye} from "react-icons/md";
 import {BiSolidFileTxt} from "react-icons/bi";
-import {useParams} from "react-router-dom";
+
 
 const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore, statisticsStore, ...props}) => {
+    const [user, setUser] = useState(authStore.currentUser);
+    const [userStatistics, setUserStatistics] = useState({viewsNumber: 0, storiesNumber: 0});
+    const navigate = useNavigateCustom();
+
+
+    if (!authStore.isAuthorized)
+        navigate("/");
+
+
+    useEffect(_ => {
+            statisticsStore.readUserStatistics(user.id).then(statistics => {
+                setUserStatistics(statistics);
+            })
+        },
+        [user]
+    )
+
+
     const {
         id,
         nickname,
@@ -15,40 +33,23 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
         registered_at: registeredAt,
         photo_url: photoUrl,
         is_superuser: isSuperuser
-    } = authStore.currentUser;
-
-    const {id: userId} = useParams();
-    console.log(userId)
-    const [picSrc, setPicSrc] = useState(photoUrl);
-    const [userStatistics, setUserStatistics] = useState({viewsNumber: 0, storiesNumber: 0});
-    const navigate = useNavigateCustom();
-
-    if (!authStore.isAuthorized)
-        navigate("/");
-
-
-    useEffect(
-        _ => {
-            statisticsStore.readUserStatistics(authStore.currentUser.id).then(
-                result => {
-                    setUserStatistics({
-                        viewsNumber: result?.views_number,
-                        storiesNumber: result?.stories_number
-                    });
-                }
-            )
-        },
-        [id]
-    )
+    } = user;
 
     const {viewsNumber, storiesNumber} = userStatistics;
 
+    const setPicture = (src) => {
+        setUser(
+            {
+                ...user,
+                photoUrl: src
+            }
+        );
+    }
 
-    const handleImageError = () =>
-        setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/user.png');
 
-    if (picSrc === null)
-        setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/user.png');
+    const setDefaultPicture = () =>
+        setPicture(process.env.PUBLIC_URL + "/imgs/defaults/user.png");
+
 
     return (
         <PageWrapper>
@@ -56,9 +57,9 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
                 <Stack className="d-inline-block" direction="vertical" gap={2}>
                     <Image
                         className="rounded-circle"
-                        src={picSrc}
+                        src={photoUrl ? photoUrl : process.env.PUBLIC_URL + "/imgs/defaults/user.png"}
                         width="250px"
-                        onErrorCapture={handleImageError}
+                        onErrorCapture={setDefaultPicture}
                     />
                     <h1>
                         {nickname}{isSuperuser ? "(admin)" : ""}

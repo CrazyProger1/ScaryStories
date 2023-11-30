@@ -21,7 +21,7 @@ class AuthStore {
         this.loadData();
     }
 
-    saveData = () => {
+    saveData() {
         localStorage.setItem("auth", JSON.stringify({
             isAuthorized: true,
             currentUser: this.currentUser,
@@ -29,7 +29,7 @@ class AuthStore {
         }));
     }
 
-    loadData = () => {
+    loadData() {
         const jsonData = localStorage.getItem("auth");
         if (jsonData) {
             const data = JSON.parse(jsonData)
@@ -40,7 +40,7 @@ class AuthStore {
 
     }
 
-    updateUserData = async () => {
+    async updateUserData() {
         if (!this.isAuthorized)
             return
 
@@ -54,7 +54,14 @@ class AuthStore {
 
     }
 
-    login = async (login, password) => {
+    async readUser(id) {
+        return await readUser(id, this.token).then((response) => {
+            if (response.status === 200)
+                return response.data;
+        })
+    }
+
+    async login(login, password) {
         await loginUser({
             password: password,
             username: login
@@ -71,7 +78,7 @@ class AuthStore {
 
     }
 
-    register = async (login, nickname, password) => {
+    async register(login, nickname, password) {
         await registerUser({
             email: login,
             password: password,
@@ -82,7 +89,7 @@ class AuthStore {
     }
 
 
-    logout = async () => {
+    async logout() {
         this.isAuthorized = false;
         this.token = null;
         this.currentUser = {};
