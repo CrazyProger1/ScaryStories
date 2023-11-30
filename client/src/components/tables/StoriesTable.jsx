@@ -7,12 +7,14 @@ const StoriesTable = ({stories, onChoose, onEdit, onDelete, ...props}) => {
         <div className="story-table">
             <div className="row">
                 {stories.map((story) => (
-                    <StoryCard
-                        story={story}
-                        onChoose={onChoose}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
-                    />
+                    <div className="col-md-4 mb-4">
+                        <StoryCard
+                            story={story}
+                            onChoose={onChoose}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                        />
+                    </div>
                 ))}
             </div>
         </div>

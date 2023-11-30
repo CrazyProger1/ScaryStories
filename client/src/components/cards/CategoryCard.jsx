@@ -39,8 +39,7 @@ const CategoryCard = inject("authStore")(observer(
         }
 
         return (
-            <div className="col-md-4 mb-4" onClick={() => onChoose(category)}>
-                <div className="card category-card">
+                <div className="card category-card" style={{cursor: "pointer"}} onClick={() => onChoose(category)}>
                     <img src={picSrc}
                          className="card-img-top" alt={name} onErrorCapture={handleImageError}/>
                     <div className="card-body card-img-overlay d-flex flex-column">
@@ -53,10 +52,8 @@ const CategoryCard = inject("authStore")(observer(
                                     <DeleteButton onClick={handleDeleteButtonClick}/>
                                 </Stack> : <div/>
                         }
-
                     </div>
                 </div>
-            </div>
         );
     }
 ));

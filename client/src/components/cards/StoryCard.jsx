@@ -36,42 +36,39 @@ const StoryCard = ({story, onChoose, onEdit, onDelete, ...props}) => {
 
 
     return (
-        <div className="col-md-4 mb-4" onClick={() => onChoose(story)}>
-            <div className="card story-card">
-                <img src={picSrc} className="card-img-top" alt={name} onErrorCapture={handleImageError}/>
-                <div className="card-body d-flex flex-column">
-                    <h5 className="card-title story-card-title">{name}</h5>
-                    <p className="card-text">Author:&nbsp; {author.nickname}</p>
-                    <p className="card-text">
-                        <Stack direction="horizontal" gap={2}>
-                            <div>
-                                <BsCalendar2DateFill width="24" height="24"/>
-                                {date}
-                            </div>
-                            <div>
-                                <FaStar width="24" height="24"/>
-                                {rating}
-                            </div>
-                            <div>
-                                <MdRemoveRedEye width="24" height="24"/>
-                                {views}
-                            </div>
-                            <div>
-                                <IoTimeSharp width="24" height="24"/>
-                                {readTimeMin.toFixed(2)}m
-                            </div>
-                            <div className="ms-auto mt-auto">
-                                <Stack direction="horizontal">
-                                    <EditButton onClick={handleEditButtonClick}/>
-                                    <DeleteButton onClick={handleDeleteButtonClick}/>
-                                </Stack>
-                            </div>
-                        </Stack>
-                    </p>
-                </div>
+        <div className="card story-card" style={{cursor: "pointer"}} onClick={() => onChoose(story)}>
+            <img src={picSrc} className="card-img-top" alt={name} onErrorCapture={handleImageError}/>
+            <div className="card-body d-flex flex-column">
+                <h5 className="card-title story-card-title">{name}</h5>
+                <p className="card-text">Author:&nbsp; {author.nickname}</p>
+                <p className="card-text">
+                    <Stack direction="horizontal" gap={2}>
+                        <div>
+                            <BsCalendar2DateFill width="24" height="24"/>
+                            {date}
+                        </div>
+                        <div>
+                            <FaStar width="24" height="24"/>
+                            {rating}
+                        </div>
+                        <div>
+                            <MdRemoveRedEye width="24" height="24"/>
+                            {views}
+                        </div>
+                        <div>
+                            <IoTimeSharp width="24" height="24"/>
+                            {readTimeMin.toFixed(2)}m
+                        </div>
+                        <div className="ms-auto mt-auto">
+                            <Stack direction="horizontal">
+                                <EditButton onClick={handleEditButtonClick}/>
+                                <DeleteButton onClick={handleDeleteButtonClick}/>
+                            </Stack>
+                        </div>
+                    </Stack>
+                </p>
             </div>
         </div>
-
     );
 };
 
