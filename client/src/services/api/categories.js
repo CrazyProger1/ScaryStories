@@ -8,6 +8,15 @@ export const readCategories = async () =>
         }
     )
 
+
+export const readCategory = async (id) =>
+    await makeRequest({
+            method: "GET",
+            url: "stories/categories/" + id
+        }
+    )
+
+
 export const createCategory = async (category, token) =>
     await makeRequest({
             method: "POST",

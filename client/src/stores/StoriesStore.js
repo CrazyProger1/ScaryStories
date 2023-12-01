@@ -20,9 +20,20 @@ class StoriesStore {
     }
 
 
-    async readStories(categoryId = null, authorId = null) {
+    async readStories(
+        categoryId = null,
+        authorId = null,
+        topviewed = null
+    ) {
         this.stories = [];
-        const response = await readStories(categoryId, authorId)
+        const response = await readStories({
+                category_id: categoryId,
+                author_id: authorId
+            },
+            {
+                views: topviewed ? "desc" : null
+            }
+        )
         validateResponse(response, [200])
         this.stories = response?.data.results;
     }

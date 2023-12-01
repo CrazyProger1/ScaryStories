@@ -5,16 +5,30 @@ import StoriesTable from "../tables/StoriesTable";
 import {inject, observer} from "mobx-react";
 import AddButton from "../buttons/AddButton";
 import StoryCreateUpdateModal from "../modals/StoryCreateUpdateModal";
+import {set} from "mobx";
 
 
-const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore, authStore, ...props}) => {
+const CategoryPage = inject("storiesStore", "authStore", "categoriesStore")(observer(({
+                                                                                          storiesStore,
+                                                                                          authStore,
+                                                                                          categoriesStore,
+                                                                                          ...props
+                                                                                      }) => {
     const {id: categoryId} = useParams();
     const [createModalVisible, setCreateModalVisible] = useState(false);
+    const [category, setCategory] = useState({name: ""});
 
 
     useEffect(
         () => {
             storiesStore.readStories(categoryId, null);
+
+            categoriesStore.categories.map(cat => {
+                if (cat.id === parseInt(categoryId)) {
+                    setCategory(cat);
+                }
+            })
+
         },
         []
     )
@@ -32,8 +46,12 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
         )
     }
 
+    const {name} = category;
+
     return (
         <PageWrapper>
+            <h1 className="text-center mt-5">#{name}</h1>
+
             {authStore.isAuthorized && !isNaN(parseInt(categoryId)) ? <div className="mt-5">
                 <AddButton onClick={handleAddStoryButtonClick}/>
             </div> : <div/>}

@@ -23,8 +23,8 @@ class CategoriesStore {
         const response = await readCategories()
         validateResponse(response, [200])
         this.categories = response?.data.results;
-
     }
+
 
     async createCategory(name, pictureUrl) {
         const response = await createCategory({name: name, picture_url: pictureUrl}, authStore.token)
