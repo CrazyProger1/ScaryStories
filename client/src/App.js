@@ -8,6 +8,7 @@ import AboutPage from "./components/pages/AboutPage";
 import CategoryPage from "./components/pages/CategoryPage";
 import StoryPage from "./components/pages/StoryPage";
 import ProfilePage from "./components/pages/ProfilePage";
+import AuthorStoriesPage from "./components/pages/AuthorStoriesPage";
 
 
 const App = () =>
@@ -19,7 +20,9 @@ const App = () =>
             {/*<Route path='/profile/:id' element={<ProfilePage/>}/>*/}
             <Route path='/categories' element={<CategoriesPage/>}/>
             <Route path='/category/:id' element={<CategoryPage/>}/>
+            <Route path='/author/:id' element={<AuthorStoriesPage/>}/>
             <Route path='/story/:id' element={<StoryPage/>}/>
+
 
         </Routes>
     </div>

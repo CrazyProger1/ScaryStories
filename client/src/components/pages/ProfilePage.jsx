@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import PageWrapper from "./PageWrapper";
 import {inject, observer} from "mobx-react";
-import {Image, Stack} from "react-bootstrap";
+import {Button, Image, Stack} from "react-bootstrap";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
-import {MdRemoveRedEye} from "react-icons/md";
-import {BiSolidFileTxt} from "react-icons/bi";
+import QuestionModal from "../modals/QuestionModal";
 
 
 const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore, statisticsStore, ...props}) => {
     const [user, setUser] = useState(authStore.currentUser);
     const [userStatistics, setUserStatistics] = useState({viewsNumber: 0, storiesNumber: 0});
+    const [questionModalVisible, setQuestionModalVisible] = useState(false);
     const navigate = useNavigateCustom();
 
 
@@ -21,9 +21,11 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
             setUser(authStore.currentUser)
             statisticsStore.readUserStatistics(authStore.currentUser.id).then(statistics => {
                 setUserStatistics(statistics);
+            }).catch(error => {
+
             })
         },
-        [authStore.currentUser]
+        [authStore.isAuthorized]
     )
 
 
@@ -52,6 +54,14 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
         setPicture(process.env.PUBLIC_URL + "/imgs/defaults/user.png");
 
 
+    const handleDeleteButtonClick = () =>
+        setQuestionModalVisible(true);
+
+    const handleDelete = () => {
+        setQuestionModalVisible(false);
+        authStore.deleteUser();
+    }
+
     return (
         <PageWrapper>
             <div className="text-center mt-5">
@@ -68,15 +78,26 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
                 </Stack>
                 <Stack direction="vertical">
                     <div>
-                        <MdRemoveRedEye/>
+                        Views Number:&nbsp;
                         {viewsNumber}
                     </div>
                     <div>
-                        <BiSolidFileTxt/>
+                        Stories Number:&nbsp;
                         {storiesNumber}
                     </div>
                 </Stack>
+
             </div>
+
+            <QuestionModal
+                show={questionModalVisible}
+                title=""
+                message="Are you sure?"
+                onClose={_ => setQuestionModalVisible(false)}
+                onContinue={handleDelete}
+            />
+
+
         </PageWrapper>
     );
 }));

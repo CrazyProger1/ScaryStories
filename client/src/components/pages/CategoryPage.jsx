@@ -6,6 +6,7 @@ import useNavigateCustom from "../../hooks/useNavigateCustom";
 import {inject, observer} from "mobx-react";
 import AddButton from "../buttons/AddButton";
 import StoryCreateUpdateModal from "../modals/StoryCreateUpdateModal";
+import QuestionModal from "../modals/QuestionModal";
 
 
 const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore, authStore, ...props}) => {
@@ -14,6 +15,8 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
     const [createModalShow, setCreateModalShow] = useState(false);
     const [editModalShow, setEditModalShow] = useState(false);
     const [defaultEditModalData, setDefaultEditModalData] = useState({name: "", pictureUrl: "", story: ""});
+    const [questionModalVisible, setQuestionModalVisible] = useState(false);
+    const [storyToDelete, setStoryToDelete] = useState(null);
 
     useEffect(
         () => {
@@ -26,8 +29,10 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
     const handleStoryChoose = (story) =>
         navigate("/story/" + story.id);
 
-    const handleStoryDeleteButtonClick = (story) =>
-        storiesStore.deleteStory(story.id)
+    const handleStoryDeleteButtonClick = (story) => {
+        setStoryToDelete(story);
+        setQuestionModalVisible(true);
+    }
 
 
     const handleStoryEditButtonClick = (story) => {
@@ -66,6 +71,12 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
         );
     }
 
+    const handleDeleteStory = () => {
+        setQuestionModalVisible(false);
+        if (storyToDelete)
+            storiesStore.deleteStory(storyToDelete.id)
+    }
+
     return (
         <PageWrapper>
             {authStore.isAuthorized && !isNaN(parseInt(categoryId)) ? <div className="mt-5">
@@ -94,6 +105,13 @@ const CategoryPage = inject("storiesStore", "authStore")(observer(({storiesStore
                 onClose={() => setEditModalShow(false)}
                 title="Story Edition"
                 buttonText="Save"
+            />
+            <QuestionModal
+                show={questionModalVisible}
+                onClose={_ => setQuestionModalVisible(false)}
+                title="Story Deleting"
+                message="Are you sure?"
+                onContinue={handleDeleteStory}
             />
         </PageWrapper>
     );

@@ -43,3 +43,16 @@ export const readUser = async (id, token) =>
             }
         }
     )
+
+
+export const deleteUser = async (id, token) =>
+    await makeRequest({
+            method: "DELETE",
+            url: "users/" + id,
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }
+    )
+
+

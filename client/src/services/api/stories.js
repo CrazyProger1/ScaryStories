@@ -1,12 +1,13 @@
 import {makeRequest} from './api';
 
 
-export const readStories = async (categoryId) =>
+export const readStories = async (categoryId, authorId) =>
     await makeRequest({
             method: "GET",
             url: "stories",
             params: {
                 category_id: categoryId,
+                author_id: authorId
             }
         }
     )

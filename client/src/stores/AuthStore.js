@@ -1,5 +1,5 @@
 import {makeObservable, action, observable} from 'mobx';
-import {loginUser, logoutUser, readUser, registerUser} from "../services/api/users";
+import {deleteUser, loginUser, logoutUser, readUser, registerUser} from "../services/api/users";
 import {validateResponse} from "../utils/validators/responses";
 
 class AuthStore {
@@ -18,6 +18,7 @@ class AuthStore {
                 logoutUser: action,
                 refreshCurrentUser: action,
                 readUser: action,
+                deleteUser: action,
                 checkCurrentToken: action
             }
         )
@@ -73,7 +74,7 @@ class AuthStore {
         validateResponse(response, [200]);
         this.isAuthorized = true;
         this.token = response.data.access_token;
-        this.refreshCurrentUser();
+        await this.refreshCurrentUser();
     }
 
     async registerUser(login, nickname, password) {
@@ -84,7 +85,7 @@ class AuthStore {
         };
         const response = await registerUser(data)
         validateResponse(response, [204]);
-        this.loginUser(login, password)
+        await this.loginUser(login, password)
     }
 
 
@@ -95,7 +96,12 @@ class AuthStore {
         this.saveData();
     }
 
-
+    async deleteUser() {
+        if (this.isAuthorized) {
+            await deleteUser(this.currentUser.id, this.token)
+            await this.logoutUser();
+        }
+    }
 }
 
 
