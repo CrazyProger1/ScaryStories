@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
+import {validateStory} from "../../utils/validators/stories";
+import {validatePictureUrl, validateName} from "../../utils/validators/common";
 
 const StoryForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
     const {name, story, pictureUrl} = formData;
@@ -36,7 +38,26 @@ const StoryForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...prop
 
 
     const validate = () => {
-        onSetValidity(!errors.story && !errors.name && !errors.pictureUrl)
+        let newErrors = {
+            name: "",
+            story: "",
+            pictureUrl: ""
+        }
+        if (!validateName(name)) {
+            if (!name) newErrors.name = "Name can't be empty";
+            else newErrors.name = "Maximum name length is 50 characters"
+        }
+
+
+        if (!validatePictureUrl(pictureUrl))
+            newErrors.pictureUrl = "URL is not valid";
+
+        if (!validateStory(story))
+            newErrors.story = "Story can't be empty";
+
+
+        onSetValidity(!newErrors.story && !newErrors.name && !newErrors.pictureUrl);
+        setErrors(newErrors);
     }
 
     const handleSubmit = (e) => {
@@ -95,8 +116,16 @@ const StoryForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...prop
                     placeholder="Text"
                     name="story"
                     value={story}
+                    isInvalid={!!errors.story}
+                    isValid={!errors.story}
                     onChange={handleStoryChange}
                 />
+                <Form.Control.Feedback type="invalid">
+                    {errors.story}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                    Looks good!
+                </Form.Control.Feedback>
             </Form.Group>
         </Form>
     );

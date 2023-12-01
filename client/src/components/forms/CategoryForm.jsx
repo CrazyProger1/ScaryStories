@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
+import {validateStory} from "../../utils/validators/stories";
+import {validateName, validatePictureUrl} from "../../utils/validators/common";
 
 const CategoryForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...props}) => {
     const {name, pictureUrl} = formData;
@@ -29,7 +31,22 @@ const CategoryForm = ({formData, onFormDataChange, onSetValidity, onSubmit, ...p
 
 
     const validate = () => {
-        onSetValidity(!errors.pictureUrl && !errors.name)
+        let newErrors = {
+            name: "",
+            pictureUrl: ""
+        };
+
+        if (!validateName(name)) {
+            if (!name) newErrors.name = "Name can't be empty";
+            else newErrors.name = "Maximum name length is 50 characters"
+        }
+
+
+        if (!validatePictureUrl(pictureUrl))
+            newErrors.pictureUrl = "URL is not valid";
+
+        onSetValidity(!newErrors.name && !newErrors.pictureUrl);
+        setErrors(newErrors);
     }
 
     const handleSubmit = (e) => {
