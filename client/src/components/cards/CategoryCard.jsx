@@ -34,6 +34,8 @@ const CategoryCard = inject("authStore", "categoriesStore")(observer(
             _ => {
                 if (pictureUrl)
                     setPictureSrc(pictureUrl);
+                else
+                    setPictureSrc(PICTURE_NOT_AVAILABLE_SRC);
             },
             [pictureUrl]
         )

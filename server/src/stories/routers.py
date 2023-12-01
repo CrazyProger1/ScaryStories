@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, Response
 
 from src.pagination import DefaultPaginator, PaginatedResponseSchema, Paginator
 from src.filtering import Filter
+from src.sorting import Sorter
 from src.auth.models import User
 from src.auth.auth import current_superuser, current_active_user
 from .services import CategoriesService, StoriesService
@@ -14,6 +15,7 @@ from .schemas import (
     StoryUpdateSchema
 )
 from .filters import StoryFilter
+from .sorters import StorySorter
 
 router = APIRouter()
 
@@ -73,9 +75,14 @@ async def delete_category(
 async def read_stories(
         service: StoriesService = Depends(stories_service),
         pagination_params: DefaultPaginator = Depends(DefaultPaginator),
-        filter_params: Filter = Depends(StoryFilter)
+        filter_params: Filter = Depends(StoryFilter),
+        sort_params: Sorter = Depends(StorySorter)
 ):
-    results = await service.read_stories(pagination_params=pagination_params, filter_params=filter_params)
+    results = await service.read_stories(
+        pagination_params=pagination_params,
+        filter_params=filter_params,
+        sort_params=sort_params
+    )
     return pagination_params.form_response(results=results, total=0)
 
 

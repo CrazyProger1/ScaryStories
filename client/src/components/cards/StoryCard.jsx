@@ -20,7 +20,6 @@ const StoryCard = inject("authStore", "storiesStore")(observer(({
                                                                     ...props
                                                                 }) => {
 
-
     const [pictureSrc, setPictureSrc] = useState(PICTURE_NOT_AVAILABLE_SRC);
     const [questionModalVisible, setQuestionModalVisible] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState(false);
@@ -43,6 +42,8 @@ const StoryCard = inject("authStore", "storiesStore")(observer(({
         _ => {
             if (pictureUrl)
                 setPictureSrc(pictureUrl);
+            else
+                setPictureSrc(PICTURE_NOT_AVAILABLE_SRC);
         },
         [pictureUrl]
     )

@@ -3,6 +3,7 @@ import datetime
 from fastapi import HTTPException
 
 from src.filtering import Filter
+from src.sorting import Sorter
 from src.pagination import Paginator
 from src.serializer import AbstractSerializer
 from src.stories.schemas import StoryCreateSchema, StoryReadSchema, StoriesReadSchema, StoryUpdateSchema
@@ -55,12 +56,14 @@ class StoriesService:
 
         raise HTTPException(status_code=403, detail=ErrorMessages.NO_PERMISSION)
 
-    async def read_stories(self, pagination_params: Paginator, filter_params: Filter):
+    async def read_stories(self, pagination_params: Paginator, filter_params: Filter, sort_params: Sorter = None):
+
         results = []
         for story in await self.stories_repository.read(
                 *filter_params.filters,
                 limit=pagination_params.limit,
-                offset=pagination_params.offset
+                offset=pagination_params.offset,
+                sorts=sort_params.sorts
         ):
             results.append(StoriesReadSchema(
                 **story.__dict__,
