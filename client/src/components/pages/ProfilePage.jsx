@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import PageWrapper from "./PageWrapper";
 import {inject, observer} from "mobx-react";
-import {Button, Image, Stack} from "react-bootstrap";
+import {Image, Stack} from "react-bootstrap";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import QuestionModal from "../modals/QuestionModal";
+import {DEFAULT_USER_PICTURE_SRC} from "../../constants/defaults";
 
 
 const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore, statisticsStore, ...props}) => {
@@ -51,7 +52,7 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
 
 
     const setDefaultPicture = () =>
-        setPicture(process.env.PUBLIC_URL + "/imgs/defaults/user.png");
+        setPicture(DEFAULT_USER_PICTURE_SRC);
 
 
     const handleDeleteButtonClick = () =>
@@ -68,7 +69,7 @@ const ProfilePage = inject("authStore", "statisticsStore")(observer(({authStore,
                 <Stack className="d-inline-block" direction="vertical" gap={2}>
                     <Image
                         className="rounded-circle"
-                        src={photoUrl ? photoUrl : process.env.PUBLIC_URL + "/imgs/defaults/user.png"}
+                        src={photoUrl ? photoUrl : DEFAULT_USER_PICTURE_SRC}
                         width="250px"
                         onErrorCapture={setDefaultPicture}
                     />

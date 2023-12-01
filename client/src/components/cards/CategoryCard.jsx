@@ -3,6 +3,7 @@ import DeleteButton from "../buttons/DeleteButton";
 import EditButton from "../buttons/EditButton";
 import {Stack} from "react-bootstrap";
 import {inject, observer} from "mobx-react";
+import {PICTURE_NOT_AVAILABLE_SRC} from "../../constants/defaults";
 
 const CategoryCard = inject("authStore")(observer(
     ({
@@ -14,7 +15,7 @@ const CategoryCard = inject("authStore")(observer(
          ...props
      }) => {
         const {name, picture_url: pictureUrl} = category;
-        const [picSrc, setPicSrc] = useState(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
+        const [picSrc, setPicSrc] = useState(PICTURE_NOT_AVAILABLE_SRC);
 
         useEffect(
             _ => {
@@ -26,7 +27,7 @@ const CategoryCard = inject("authStore")(observer(
 
 
         const handleImageError = () =>
-            setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
+            setPicSrc(PICTURE_NOT_AVAILABLE_SRC);
 
         const handleEditButtonClick = (event) => {
             event.stopPropagation();

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import PageWrapper from "./PageWrapper";
 import {Stack} from "react-bootstrap";
 import {FaStar} from "react-icons/fa";
@@ -81,10 +81,10 @@ const StoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => 
             </div>
             <div className="text-md ml-2 text-center mt-3">
                 by&nbsp;
-                <a className="text-white hover:underline"
-                   href={"/profile/" + author?.id}>
+                <Link className="text-white hover:underline"
+                      to={"/author/" + author?.id}>
                     {author?.nickname}
-                </a>
+                </Link>
             </div>
             <p className="mt-5">{content}</p>
         </PageWrapper>

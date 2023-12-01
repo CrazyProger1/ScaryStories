@@ -7,9 +7,26 @@ import {Stack} from "react-bootstrap";
 import DeleteButton from "../buttons/DeleteButton";
 import EditButton from "../buttons/EditButton";
 import {inject, observer} from "mobx-react";
+import useNavigateCustom from "../../hooks/useNavigateCustom";
+import QuestionModal from "../modals/QuestionModal";
+import StoryCreateUpdateModal from "../modals/StoryCreateUpdateModal";
+import {PICTURE_NOT_AVAILABLE_SRC} from "../../constants/defaults";
 
 
-const StoryCard = inject("authStore")(observer(({authStore, story, onChoose, onEdit, onDelete, ...props}) => {
+const StoryCard = inject("authStore", "storiesStore")(observer(({
+                                                                    authStore,
+                                                                    storiesStore,
+                                                                    story,
+                                                                    ...props
+                                                                }) => {
+
+
+    const [pictureSrc, setPictureSrc] = useState(PICTURE_NOT_AVAILABLE_SRC);
+    const [questionModalVisible, setQuestionModalVisible] = useState(false);
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [defaultEditModalData, setDefaultEditModalData] = useState({name: "", pictureUrl: "", story: ""});
+    const navigate = useNavigateCustom();
+
     const {
         id,
         name,
@@ -22,27 +39,56 @@ const StoryCard = inject("authStore")(observer(({authStore, story, onChoose, onE
         create_date: createDateTime
     } = story;
 
-    const [picSrc, setPicSrc] = useState(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
-
     useEffect(
         _ => {
             if (pictureUrl)
-                setPicSrc(pictureUrl);
+                setPictureSrc(pictureUrl);
         },
         [pictureUrl]
     )
 
-    const handleImageError = () =>
-        setPicSrc(process.env.PUBLIC_URL + '/imgs/defaults/picture.jpg');
 
-    const handleEditButtonClick = (event) => {
-        event.stopPropagation();
-        onEdit(story);
+    const handleDeleteStory = () => {
+        setQuestionModalVisible(false);
+        storiesStore.deleteStory(id)
+    }
+    const handleStoryEdit = (data) => {
+        setEditModalVisible(false);
+        storiesStore.updateStory(
+            data.id,
+            data.name,
+            data.pictureUrl,
+            data.story
+        );
+    }
+
+
+    const handleImageError = () =>
+        setPictureSrc(PICTURE_NOT_AVAILABLE_SRC);
+
+
+    const handleChooseButtonClick = () => {
+        if (!questionModalVisible && !editModalVisible)
+            navigate("/story/" + id)
     }
 
     const handleDeleteButtonClick = (event) => {
         event.stopPropagation();
-        onDelete(story);
+        setQuestionModalVisible(true);
+    }
+
+
+    const handleEditButtonClick = (event) => {
+        event.stopPropagation();
+        setEditModalVisible(true);
+        storiesStore.readStory(story.id).then(story => {
+            setDefaultEditModalData({
+                name: story.name,
+                pictureUrl: story.picture_url,
+                id: story.id,
+                story: story.story
+            });
+        })
     }
 
     const date = createDateTime?.split("T")[0];
@@ -50,8 +96,8 @@ const StoryCard = inject("authStore")(observer(({authStore, story, onChoose, onE
 
 
     return (
-        <div className="card story-card" style={{cursor: "pointer"}} onClick={() => onChoose(story)}>
-            <img src={picSrc} className="card-img-top" alt={name} onErrorCapture={handleImageError}/>
+        <div className="card story-card" style={{cursor: "pointer"}} onClick={handleChooseButtonClick}>
+            <img src={pictureSrc} className="card-img-top" alt={name} onErrorCapture={handleImageError}/>
             <div className="card-body d-flex flex-column">
                 <h5 className="card-title story-card-title">{name}</h5>
                 <p className="card-text">Author:&nbsp; {author.nickname}</p>
@@ -77,16 +123,32 @@ const StoryCard = inject("authStore")(observer(({authStore, story, onChoose, onE
                             <Stack direction="horizontal">
                                 {
                                     authStore.isAuthorized && (authStore.currentUser?.is_superuser || authStore.currentUser.id === author.id) ?
-                                        <Stack className="ms-auto mt-auto" direction="horizontal">
+                                        <div className="ms-auto mt-auto"
+                                             style={{display: 'flex', flexDirection: 'row'}}>
                                             <EditButton onClick={handleEditButtonClick}/>
                                             <DeleteButton onClick={handleDeleteButtonClick}/>
-                                        </Stack> : <div/>
+                                        </div> : <div/>
                                 }
                             </Stack>
                         </div>
                     </Stack>
                 </p>
             </div>
+            <QuestionModal
+                show={questionModalVisible}
+                onClose={_ => setQuestionModalVisible(false)}
+                title="Story Deleting"
+                message="Are you sure?"
+                onContinue={handleDeleteStory}
+            />
+            <StoryCreateUpdateModal
+                defaultData={defaultEditModalData}
+                show={editModalVisible}
+                onSubmit={handleStoryEdit}
+                onClose={() => setEditModalVisible(false)}
+                title="Story Edition"
+                buttonText="Save"
+            />
         </div>
     );
 }));
