@@ -48,7 +48,7 @@ const StoryCard = inject("authStore", "storiesStore")(observer(({
     )
 
 
-    const handleDeleteStory = () => {
+    const handleStoryDelete = () => {
         setQuestionModalVisible(false);
         storiesStore.deleteStory(id)
     }
@@ -67,7 +67,7 @@ const StoryCard = inject("authStore", "storiesStore")(observer(({
         setPictureSrc(PICTURE_NOT_AVAILABLE_SRC);
 
 
-    const handleChooseButtonClick = () => {
+    const handleStoryChoose = () => {
         if (!questionModalVisible && !editModalVisible)
             navigate("/story/" + id)
     }
@@ -96,7 +96,7 @@ const StoryCard = inject("authStore", "storiesStore")(observer(({
 
 
     return (
-        <div className="card story-card" style={{cursor: "pointer"}} onClick={handleChooseButtonClick}>
+        <div className="card story-card" style={{cursor: "pointer"}} onClick={handleStoryChoose}>
             <img src={pictureSrc} className="card-img-top" alt={name} onErrorCapture={handleImageError}/>
             <div className="card-body d-flex flex-column">
                 <h5 className="card-title story-card-title">{name}</h5>
@@ -139,7 +139,7 @@ const StoryCard = inject("authStore", "storiesStore")(observer(({
                 onClose={_ => setQuestionModalVisible(false)}
                 title="Story Deleting"
                 message="Are you sure?"
-                onContinue={handleDeleteStory}
+                onContinue={handleStoryDelete}
             />
             <StoryCreateUpdateModal
                 defaultData={defaultEditModalData}
