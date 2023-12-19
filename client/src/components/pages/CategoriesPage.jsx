@@ -62,7 +62,7 @@ const CategoriesPage = inject("categoriesStore", "authStore")(observer(({categor
                 show={createModalVisible}
                 onSubmit={handleCategoryAdd}
                 onClose={() => setCreateModalVisible(false)}
-                title="Category Creation"
+                title="Category Creating"
                 buttonText="Add"
             />
 

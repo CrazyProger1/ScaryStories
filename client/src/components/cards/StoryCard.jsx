@@ -147,7 +147,7 @@ const StoryCard = inject("authStore", "storiesStore")(observer(({
                 show={editModalVisible}
                 onSubmit={handleStoryEdit}
                 onClose={() => setEditModalVisible(false)}
-                title="Story Edition"
+                title="Story Editing"
                 buttonText="Save"
             />
         </div>

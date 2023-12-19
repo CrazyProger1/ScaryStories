@@ -38,7 +38,7 @@ const AuthBlock = inject("authStore")(observer(({authStore, ...props}) => {
             case  "registration":
                 authStore.registerUser(data.login, data.nickname, data.password).catch(error => {
                     if (error.response?.status === 400)
-                        showError("User with such username already exists!");
+                        showError("User with such email or nickname already exists!");
                 });
                 break;
         }

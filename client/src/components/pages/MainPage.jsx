@@ -12,7 +12,6 @@ const MainPage = inject("storiesStore")(observer(({storiesStore, ...props}) => {
         []
     )
 
-
     return (
         <PageWrapper>
             <h1 className="text-center mt-5">Most Viewed</h1>

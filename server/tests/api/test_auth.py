@@ -12,3 +12,12 @@ def test_register():
     })
 
     assert response.status_code == 201
+
+
+def test_login():
+    response = client.post('/users/login', json={
+        'email': 'user@example.com',
+        'password': 'string',
+    })
+
+    assert response.status_code == 200

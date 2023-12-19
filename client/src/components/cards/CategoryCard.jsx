@@ -105,7 +105,7 @@ const CategoryCard = inject("authStore", "categoriesStore")(observer(
                     show={editModalVisible}
                     onSubmit={handleCategoryEdit}
                     onClose={() => setEditModalVisible(false)}
-                    title="Category Edition"
+                    title="Category Editing"
                     buttonText="Save"
                 />
                 <ErrorModal

@@ -84,7 +84,7 @@ class AuthStore {
             nickname: nickname
         };
         const response = await registerUser(data)
-        validateResponse(response, [204]);
+        validateResponse(response, [201]);
         await this.loginUser(login, password)
     }
 

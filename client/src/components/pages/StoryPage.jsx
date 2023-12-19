@@ -8,18 +8,23 @@ import {IoTimeSharp} from "react-icons/io5";
 import {FaCommentDots} from "react-icons/fa";
 import {BsCalendar2DateFill} from "react-icons/bs";
 import {inject, observer} from "mobx-react";
+import useNavigateCustom from "../../hooks/useNavigateCustom";
 
 
 const StoryPage = inject("storiesStore")(observer(({storiesStore, ...props}) => {
     const {id: storyIdOrRandom} = useParams();
     const [story, setStory] = useState({});
+    const navigate = useNavigateCustom();
 
     useEffect(
         () => {
             storiesStore.readStory(storyIdOrRandom).then((result) => {
                 if (result)
                     setStory(result);
+            }).catch(error => {
+                navigate("/");
             });
+
         },
         []
     )

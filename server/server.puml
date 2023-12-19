@@ -1,0 +1,302 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+abstract class AbstractSerializer{
+    to_dict()
+    serialize()
+    serialize_many()
+}
+abstract class AbstractRepository{
+    create()
+    read()
+    read_one()
+    update()
+    delete()
+    exists()
+    count()
+}
+
+abstract class Filter{
+    filters
+}
+abstract class Paginator{
+     limit
+     offset
+     form_response()
+}
+
+abstract class Sorter{
+    sorts
+}
+class BaseModel
+class BaseUser
+class BaseUserCreate
+class BaseUserUpdate
+class SQLAlchemyBaseUserTable
+class BaseSettings
+class Base
+
+class Serializer{
+    to_dict()
+    serialize()
+    serialize_many()
+}
+
+class SQLAlchemyRepository {
+    model
+    create()
+    read()
+    read_one()
+    update()
+    delete()
+    exists()
+    count()
+}
+
+class UsersStatisticsService{
+    users_service
+    stories_service
+    read_user_statistics(user_id)
+}
+
+class UsersService {
+    users_repository
+    users_serializer
+    get_user_or_404(user_id)
+    is_superuser_or_403(user)
+    read_user(user_id)
+}
+
+class UsersSerializer{
+
+}
+
+class UserReadSchema{
+    nickname
+    registered_at
+    photo_url
+}
+
+class UserCreateSchema{
+    nickname
+    photo_url
+}
+
+class UserUpdateSchema{
+    nickname
+    photo_url
+}
+
+class UsersRepository{
+
+}
+
+class User{
+    id
+    email
+    nickname
+    registered_at
+    hashed_password
+    is_active
+    is_superuser
+    is_verified
+    photo_url
+}
+
+class DefaultPaginator{
+    limit
+    offset
+    form_response()
+}
+
+class SensitiveSettings{
+    secret
+    admin_email
+    db_host
+    db_port
+    db_name
+    db_user
+    db_pass
+    debug
+    model_config
+}
+
+class CategoriesRepository{
+
+}
+
+class StoriesRepository{
+
+}
+
+class CategoriesSerializer{
+
+}
+
+class StoriesSerializer{
+
+}
+
+class CategoriesService{
+    category_repository
+    category_serializer
+    get_category_or_404(category_id)
+    name_is_unique_or_403(name)
+    read_categories(pagination_params)
+    read_category(category_id)
+    create_category(category)
+    update_category(category_id, category)
+    delete_category(category_id)
+}
+
+class StoriesService{
+    stories_repository
+    stories_serializer
+    users_serializer
+    categories_service
+    users_service
+    _increase_views(story)
+    count_user_stories(user)
+    count_author_views(author)
+    get_story_or_404(story_id)
+    is_story_owner_or_superuser_or_403(user, story)
+    read_stories(pagination_params, filter_params, sort_params)
+    read_story(story_id)
+    read_random_story()
+    create_story(story, user)
+    update_story(story_id, story, user)
+    delete_story(story_id, user)
+}
+
+class StoryFilter{
+    filters
+    category_id
+    author_id
+}
+
+class Category{
+    id
+    name
+    picture_url
+    stories
+}
+
+class Story{
+    id
+    name
+    story
+    author_id
+    category_id
+    create_date
+    views
+    picture_url
+    category
+    author
+}
+
+class StorySorter{
+    views
+    sorts
+}
+
+
+class CategoryReadSchema {
+    id
+    name
+    picture_url
+}
+
+class CategoryCreateUpdateSchema{
+    name
+    picture_url
+}
+
+class StoriesReadSchema{
+    id
+    name
+    author
+    category
+    rating
+    read_time
+    views
+    comments_number
+    create_date
+    picture_url
+}
+
+class StoryReadSchema{
+    id
+    name
+    story
+    author
+    category
+    rating
+    read_time
+    comments_number
+    create_date
+    views
+    picture_url
+}
+
+class StoryUpdateSchema{
+    name
+    story
+    picture_url
+}
+
+class StoryCreateSchema{
+    name
+    story
+    picture_url
+    category_id
+}
+CategoryReadSchema <|-- BaseModel
+CategoryCreateUpdateSchema  <|-- BaseModel
+StoriesReadSchema <|-- BaseModel
+StoryReadSchema <|-- BaseModel
+StoryUpdateSchema <|-- BaseModel
+StoryCreateSchema <|-- BaseModel
+Serializer <|-- AbstractSerializer
+SQLAlchemyRepository <|-- AbstractRepository
+UsersSerializer <|-- Serializer
+UserReadSchema <|-- BaseUser
+UserCreateSchema <|-- BaseUserCreate
+UserUpdateSchema <|--BaseUserUpdate
+UsersRepository <|-- SQLAlchemyRepository
+User <|-- SQLAlchemyBaseUserTable
+DefaultPaginator <|-- Paginator
+SensitiveSettings <|-- BaseSettings
+CategoriesRepository  <|-- SQLAlchemyRepository
+StoriesRepository <|-- SQLAlchemyRepository
+CategoriesSerializer <|-- Serializer
+StoriesSerializer <|-- Serializer
+StoryFilter <|-- Filter
+Category <|-- Base
+Story <|-- Base
+StorySorter <|-- Sorter
+
+'abstract class AbstractList
+'abstract AbstractCollection
+'interface List
+'interface Collection
+'
+'List <|-- AbstractList
+'Collection <|-- AbstractCollection
+'
+'Collection <|- List
+'AbstractCollection <|- AbstractList
+'AbstractList <|-- ArrayList
+'
+'class ArrayList {
+'Object[] elementData
+'size()
+'}
+'
+'enum TimeUnit {
+'DAYS
+'HOURS
+'MINUTES
+'}
+
+@enduml

@@ -16,7 +16,7 @@ const AboutPage = () => {
                     <Stack className="mt-5" direction="horizontal" gap={3}>
                         <Image
                             className="rounded-circle"
-                            src="https://cdn.pixabay.com/photo/2020/05/09/21/43/hacker-5151533_1280.jpg"
+                            src={process.env.PUBLIC_URL + "/imgs/Nikolay.jpg"}
                             width="250px"
                         />
                         <div>

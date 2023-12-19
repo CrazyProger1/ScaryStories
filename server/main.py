@@ -5,6 +5,7 @@ from fastapi import FastAPI, APIRouter
 from starlette.middleware.cors import CORSMiddleware
 
 from src.auth.routers import routers as auth_routers
+from src.middlewares import catch_exceptions_middleware
 from src.stories.routers import routers as stories_routers
 from src.statistics.routers import routers as statistics_routers
 from src.config import APP, VERSION
@@ -28,7 +29,7 @@ include_routers(auth_routers, tags=['Users App'], prefix='/users')
 include_routers(stories_routers, tags=['Stories App'], prefix='/stories')
 include_routers(statistics_routers, tags=['Statistics App'], prefix='/statistics')
 
-# app.middleware('http')(catch_exceptions_middleware)
+app.middleware('http')(catch_exceptions_middleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],

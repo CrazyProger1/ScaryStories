@@ -65,7 +65,7 @@ const CategoryPage = inject("storiesStore", "authStore", "categoriesStore")(obse
                 show={createModalVisible}
                 onSubmit={handleStoryAdd}
                 onClose={() => setCreateModalVisible(false)}
-                title="Story Creation"
+                title="Story Creating"
                 buttonText="Add"
             />
         </PageWrapper>
