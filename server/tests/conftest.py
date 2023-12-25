@@ -14,10 +14,10 @@ from src.config import settings
 from main import app
 
 # DATABASE
-DATABASE_URL_TEST = f'postgresql+asyncpg://{settings.db_user}:{settings.db_pass}' \
+MOCK_DATABASE_URL = f'postgresql+asyncpg://{settings.db_user}:{settings.db_pass}' \
                     f'@{settings.db_host}:{settings.db_port}/{settings.db_name}'
 
-engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)
+engine_test = create_async_engine(MOCK_DATABASE_URL, poolclass=NullPool)
 async_session_maker = sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)
 metadata.bind = engine_test
 

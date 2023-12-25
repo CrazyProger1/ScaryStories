@@ -163,3 +163,5 @@ cython_debug/
 *.sqlite
 
 *.env-render
+
+src/stories_patterns

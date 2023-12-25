@@ -1,7 +1,20 @@
+import datetime
+
 import sqlalchemy as db
+from sqlalchemy.orm import relationship
 
 from src.database import Base
 from src.auth.models import User
+
+
+class Category(Base):
+    __tablename__ = 'story_categories'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+    picture_url = db.Column(db.String, nullable=True)
+
+    stories = relationship('Story', back_populates='category')
 
 
 class Story(Base):
@@ -10,28 +23,11 @@ class Story(Base):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     story = db.Column(db.String, nullable=False)
-    creator_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='SET NULL'), nullable=True)
-    category_name = db.Column(db.String, db.ForeignKey('story_categories.name', onupdate='CASCADE'))
+    author_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='SET NULL'), nullable=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('story_categories.id', onupdate='CASCADE'))
+    create_date = db.Column(db.Date, default=datetime.datetime.utcnow)
+    views = db.Column(db.Integer, default=0)
+    picture_url = db.Column(db.String, nullable=True)
 
-
-class StoryCategory(Base):
-    __tablename__ = 'story_categories'
-
-    name = db.Column(db.String, primary_key=True)
-
-
-class StoryRatingVote(Base):
-    __tablename__ = 'story_rating_votes'
-
-    story_id = db.Column(db.Integer, db.ForeignKey('stories.id', ondelete='CASCADE'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'), primary_key=True)
-    vote = db.Column(db.Integer, nullable=False)
-
-
-class StoryComment(Base):
-    __tablename__ = 'story_comments'
-
-    id = db.Column(db.Integer, primary_key=True)
-    story_id = db.Column(db.Integer, db.ForeignKey('stories.id', ondelete='CASCADE'))
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'))
-    comment = db.Column(db.String, nullable=False)
+    category = relationship('Category', back_populates='stories')
+    author = relationship('User')

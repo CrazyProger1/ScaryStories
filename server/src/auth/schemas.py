@@ -1,16 +1,20 @@
 import datetime
 
 from fastapi_users import schemas
+from pydantic import Field
 
 
 class UserReadSchema(schemas.BaseUser[int]):
-    username: str
+    nickname: str
     registered_at: datetime.datetime
+    photo_url: str | None = Field(None)
 
 
 class UserCreateSchema(schemas.BaseUserCreate):
-    username: str
+    nickname: str
+    photo_url: str | None = Field(None)
 
 
 class UserUpdateSchema(schemas.BaseUserUpdate):
-    username: str
+    nickname: str
+    photo_url: str | None = Field(None)

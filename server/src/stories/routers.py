@@ -1,30 +1,21 @@
 from fastapi import APIRouter, Depends, Response
 
-from src.auth.auth import current_active_user, current_superuser
+from src.pagination import DefaultPaginator, PaginatedResponseSchema, Paginator
+from src.filtering import Filter
+from src.sorting import Sorter
 from src.auth.models import User
-from src.stories.dependencies import (
-    stories_service,
-    story_categories_service,
-    story_votes_service,
-    story_comments_service
-)
-from src.stories.schemas import (
+from src.auth.auth import current_superuser, current_active_user
+from .services import CategoriesService, StoriesService
+from .dependencies import categories_service, stories_service
+from .schemas import (
+    CategoryReadSchema,
+    CategoryCreateUpdateSchema,
+    StoryReadSchema,
     StoryCreateSchema,
-    StoriesReadSchema,
-    CategorySchema,
-    VoteReadSchema,
-    VoteWriteSchema,
-    CommentWriteSchema,
-    CommentReadSchema,
-    Rating,
-    StoryUpdateSchema, StoryReadSchema, CommentUpdateSchema, VoteUpdateSchema
+    StoryUpdateSchema
 )
-from src.stories.services import (
-    StoriesService,
-    CategoriesService,
-    VotesService,
-    CommentsService
-)
+from .filters import StoryFilter
+from .sorters import StorySorter
 
 router = APIRouter()
 
@@ -33,100 +24,86 @@ routers = (
 )
 
 
-@router.get('', response_model=list[StoriesReadSchema], tags=['Stories'])
-async def read_stories(
-        service: StoriesService = Depends(stories_service),
-        limit: int = None,
-        offset: int = None
+@router.get('/categories', response_model=PaginatedResponseSchema, tags=['Categories'])
+async def read_categories(
+        service: CategoriesService = Depends(categories_service),
+        pagination_params: Paginator = Depends(DefaultPaginator)
 ):
-    return await service.read_stories(limit=limit, offset=offset)
+    results = await service.read_categories(pagination_params=pagination_params)
+    return pagination_params.form_response(results=results, total=len(results))
 
 
-@router.post('', response_model=StoriesReadSchema, tags=['Stories'])
-async def create_story(
-        story: StoryCreateSchema,
-        user: User = Depends(current_active_user),
-        service: StoriesService = Depends(stories_service)
+@router.get('/categories/{category_id}', response_model=CategoryReadSchema, tags=['Categories'])
+async def read_category(
+        category_id: int,
+        service: CategoriesService = Depends(categories_service)
 ):
-    return await service.create_story(story=story, creator=user)
+    return await service.read_category(category_id=category_id)
 
 
-@router.get('/categories', response_model=list[CategorySchema], tags=['Categories'])
-async def read_categories(service: CategoriesService = Depends(story_categories_service)):
-    return await service.read_categories()
-
-
-@router.post('/categories', response_model=CategorySchema, tags=['Categories'])
+@router.post('/categories', response_model=CategoryReadSchema, status_code=201, tags=['Categories'])
 async def create_category(
-        category: CategorySchema,
-        service: CategoriesService = Depends(story_categories_service),
+        category: CategoryCreateUpdateSchema,
+        service: CategoriesService = Depends(categories_service),
         user: User = Depends(current_superuser)
 ):
     return await service.create_category(category=category)
 
 
-@router.put('/categories/{name}', response_model=CategorySchema, tags=['Categories'])
+@router.patch('/categories/{category_id}', status_code=204, tags=['Categories'])
 async def update_category(
-        name: str,
-        category: CategorySchema,
-        service: CategoriesService = Depends(story_categories_service),
+        category_id: int,
+        category: CategoryCreateUpdateSchema,
+        service: CategoriesService = Depends(categories_service),
         user: User = Depends(current_superuser)
 ):
-    await service.update_category(name=name, category=category)
+    await service.update_category(category_id=category_id, category=category)
     return Response(status_code=204)
 
 
-@router.get('/{story_id}/rating', response_model=Rating, tags=['Votes'])
-async def get_rating(story_id: int, service: VotesService = Depends(story_votes_service)):
-    return await service.get_rating(story_id=story_id)
-
-
-@router.post('/{story_id}/votes', response_model=VoteReadSchema, tags=['Votes'])
-async def create_vote(
-        story_id: int,
-        vote: VoteWriteSchema,
-        service: VotesService = Depends(story_votes_service),
-        user: User = Depends(current_active_user)
+@router.delete('/categories/{category_id}', status_code=204, tags=['Categories'])
+async def delete_category(
+        category_id: int,
+        service: CategoriesService = Depends(categories_service),
+        user: User = Depends(current_superuser)
 ):
-    return await service.create_vote(vote=vote, creator=user, story_id=story_id)
+    await service.delete_category(category_id=category_id)
+    return Response(status_code=204)
 
 
-@router.get('/{story_id}/votes/my', response_model=VoteReadSchema, tags=['Votes'])
-async def read_my_vote(
-        story_id: int,
-        service: VotesService = Depends(story_votes_service),
-        user: User = Depends(current_active_user)
+@router.get('', response_model=PaginatedResponseSchema, tags=['Stories'])
+async def read_stories(
+        service: StoriesService = Depends(stories_service),
+        pagination_params: DefaultPaginator = Depends(DefaultPaginator),
+        filter_params: Filter = Depends(StoryFilter),
+        sort_params: Sorter = Depends(StorySorter)
 ):
-    return await service.read_my_vote(story_id=story_id, user=user)
-
-
-@router.get('/{story_id}/comments', tags=['Comments'])
-async def read_comments(
-        story_id: int,
-        service: CommentsService = Depends(story_comments_service),
-        limit: int = None,
-        offset: int = None
-):
-    return await service.read_comments(story_id=story_id, limit=limit, offset=offset)
-
-
-@router.post('/{story_id}/comments', response_model=CommentReadSchema, tags=['Comments'])
-async def create_comment(
-        story_id: int,
-        comment: CommentWriteSchema,
-        service: CommentsService = Depends(story_comments_service),
-        user: User = Depends(current_active_user)
-
-):
-    return await service.create_comment(comment=comment, story_id=story_id, creator=user)
+    results = await service.read_stories(
+        pagination_params=pagination_params,
+        filter_params=filter_params,
+        sort_params=sort_params
+    )
+    return pagination_params.form_response(results=results, total=0)
 
 
 @router.get('/{story_id}', response_model=StoryReadSchema, tags=['Stories'])
 async def read_story(
-        story_id: int,
+        story_id: int | str,
         service: StoriesService = Depends(stories_service)
 ):
-    return await service.read_story(story_id=story_id)
+    if story_id.isdigit():
+        return await service.read_story(story_id=int(story_id))
+    else:
+        return await service.read_random_story()
+
+
+@router.post('', status_code=201, response_model=StoryReadSchema, tags=['Stories'])
+async def create_story(
+        story: StoryCreateSchema,
+        service: StoriesService = Depends(stories_service),
+        user: User = Depends(current_active_user)
+):
+    return await service.create_story(story=story, user=user)
 
 
 @router.patch('/{story_id}', status_code=204, tags=['Stories'])
@@ -136,7 +113,11 @@ async def update_story(
         service: StoriesService = Depends(stories_service),
         user: User = Depends(current_active_user)
 ):
-    await service.update_story(story_id=story_id, story=story, user=user)
+    await service.update_story(
+        story_id=story_id,
+        story=story,
+        user=user
+    )
     return Response(status_code=204)
 
 
@@ -147,72 +128,4 @@ async def delete_story(
         user: User = Depends(current_active_user)
 ):
     await service.delete_story(story_id=story_id, user=user)
-    return Response(status_code=204)
-
-
-@router.delete('/categories/{name}', status_code=204, tags=['Categories'])
-async def delete_category(
-        name: str,
-        service: CategoriesService = Depends(story_categories_service),
-        user: User = Depends(current_superuser)
-):
-    await service.delete_category(name=name)
-    return Response(status_code=204)
-
-
-@router.patch('/comments/{comment_id}', status_code=204, tags=['Comments'])
-async def update_comment(
-        comment_id: int,
-        comment: CommentUpdateSchema,
-        service: CommentsService = Depends(story_comments_service),
-        user: User = Depends(current_active_user)
-):
-    await service.update_comment(
-        comment=comment,
-        comment_id=comment_id,
-        user=user
-    )
-    return Response(status_code=204)
-
-
-@router.delete('/comments/{comment_id}', status_code=204, tags=['Comments'])
-async def delete_comment(
-        comment_id: int,
-        service: CommentsService = Depends(story_comments_service),
-        user: User = Depends(current_active_user)
-):
-    await service.delete_comment(
-        comment_id=comment_id,
-        user=user
-    )
-    return Response(status_code=204)
-
-
-@router.patch('{story_id}/votes/', status_code=204, tags=['Votes'])
-async def update_vote(
-        story_id: int,
-        vote: VoteUpdateSchema,
-        service: VotesService = Depends(story_votes_service),
-        user: User = Depends(current_active_user)
-):
-    await service.update_vote(
-        story_id=story_id,
-        vote=vote,
-        user=user
-    )
-
-    return Response(status_code=204)
-
-
-@router.delete('{story_id}/votes/', status_code=204, tags=['Votes'])
-async def delete_vote(
-        story_id: int,
-        service: VotesService = Depends(story_votes_service),
-        user: User = Depends(current_active_user)
-):
-    await service.delete_vote(
-        story_id=story_id,
-        user=user
-    )
-
     return Response(status_code=204)

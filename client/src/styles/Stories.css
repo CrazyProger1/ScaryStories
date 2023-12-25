@@ -1,0 +1,31 @@
+.story-table {
+
+}
+
+
+.story-card {
+    border: 0;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
+.story-card:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.story-card:hover img {
+    filter: blur(1px) brightness(90%);
+}
+
+.story-card img {
+    height: 16rem;
+    filter: brightness(80%);
+    border-radius: 5px;
+}
+
+.story-card-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+}
